@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Match</title>
+    <!-- Tailwind CSS (UI ဒီဇိုင်းအတွက်) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-100 font-sans min-h-screen">
+
+    <!-- App Bar / Header -->
+    <header class="bg-slate-800 text-white p-4 shadow-md text-center">
+        <h1 class="text-xl font-bold">Teacher Match</h1>
+        <p class="text-xs text-gray-300">ဆရာရှာဖွေရေး Agency</p>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-md mx-auto p-4 pb-20">
+
+        <!-- HOME SCREEN -->
+        <div id="home-screen" class="space-y-4">
+            <div class="text-center my-6">
+                <h2 class="text-2xl font-bold text-slate-800">ပင်မစာမျက်နှာ</h2>
+                <p class="text-sm text-gray-600">Teacher Match မှ ကြိုဆိုပါတယ်</p>
+            </div>
+
+            <!-- Top Row Buttons -->
+            <div class="grid grid-cols-3 gap-3">
+                <button onclick="showScreen('teacher-screen')" class="bg-lime-200 hover:bg-lime-300 p-4 rounded-xl flex flex-col items-center justify-center shadow transition">
+                    <span class="text-2xl">🎓</span>
+                    <span class="text-xs font-bold mt-1">Teacher</span>
+                </button>
+                <button onclick="showScreen('student-screen')" class="bg-red-200 hover:bg-red-300 p-4 rounded-xl flex flex-col items-center justify-center shadow transition">
+                    <span class="text-2xl">👨‍🎓</span>
+                    <span class="text-xs font-bold mt-1">Student</span>
+                </button>
+                <button onclick="showScreen('admin-login-screen')" class="bg-purple-200 hover:bg-purple-300 p-4 rounded-xl flex flex-col items-center justify-center shadow transition">
+                    <span class="text-2xl">⚙️</span>
+                    <span class="text-xs font-bold mt-1">Admin</span>
+                </button>
+            </div>
+
+            <!-- Middle Row Buttons -->
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="showScreen('blacklist-screen')" class="bg-indigo-200 hover:bg-indigo-300 p-3 rounded-xl flex flex-col items-center justify-center shadow transition">
+                    <span class="text-xl">🛡️</span>
+                    <span class="text-xs font-bold mt-1">Black List</span>
+                </button>
+                <button onclick="showScreen('help-screen')" class="bg-blue-200 hover:bg-blue-300 p-3 rounded-xl flex flex-col items-center justify-center shadow transition">
+                    <span class="text-xl">❓</span>
+                    <span class="text-xs font-bold mt-1">Help & FAQ</span>
+                </button>
+            </div>
+
+            <!-- Terms & Conditions Button -->
+            <button onclick="showScreen('terms-screen')" class="w-full bg-emerald-200 hover:bg-emerald-300 p-3 rounded-xl flex flex-col items-center justify-center shadow transition">
+                <span class="text-xl">📋</span>
+                <span class="text-xs font-bold mt-1">Terms & Conditions</span>
+            </button>
+        </div>
+
+        <!-- ADMIN LOGIN SCREEN -->
+        <div id="admin-login-screen" class="hidden space-y-4">
+            <button onclick="showScreen('home-screen')" class="text-sm text-blue-600 mb-2">← ပင်မစာမျက်နှာသို့</button>
+            <div class="bg-white p-6 rounded-xl shadow space-y-4">
+                <h2 class="text-lg font-bold text-center">Admin Login</h2>
+                <div>
+                    <label class="text-xs font-bold block mb-1">Password</label>
+                    <input type="password" id="admin-pass-input" class="w-full border p-2 rounded text-sm outline-none focus:border-blue-500">
+                </div>
+                <p id="admin-login-error" class="text-xs text-red-500 hidden">Password မှားယွင်းနေပါသည်</p>
+                <button onclick="handleAdminLogin()" class="w-full bg-blue-600 text-white py-2 rounded-lg font-bold text-sm">Login ဝင်မည်</button>
+            </div>
+        </div>
+
+        <!-- ADMIN DASHBOARD SCREEN -->
+        <div id="admin-dashboard-screen" class="hidden space-y-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold">Admin Dashboard</h2>
+                <button onclick="showScreen('home-screen')" class="text-xs bg-red-500 text-white px-3 py-1 rounded">Logout</button>
+            </div>
+            
+            <div class="bg-white p-4 rounded-xl shadow">
+                <h3 class="font-bold text-sm mb-2 text-blue-600">အတည်ပြုရန် စောင့်ဆိုင်းနေသော ဆရာများ</h3>
+                <div id="admin-pending-tutors" class="space-y-2 text-xs text-gray-500">
+                    Data ဆွဲယူနေပါသည်...
+                </div>
+            </div>
+        </div>
+
+        <!-- OTHER SCREENS (PLACEHOLDERS) -->
+        <div id="terms-screen" class="hidden space-y-4">
+            <button onclick="showScreen('home-screen')" class="text-sm text-blue-600 mb-2">← နောက်သို့</button>
+            <div class="bg-white p-4 rounded-xl shadow space-y-2">
+                <h2 class="font-bold text-lg text-blue-600">Terms & Conditions</h2>
+                <p class="text-xs leading-relaxed text-gray-600">
+                    ၁။ ဤ Platform သည် ဆရာနှင့် ကျောင်းသား တိုက်ရိုက်ချိတ်ဆက်ပေးသော နေရာသာဖြစ်သည်။<br><br>
+                    ၂။ ချိတ်ဆက်မှု ဝန်ဆောင်ခကို ဆရာများဘက်မှ ပေးရပါမည်။<br><br>
+                    ၃။ ချိတ်ဆက်မှု ဝန်ဆောင်ခကို ကျောင်းသားများဘက်မှ ပေးစရာမလိုပါ။
+                </p>
+            </div>
+        </div>
+
+        <div id="help-screen" class="hidden space-y-4">
+            <button onclick="showScreen('home-screen')" class="text-sm text-blue-600 mb-2">← နောက်သို့</button>
+            <div class="bg-white p-4 rounded-xl shadow">
+                <h2 class="font-bold text-lg text-green-600">Help & Support</h2>
+                <p class="text-xs text-gray-600 mt-2">Email: teachermatching@gmail.com</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Credit -->
+    <footer class="text-center text-xs text-gray-400 py-4 fixed bottom-0 w-full bg-gray-100">
+        Powered by Saw Yan Aung
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Supabase Init
+        const SUPABASE_URL = "https://ryberrmhwmjnqcovpxrv.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_7JG5cYQrpnme8TnImrqLCQ_z9RZSvPi";
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Navigation Function
+        function showScreen(screenId) {
+            const screens = ['home-screen', 'admin-login-screen', 'admin-dashboard-screen', 'terms-screen', 'help-screen'];
+            screens.forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        // Admin Login
+        function handleAdminLogin() {
+            const pass = document.getElementById('admin-pass-input').value;
+            if (pass === "G&b862013") {
+                document.getElementById('admin-login-error').classList.add('hidden');
+                document.getElementById('admin-pass-input').value = "";
+                showScreen('admin-dashboard-screen');
+                loadPendingTutors();
+            } else {
+                document.getElementById('admin-login-error').classList.remove('hidden');
+            }
+        }
+
+        // Load Data From Supabase Example
+        async function loadPendingTutors() {
+            const container = document.getElementById('admin-pending-tutors');
+            const { data, error } = await supabase.from('tutors').select('*').eq('status', 'pending');
+            
+            if (error || !data || data.length === 0) {
+                container.innerHTML = "စိစစ်ရန် ဆရာမရှိသေးပါ။";
+                return;
+            }
+
+            container.innerHTML = "";
+            data.forEach(tutor => {
+                container.innerHTML += `
+                    <div class="border p-2 rounded bg-gray-50 flex justify-between items-center">
+                        <div>
+                            <p class="font-bold text-gray-800">${tutor.name || tutor.username}</p>
+                            <p class="text-gray-500">${tutor.phone || 'ဖုန်းမဖြည့်ရသေးပါ'}</p>
+                        </div>
+                        <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded text-[10px]">Pending</span>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
