@@ -98,7 +98,7 @@
         <!-- 2. TEACHER SCREEN -->
         <!-- ========================================== -->
         <div id="teacher-screen" class="hidden space-y-4">
-            <!-- Navigation Tabs (Visible when logged in) -->
+            <!-- Navigation Tabs -->
             <div id="t-tabs" class="hidden flex bg-white rounded-xl shadow p-1 space-x-1 text-xs font-bold border">
                 <button onclick="switchTTab('profile')" id="t-tab-profile" class="flex-1 py-2 rounded-lg bg-blue-600 text-white transition">My Profile</button>
                 <button onclick="switchTTab('posts')" id="t-tab-posts" class="flex-1 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">Post များ</button>
@@ -205,7 +205,6 @@
 
                     <p id="t-p-msg" class="text-xs font-bold text-center"></p>
 
-                    <!-- Edit Buttons -->
                     <div id="t-p-btn-view" class="text-center pt-2">
                         <button onclick="tEditMode(false)" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-2.5 rounded-full shadow text-sm transition"><i class="fa-solid fa-pen-to-square mr-1"></i> Profile ပြင်ဆင်မည်</button>
                     </div>
@@ -215,7 +214,6 @@
                     </div>
                 </div>
 
-                <!-- Completed Students -->
                 <div class="bg-white border shadow-sm p-4 rounded-2xl space-y-3">
                     <h4 class="font-bold text-gray-800 text-sm border-b pb-2"><i class="fa-solid fa-users text-blue-500 mr-1"></i> သင်တန်းသား အသစ်စာရင်း</h4>
                     <div id="t-students-list" class="space-y-2 text-xs"></div>
@@ -311,7 +309,7 @@
                             <option value="ပဲခူးတိုင်းဒေသကြီး">ပဲခူးတိုင်း</option>
                             <option value="နေပြည်တော်">နေပြည်တော်</option>
                         </select>
-                        <input type="text" id="s-post-town" placeholder="မြို့နယ်" class="border p-2.5 rounded-xl bg-gray-50 outline-none">
+                        <input type="text" id="s-post-town" placeholder="မြို့နယ်" class="w-full border p-2.5 rounded-xl bg-gray-50 outline-none">
                     </div>
                     <input type="text" id="s-post-fee" placeholder="ပေးနိုင်သော လစဉ်ကြေး" class="w-full border p-2.5 rounded-xl bg-gray-50 outline-none">
                     <textarea id="s-post-det" placeholder="အသေးစိတ်အချက်အလက်များ" class="w-full border p-2.5 rounded-xl bg-gray-50 h-20 outline-none"></textarea>
@@ -463,15 +461,14 @@
         /* --- SUPABASE CONFIG --- */
         const SUPA_URL = "https://ryberrmhwmjnqcovpxrv.supabase.co";
         const SUPA_KEY = "sb_publishable_7JG5cYQrpnme8TnImrqLCQ_z9RZSvPi";
-        // To avoid conflicts with browser built-ins, use a specific variable name.
-        const db = window.supabase.createClient(SUPA_URL, SUPA_KEY)[cite: 1];
+        const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
         /* --- STATE VARIABLES --- */
-        const APP_VERSION = "1.0.0"[cite: 1];
+        const APP_VERSION = "1.0.0";
         let t_id = null; // Logged in teacher ID
-        let s_user = null; // Logged in student object {id, name, phone}[cite: 1]
-        let a_logged = false; // Admin auth state[cite: 1]
-        let a_chat_id = null; // Admin active chat tutor ID[cite: 1]
+        let s_user = null; // Logged in student object {id, name, phone}
+        let a_logged = false; // Admin auth state
+        let a_chat_id = null; // Admin active chat tutor ID
 
         /* --- INITIALIZATION & UTILS --- */
         window.onload = () => { checkAppUpdate(true); };
@@ -482,15 +479,15 @@
             .forEach(id => document.getElementById(id).classList.add('hidden'));
             
             document.getElementById(screen).classList.remove('hidden');
-            document.getElementById('app-title').innerText = title || "Teacher Match"[cite: 1];
-            document.getElementById('btn-back').style.display = (screen === 'home-screen') ? 'none' : 'block'[cite: 1];
+            document.getElementById('app-title').innerText = title || "Teacher Match";
+            document.getElementById('btn-back').style.display = (screen === 'home-screen') ? 'none' : 'block';
         }
 
-        function goHome() { navTo('home-screen', 'Teacher Match'); }[cite: 1]
+        function goHome() { navTo('home-screen', 'Teacher Match'); }
 
         // Notifications helper
         async function pushNoti(title, msg) {
-            try { await db.from('notifications').insert([{ title: title, message: msg }]); } catch(e){}[cite: 1]
+            try { await db.from('notifications').insert([{ title: title, message: msg }]); } catch(e){}
         }
 
         /* --- MODAL ENGINE --- */
@@ -513,10 +510,10 @@
         /* --- VERSION CHECK --- */
         async function checkAppUpdate(silent = false) {
             try {
-                const { data } = await db.from('app_settings').select('*').eq('id', 1)[cite: 1];
+                const { data } = await db.from('app_settings').select('*').eq('id', 1);
                 if(data && data.length > 0) {
-                    const serverV = data[0].latest_version[cite: 1];
-                    const url = data[0].update_url || '#'[cite: 1];
+                    const serverV = data[0].latest_version;
+                    const url = data[0].update_url || '#';
                     if(serverV && serverV !== APP_VERSION) {
                         openModal(
                             `<div class="text-center space-y-2">
@@ -527,7 +524,7 @@
                             `<a href="${url}" target="_blank" class="w-full bg-green-600 text-white font-bold py-2.5 rounded-xl text-center"><i class="fa-solid fa-download mr-1"></i> Update ပြုလုပ်မည်</a>`
                         );
                     } else if(!silent) {
-                        showAlert("Up to date", `သင့် App သည် နောက်ဆုံးပေါ် Version (v${APP_VERSION}) ဖြစ်နေပါပြီ။`, "green")[cite: 1];
+                        showAlert("Up to date", `သင့် App သည် နောက်ဆုံးပေါ် Version (v${APP_VERSION}) ဖြစ်နေပါပြီ။`, "green");
                     }
                 }
             } catch(e){}
@@ -548,14 +545,14 @@
             const p = document.getElementById('t-r-pass').value.trim();
             const msg = document.getElementById('t-r-msg');
 
-            if (!/^([A-Z][a-z]+)+$/.test(u)) { msg.innerText = "Username သည် Space မပါဘဲ နာမည်အစစာလုံးတိုင်း UpperCase ဖြစ်ရပါမည် (ဥပမာ - KyawKyaw)။"; return; }[cite: 1]
-            if (p.length < 8 || !/[A-Z]/.test(p) || !/[a-z]/.test(p) || !/[0-9]/.test(p) || !/[@#$!%*?&_]/.test(p)) { msg.innerText = "Password သည် အနည်းဆုံး ၈ လုံး ရှိရမည်ဖြစ်ပြီး စာလုံးကြီး၊ စာလုံးအသေး၊ ဂဏန်းနှင့် သင်္ကေတ ပါဝင်ရပါမည်။"; return; }[cite: 1]
+            if (!/^([A-Z][a-z]+)+$/.test(u)) { msg.innerText = "Username သည် Space မပါဘဲ နာမည်အစစာလုံးတိုင်း UpperCase ဖြစ်ရပါမည် (ဥပမာ - KyawKyaw)။"; return; }
+            if (p.length < 8 || !/[A-Z]/.test(p) || !/[a-z]/.test(p) || !/[0-9]/.test(p) || !/[@#$!%*?&_]/.test(p)) { msg.innerText = "Password သည် အနည်းဆုံး ၈ လုံး ရှိရမည်ဖြစ်ပြီး စာလုံးကြီး၊ စာလုံးအသေး၊ ဂဏန်းနှင့် သင်္ကေတ ပါဝင်ရပါမည်။"; return; }
 
-            const { error } = await db.from('tutors').insert([{ username: u, password: p, status: 'pending', reject_reason: '' }])[cite: 1];
-            if(error) msg.innerText = "ဤ Username က ရှိပြီးသား ဖြစ်နေသဖြင့် အခြားပေးပါ။";[cite: 1]
+            const { error } = await db.from('tutors').insert([{ username: u, password: p, status: 'pending', reject_reason: '' }]);
+            if(error) msg.innerText = "ဤ Username က ရှိပြီးသား ဖြစ်နေသဖြင့် အခြားပေးပါ။";
             else { 
-                msg.className = "text-[11px] text-green-600 text-center font-bold"; msg.innerText = "အကောင့်ဆောက်အောင်မြင်ပါသည်။ Login ဝင်နိုင်ပါပြီ။";[cite: 1]
-                pushNoti("ဆရာ အကောင့်သစ်", `${u} အမည်ဖြင့် ဆရာအကောင့်သစ် တစ်ခု ဖွင့်ထားပါသည်။`);[cite: 1]
+                msg.className = "text-[11px] text-green-600 text-center font-bold"; msg.innerText = "အကောင့်ဆောက်အောင်မြင်ပါသည်။ Login ဝင်နိုင်ပါပြီ။";
+                pushNoti("ဆရာ အကောင့်သစ်", `${u} အမည်ဖြင့် ဆရာအကောင့်သစ် တစ်ခု ဖွင့်ထားပါသည်။`);
             }
         }
 
@@ -564,18 +561,18 @@
             const p = document.getElementById('t-l-pass').value.trim();
             const msg = document.getElementById('t-l-msg');
 
-            const { data } = await db.from('tutors').select('*').eq('username', u).eq('password', p)[cite: 1];
+            const { data } = await db.from('tutors').select('*').eq('username', u).eq('password', p);
             if(data && data.length > 0) {
-                if(data[0].status === 'blacklisted') { msg.innerText = "သင့်အကောင့်အား Blacklist သွင်းထားသဖြင့် ဝင်ရောက်ခွင့်မပြုတော့ပါ။"; return; }[cite: 1]
-                t_id = data[0].id[cite: 1];
+                if(data[0].status === 'blacklisted') { msg.innerText = "သင့်အကောင့်အား Blacklist သွင်းထားသဖြင့် ဝင်ရောက်ခွင့်မပြုတော့ပါ။"; return; }
+                t_id = data[0].id;
                 document.getElementById('t-login-view').style.display = 'none';
                 document.getElementById('t-tabs').style.display = 'flex';
                 switchTTab('profile');
-            } else msg.innerText = "Username သို့မဟုတ် Password မှားယွင်းနေပါသည်။";[cite: 1]
+            } else msg.innerText = "Username သို့မဟုတ် Password မှားယွင်းနေပါသည်။";
         }
 
         function tLogout() {
-            t_id = null[cite: 1];
+            t_id = null;
             document.getElementById('t-tabs').style.display = 'none';
             document.getElementById('t-profile-view').style.display = 'none';
             document.getElementById('t-posts-view').style.display = 'none';
@@ -591,102 +588,100 @@
             });
             document.getElementById(`t-${tab}-view`).style.display = (tab==='chat')?'flex':'block';
             document.getElementById(`t-tab-${tab}`).className = "flex-1 py-2 rounded-lg bg-blue-600 text-white shadow transition";
-            if(tab === 'profile') tLoadProfile();[cite: 1]
-            if(tab === 'posts') tLoadJobs();[cite: 1]
-            if(tab === 'chat') tLoadChat();[cite: 1]
+            if(tab === 'profile') tLoadProfile();
+            if(tab === 'posts') tLoadJobs();
+            if(tab === 'chat') tLoadChat();
         }
 
         function tEditMode(cancel) {
-            const state = !cancel; // if cancel is false, we want to edit (enable fields)
+            const state = !cancel; 
             ['t-p-name', 't-p-gender', 't-p-phone', 't-p-bio', 't-p-state', 't-p-town', 't-p-curr', 't-p-mode', 't-p-g1', 't-p-s1', 't-p-g2', 't-p-s2', 't-p-g3', 't-p-s3', 't-p-g4', 't-p-s4', 't-p-days', 't-p-time', 't-p-rem', 't-p-fee', 't-p-photo'].forEach(id => {
-                document.getElementById(id).disabled = !state[cite: 1];
+                document.getElementById(id).disabled = !state;
                 if(state) document.getElementById(id).classList.add('bg-white', 'border-blue-300');
                 else document.getElementById(id).classList.remove('bg-white', 'border-blue-300');
             });
-            document.getElementById('t-p-btn-view').style.display = state ? 'none' : 'block'[cite: 1];
-            document.getElementById('t-p-btn-edit').style.display = state ? 'flex' : 'none'[cite: 1];
-            if(cancel) tLoadProfile();[cite: 1]
+            document.getElementById('t-p-btn-view').style.display = state ? 'none' : 'block';
+            document.getElementById('t-p-btn-edit').style.display = state ? 'flex' : 'none';
+            if(cancel) tLoadProfile();
         }
 
         async function tLoadProfile() {
-            if(!t_id) return[cite: 1];
-            const { data } = await db.from('tutors').select('*').eq('id', t_id)[cite: 1];
+            if(!t_id) return;
+            const { data } = await db.from('tutors').select('*').eq('id', t_id);
             if(data && data.length > 0) {
-                const r = data[0][cite: 1];
-                document.getElementById('t-p-name').value = r.name || ''[cite: 1];
-                document.getElementById('t-p-gender').value = r.gender || 'Male'[cite: 1];
-                document.getElementById('t-p-phone').value = r.phone || ''[cite: 1];
-                document.getElementById('t-p-bio').value = r.bio || ''[cite: 1];
-                document.getElementById('t-p-state').value = r.state || 'ရန်ကုန်တိုင်းဒေသကြီး'[cite: 1];
-                document.getElementById('t-p-town').value = r.township || ''[cite: 1];
-                document.getElementById('t-p-curr').value = r.curriculum || 'Government'[cite: 1];
-                document.getElementById('t-p-mode').value = r.teaching_mode || 'Online'[cite: 1];
-                document.getElementById('t-p-g1').value = r.grade1 || ''[cite: 1]; document.getElementById('t-p-s1').value = r.subject1 || ''[cite: 1];
-                document.getElementById('t-p-g2').value = r.grade2 || ''[cite: 1]; document.getElementById('t-p-s2').value = r.subject2 || ''[cite: 1];
-                document.getElementById('t-p-g3').value = r.grade3 || ''[cite: 1]; document.getElementById('t-p-s3').value = r.subject3 || ''[cite: 1];
-                document.getElementById('t-p-g4').value = r.grade4 || ''[cite: 1]; document.getElementById('t-p-s4').value = r.subject4 || ''[cite: 1];
-                document.getElementById('t-p-days').value = r.days || 'နေ့တိုင်း'[cite: 1];
-                document.getElementById('t-p-time').value = r.time || 'မနက်'[cite: 1];
-                document.getElementById('t-p-rem').value = r.current_time_remark || ''[cite: 1];
-                document.getElementById('t-p-fee').value = r.fee || ''[cite: 1];
-                document.getElementById('t-p-photo').value = r.photo || ''[cite: 1];
-                if(r.photo) document.getElementById('t-img').src = r.photo[cite: 1];
+                const r = data[0];
+                document.getElementById('t-p-name').value = r.name || '';
+                document.getElementById('t-p-gender').value = r.gender || 'Male';
+                document.getElementById('t-p-phone').value = r.phone || '';
+                document.getElementById('t-p-bio').value = r.bio || '';
+                document.getElementById('t-p-state').value = r.state || 'ရန်ကုန်တိုင်းဒေသကြီး';
+                document.getElementById('t-p-town').value = r.township || '';
+                document.getElementById('t-p-curr').value = r.curriculum || 'Government';
+                document.getElementById('t-p-mode').value = r.teaching_mode || 'Online';
+                document.getElementById('t-p-g1').value = r.grade1 || ''; document.getElementById('t-p-s1').value = r.subject1 || '';
+                document.getElementById('t-p-g2').value = r.grade2 || ''; document.getElementById('t-p-s2').value = r.subject2 || '';
+                document.getElementById('t-p-g3').value = r.grade3 || ''; document.getElementById('t-p-s3').value = r.subject3 || '';
+                document.getElementById('t-p-g4').value = r.grade4 || ''; document.getElementById('t-p-s4').value = r.subject4 || '';
+                document.getElementById('t-p-days').value = r.days || 'နေ့တိုင်း';
+                document.getElementById('t-p-time').value = r.time || 'မနက်';
+                document.getElementById('t-p-rem').value = r.current_time_remark || '';
+                document.getElementById('t-p-fee').value = r.fee || '';
+                document.getElementById('t-p-photo').value = r.photo || '';
+                if(r.photo) document.getElementById('t-img').src = r.photo;
 
                 const msg = document.getElementById('t-p-msg');
-                if(r.status === 'rejected') { msg.innerHTML = `<span class="text-red-600">Profile ကို Reject လုပ်ထားပါသည် (${r.reject_reason})</span>`; }[cite: 1]
-                else if(r.status === 'pending') { msg.innerHTML = `<span class="text-orange-500">အတည်ပြုချက် စောင့်ဆိုင်းနေဆဲ ဖြစ်သည်</span>`; }[cite: 1]
-                else { msg.innerHTML = `<span class="text-green-600"><i class="fa-solid fa-circle-check"></i> အတည်ပြုပြီး ဖြစ်သည်</span>`; }[cite: 1]
+                if(r.status === 'rejected') { msg.innerHTML = `<span class="text-red-600">Profile ကို Reject လုပ်ထားပါသည် (${r.reject_reason})</span>`; }
+                else if(r.status === 'pending') { msg.innerHTML = `<span class="text-orange-500">အတည်ပြုချက် စောင့်ဆိုင်းနေဆဲ ဖြစ်သည်</span>`; }
+                else { msg.innerHTML = `<span class="text-green-600"><i class="fa-solid fa-circle-check"></i> အတည်ပြုပြီး ဖြစ်သည်</span>`; }
             }
             
-            // Load completed students[cite: 1]
             const sList = document.getElementById('t-students-list');
             sList.innerHTML = "ဆွဲယူနေပါသည်...";
-            const reqs = await db.from('requests').select('student_name, student_phone').eq('tutor_id', t_id).eq('status', 'completed')[cite: 1];
+            const reqs = await db.from('requests').select('student_name, student_phone').eq('tutor_id', t_id).eq('status', 'completed');
             sList.innerHTML = "";
-            if(!reqs.data || reqs.data.length === 0) sList.innerHTML = "<p class='text-gray-400'>မရှိသေးပါ။</p>"[cite: 1];
+            if(!reqs.data || reqs.data.length === 0) sList.innerHTML = "<p class='text-gray-400'>မရှိသေးပါ။</p>";
             else {
-                reqs.data.forEach(r => sList.innerHTML += `<div class="bg-gray-50 p-2 rounded border"><p class="font-bold text-green-700">${r.student_name}</p><p class="text-gray-600"><i class="fa-solid fa-phone text-[10px]"></i> ${r.student_phone}</p></div>`[cite: 1]);
+                reqs.data.forEach(r => sList.innerHTML += `<div class="bg-gray-50 p-2 rounded border"><p class="font-bold text-green-700">${r.student_name}</p><p class="text-gray-600"><i class="fa-solid fa-phone text-[10px]"></i> ${r.student_phone}</p></div>`);
             }
         }
 
         async function tSaveProfile() {
             const data = {
-                name: document.getElementById('t-p-name').value[cite: 1], gender: document.getElementById('t-p-gender').value[cite: 1],
-                phone: document.getElementById('t-p-phone').value[cite: 1], bio: document.getElementById('t-p-bio').value[cite: 1],
-                state: document.getElementById('t-p-state').value[cite: 1], township: document.getElementById('t-p-town').value[cite: 1],
-                curriculum: document.getElementById('t-p-curr').value[cite: 1], teaching_mode: document.getElementById('t-p-mode').value[cite: 1],
-                grade1: document.getElementById('t-p-g1').value[cite: 1], subject1: document.getElementById('t-p-s1').value[cite: 1],
-                grade2: document.getElementById('t-p-g2').value[cite: 1], subject2: document.getElementById('t-p-s2').value[cite: 1],
-                grade3: document.getElementById('t-p-g3').value[cite: 1], subject3: document.getElementById('t-p-s3').value[cite: 1],
-                grade4: document.getElementById('t-p-g4').value[cite: 1], subject4: document.getElementById('t-p-s4').value[cite: 1],
-                days: document.getElementById('t-p-days').value[cite: 1], time: document.getElementById('t-p-time').value[cite: 1],
-                current_time_remark: document.getElementById('t-p-rem').value[cite: 1], fee: document.getElementById('t-p-fee').value[cite: 1],
-                photo: document.getElementById('t-p-photo').value[cite: 1], status: 'pending'[cite: 1]
+                name: document.getElementById('t-p-name').value, gender: document.getElementById('t-p-gender').value,
+                phone: document.getElementById('t-p-phone').value, bio: document.getElementById('t-p-bio').value,
+                state: document.getElementById('t-p-state').value, township: document.getElementById('t-p-town').value,
+                curriculum: document.getElementById('t-p-curr').value, teaching_mode: document.getElementById('t-p-mode').value,
+                grade1: document.getElementById('t-p-g1').value, subject1: document.getElementById('t-p-s1').value,
+                grade2: document.getElementById('t-p-g2').value, subject2: document.getElementById('t-p-s2').value,
+                grade3: document.getElementById('t-p-g3').value, subject3: document.getElementById('t-p-s3').value,
+                grade4: document.getElementById('t-p-g4').value, subject4: document.getElementById('t-p-s4').value,
+                days: document.getElementById('t-p-days').value, time: document.getElementById('t-p-time').value,
+                current_time_remark: document.getElementById('t-p-rem').value, fee: document.getElementById('t-p-fee').value,
+                photo: document.getElementById('t-p-photo').value, status: 'pending'
             };
-            if(!data.name || !data.phone || !data.grade1 || !data.subject1) { showAlert("အမှား", "အမည်၊ ဖုန်း နှင့် အနည်းဆုံး အတန်း/ဘာသာရပ်(၁) ခု ဖြည့်ပါ", "red"); return; }[cite: 1]
+            if(!data.name || !data.phone || !data.grade1 || !data.subject1) { showAlert("အမှား", "အမည်၊ ဖုန်း နှင့် အနည်းဆုံး အတန်း/ဘာသာရပ်(၁) ခု ဖြည့်ပါ", "red"); return; }
             
-            await db.from('tutors').update(data).eq('id', t_id)[cite: 1];
-            pushNoti("Profile ပြင်ဆင်မှု", `ဆရာ ${data.name} က အချက်အလက်များ ပြင်ဆင်လိုက်ပါသည်။`)[cite: 1];
-            showAlert("အောင်မြင်သည်", "Profile သိမ်းဆည်းပြီးပါပြီ။ Admin အတည်ပြုချက် ထပ်မံစောင့်ပါ။", "green")[cite: 1];
+            await db.from('tutors').update(data).eq('id', t_id);
+            pushNoti("Profile ပြင်ဆင်မှု", `ဆရာ ${data.name} က အချက်အလက်များ ပြင်ဆင်လိုက်ပါသည်။`);
+            showAlert("အောင်မြင်သည်", "Profile သိမ်းဆည်းပြီးပါပြီ။ Admin အတည်ပြုချက် ထပ်မံစောင့်ပါ။", "green");
             tEditMode(true);
         }
 
         async function tLoadJobs() {
             const c = document.getElementById('t-jobs-list');
             c.innerHTML = "<p class='text-center text-gray-500 py-4'>ဆွဲယူနေပါသည်...</p>";
-            const { data } = await db.from('job_posts').select('*').eq('status', 'approved')[cite: 1];
+            const { data } = await db.from('job_posts').select('*').eq('status', 'approved');
             c.innerHTML = "";
-            if(!data || data.length === 0) { c.innerHTML = "<p class='text-gray-400 text-center'>ကျောင်းသားများ၏ ဖိတ်ခေါ်စာ မရှိသေးပါ။</p>"; return; }[cite: 1]
+            if(!data || data.length === 0) { c.innerHTML = "<p class='text-gray-400 text-center'>ကျောင်းသားများ၏ ဖိတ်ခေါ်စာ မရှိသေးပါ။</p>"; return; }
             
-            // Check applied jobs[cite: 1]
-            const apps = await db.from('job_applications').select('job_id').eq('tutor_id', t_id)[cite: 1];
-            const appliedIds = apps.data ? apps.data.map(a => a.job_id) : [][cite: 1];
+            const apps = await db.from('job_applications').select('job_id').eq('tutor_id', t_id);
+            const appliedIds = apps.data ? apps.data.map(a => a.job_id) : [];
 
             data.forEach(job => {
-                const isApplied = appliedIds.includes(job.id)[cite: 1];
+                const isApplied = appliedIds.includes(job.id);
                 let btn = isApplied 
-                    ? `<button disabled class="w-full bg-green-100 text-green-700 font-bold py-2 rounded-xl mt-2 cursor-not-allowed"><i class="fa-solid fa-check"></i> လျှောက်ထားပြီးပြီ</button>`[cite: 1]
-                    : `<button onclick="tApplyJob(${job.id}, '${job.subject}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl mt-2 transition shadow-sm"><i class="fa-solid fa-briefcase"></i> လျှောက်ထားရန် (Apply)</button>`[cite: 1];
+                    ? `<button disabled class="w-full bg-green-100 text-green-700 font-bold py-2 rounded-xl mt-2 cursor-not-allowed"><i class="fa-solid fa-check"></i> လျှောက်ထားပြီးပြီ</button>`
+                    : `<button onclick="tApplyJob(${job.id}, '${job.subject}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl mt-2 transition shadow-sm"><i class="fa-solid fa-briefcase"></i> လျှောက်ထားရန် (Apply)</button>`;
                 
                 c.innerHTML += `
                     <div class="bg-white p-4 rounded-2xl border shadow-sm space-y-1 relative overflow-hidden">
@@ -702,18 +697,18 @@
         }
 
         async function tApplyJob(jid, subj) {
-            await db.from('job_applications').insert([{ job_id: jid, tutor_id: t_id }])[cite: 1];
-            pushNoti("အလုပ်လျှောက်လွှာ", `ဆရာတစ်ဦးမှ ကျောင်းသားပို့စ် [${subj}] ကို လျှောက်ထားပါသည်။`)[cite: 1];
-            showAlert("အောင်မြင်သည်", "အလုပ်လျှောက်လွှာ အောင်မြင်စွာ တင်ပြီးပါပြီ။", "green")[cite: 1];
+            await db.from('job_applications').insert([{ job_id: jid, tutor_id: t_id }]);
+            pushNoti("အလုပ်လျှောက်လွှာ", `ဆရာတစ်ဦးမှ ကျောင်းသားပို့စ် [${subj}] ကို လျှောက်ထားပါသည်။`);
+            showAlert("အောင်မြင်သည်", "အလုပ်လျှောက်လွှာ အောင်မြင်စွာ တင်ပြီးပါပြီ။", "green");
             tLoadJobs();
         }
 
         async function tLoadChat() {
             const box = document.getElementById('t-chat-box');
-            const { data } = await db.from('chat_messages').select('*').eq('tutor_id', t_id).order('timestamp')[cite: 1];
+            const { data } = await db.from('chat_messages').select('*').eq('tutor_id', t_id).order('timestamp');
             box.innerHTML = "";
             data?.forEach(msg => {
-                const me = msg.sender === 'teacher'[cite: 1];
+                const me = msg.sender === 'teacher';
                 box.innerHTML += `
                     <div class="flex ${me ? 'justify-end' : 'justify-start'}">
                         <div class="${me ? 'bg-blue-500 text-white rounded-br-none' : 'bg-gray-200 text-gray-800 rounded-bl-none'} p-2.5 rounded-2xl max-w-[85%] shadow-sm">
@@ -728,8 +723,8 @@
 
         async function tSendChat() {
             const inp = document.getElementById('t-chat-input');
-            if(!inp.value.trim()) return[cite: 1];
-            await db.from('chat_messages').insert([{ tutor_id: t_id, sender: 'teacher', message: inp.value }])[cite: 1];
+            if(!inp.value.trim()) return;
+            await db.from('chat_messages').insert([{ tutor_id: t_id, sender: 'teacher', message: inp.value }]);
             inp.value = "";
             tLoadChat();
         }
@@ -750,29 +745,29 @@
             const ph = document.getElementById('s-r-phone').value.trim();
             const msg = document.getElementById('s-r-msg');
 
-            if(!u || !p || !n || !ph) { msg.innerText = "အချက်အလက်များကို ပြည့်စုံစွာဖြည့်စွက်ပါ။"; return; }[cite: 1]
-            if(!/^(09|\u1040\u1049)?[0-9\u1040-\u1049]{7,11}$/.test(ph) || p !== ph) { msg.innerText = "Password သည် မှန်ကန်သော ဖုန်းနံပါတ် အတိအကျ ဖြစ်ရပါမည်။"; return; }[cite: 1]
+            if(!u || !p || !n || !ph) { msg.innerText = "အချက်အလက်များကို ပြည့်စုံစွာဖြည့်စွက်ပါ။"; return; }
+            if(!/^(09|\u1040\u1049)?[0-9\u1040-\u1049]{7,11}$/.test(ph) || p !== ph) { msg.innerText = "Password သည် မှန်ကန်သော ဖုန်းနံပါတ် အတိအကျ ဖြစ်ရပါမည်။"; return; }
 
-            const { error } = await db.from('students').insert([{ username: u, password: p, name: n, phone: ph }])[cite: 1];
-            if(error) msg.innerText = "Username ရှိပြီးသားဖြစ်ပါသည်";[cite: 1]
-            else { msg.className = "text-[11px] text-green-600 text-center font-bold"; msg.innerText = "အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်။ Login ဝင်နိုင်ပါပြီ။"; }[cite: 1]
+            const { error } = await db.from('students').insert([{ username: u, password: p, name: n, phone: ph }]);
+            if(error) { msg.innerText = "Username ရှိပြီးသားဖြစ်ပါသည်"; }
+            else { msg.className = "text-[11px] text-green-600 text-center font-bold"; msg.innerText = "အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်။ Login ဝင်နိုင်ပါပြီ။"; }
         }
 
         async function sLogin() {
             const u = document.getElementById('s-l-user').value.trim();
             const p = document.getElementById('s-l-pass').value.trim();
-            const { data } = await db.from('students').select('*').eq('username', u).eq('password', p)[cite: 1];
+            const { data } = await db.from('students').select('*').eq('username', u).eq('password', p);
             if(data && data.length > 0) {
-                s_user = data[0][cite: 1];
+                s_user = data[0];
                 document.getElementById('s-login-view').style.display = 'none';
                 document.getElementById('s-tabs').style.display = 'flex';
                 document.getElementById('s-main-view').style.display = 'block';
                 switchSTab('search');
-            } else { document.getElementById('s-l-msg').innerText = "Username သို့မဟုတ် Password မှားယွင်းနေပါသည်။"; }[cite: 1]
+            } else { document.getElementById('s-l-msg').innerText = "Username သို့မဟုတ် Password မှားယွင်းနေပါသည်။"; }
         }
 
         function sLogout() {
-            s_user = null[cite: 1];
+            s_user = null;
             document.getElementById('s-tabs').style.display = 'none';
             document.getElementById('s-main-view').style.display = 'none';
             document.getElementById('s-login-view').style.display = 'block';
@@ -786,8 +781,8 @@
             });
             document.getElementById(`s-${tab}-view`).style.display = 'block';
             document.getElementById(`s-tab-${tab}`).className = "flex-1 py-2 rounded-lg bg-red-500 text-white shadow transition";
-            if(tab === 'search') sLoadTutors();[cite: 1]
-            if(tab === 'myposts') sLoadMyPosts();[cite: 1]
+            if(tab === 'search') sLoadTutors();
+            if(tab === 'myposts') sLoadMyPosts();
         }
 
         async function sLoadTutors() {
@@ -796,21 +791,21 @@
             const town = document.getElementById('s-f-town').value.trim();
             c.innerHTML = "<p class='text-center py-4 text-gray-400'>ရှာဖွေနေပါသည်...</p>";
 
-            let q = db.from('tutors').select('*').eq('status', 'approved')[cite: 1];
-            if(state !== 'အားလုံး') q = q.eq('state', state)[cite: 1];
+            let q = db.from('tutors').select('*').eq('status', 'approved');
+            if(state !== 'အားလုံး') q = q.eq('state', state);
             
             const { data } = await q;
-            let list = data || [][cite: 1];
-            if(town) list = list.filter(t => t.township && t.township.includes(town))[cite: 1];
+            let list = data || [];
+            if(town) list = list.filter(t => t.township && t.township.includes(town));
 
             c.innerHTML = "";
-            if(list.length === 0) { c.innerHTML = "<p class='text-gray-400 text-center py-4'>ဤဒေသတွင် ဆရာမရှိသေးပါ။</p>"; return; }[cite: 1]
+            if(list.length === 0) { c.innerHTML = "<p class='text-gray-400 text-center py-4'>ဤဒေသတွင် ဆရာမရှိသေးပါ။</p>"; return; }
 
             list.forEach(t => {
-                let subs = (t.grade1 && t.subject1) ? `• ${t.grade1} (${t.subject1})<br>` : '';[cite: 1]
-                if(t.grade2 && t.subject2) subs += `• ${t.grade2} (${t.subject2})<br>`;[cite: 1]
-                if(t.grade3 && t.subject3) subs += `• ${t.grade3} (${t.subject3})<br>`;[cite: 1]
-                if(t.grade4 && t.subject4) subs += `• ${t.grade4} (${t.subject4})<br>`;[cite: 1]
+                let subs = (t.grade1 && t.subject1) ? `• ${t.grade1} (${t.subject1})<br>` : '';
+                if(t.grade2 && t.subject2) subs += `• ${t.grade2} (${t.subject2})<br>`;
+                if(t.grade3 && t.subject3) subs += `• ${t.grade3} (${t.subject3})<br>`;
+                if(t.grade4 && t.subject4) subs += `• ${t.grade4} (${t.subject4})<br>`;
 
                 c.innerHTML += `
                     <div class="bg-white p-4 rounded-2xl border shadow-sm space-y-3">
@@ -854,24 +849,24 @@
         }
 
         async function sConfirmBook(tid) {
-            await db.from('requests').insert([{ tutor_id: tid, student_name: s_user.name, student_phone: s_user.phone, status: 'pending', reject_reason: '' }])[cite: 1];
-            pushNoti("ချိတ်ဆက်မှုတောင်းဆိုချက်", `ကျောင်းသား ${s_user.name} မှ ဆရာတစ်ဦးနှင့် matching ရန် တောင်းဆိုထားပါသည်။`)[cite: 1];
+            await db.from('requests').insert([{ tutor_id: tid, student_name: s_user.name, student_phone: s_user.phone, status: 'pending', reject_reason: '' }]);
+            pushNoti("ချိတ်ဆက်မှုတောင်းဆိုချက်", `ကျောင်းသား ${s_user.name} မှ ဆရာတစ်ဦးနှင့် matching ရန် တောင်းဆိုထားပါသည်။`);
             closeModal();
-            showAlert("အောင်မြင်သည်", "Admin ထံ တောင်းဆိုချက် ပို့ပြီးပါပြီ။ Admin မှ ဆက်သွယ်ပေးပါမည်။", "green")[cite: 1];
+            showAlert("အောင်မြင်သည်", "Admin ထံ တောင်းဆိုချက် ပို့ပြီးပါပြီ။ Admin မှ ဆက်သွယ်ပေးပါမည်။", "green");
         }
 
         async function submitSJob() {
             const data = {
-                stu_name: s_user.name, stu_phone: s_user.phone[cite: 1],
-                subject: document.getElementById('s-post-subj').value[cite: 1], state: document.getElementById('s-post-state').value[cite: 1],
-                township: document.getElementById('s-post-town').value[cite: 1], fee_offer: document.getElementById('s-post-fee').value[cite: 1],
-                details: document.getElementById('s-post-det').value[cite: 1], status: 'pending', reject_reason: ''[cite: 1]
+                stu_name: s_user.name, stu_phone: s_user.phone,
+                subject: document.getElementById('s-post-subj').value, state: document.getElementById('s-post-state').value,
+                township: document.getElementById('s-post-town').value, fee_offer: document.getElementById('s-post-fee').value,
+                details: document.getElementById('s-post-det').value, status: 'pending', reject_reason: ''
             };
-            if(!data.subject || !data.township) { document.getElementById('s-post-msg').innerHTML = "<span class='text-red-500'>လိုအပ်ချက်များ ဖြည့်ပါ</span>"; return; }[cite: 1]
+            if(!data.subject || !data.township) { document.getElementById('s-post-msg').innerHTML = "<span class='text-red-500'>လိုအပ်ချက်များ ဖြည့်ပါ</span>"; return; }
             
-            await db.from('job_posts').insert([data])[cite: 1];
-            pushNoti("ဆရာခေါ်စာအသစ်", `မိဘ ${s_user.name} မှ ဆရာခေါ်ယူရန် ပို့စ်အသစ်တစ်ခု တင်ထားပါသည်။`)[cite: 1];
-            document.getElementById('s-post-msg').innerHTML = "<span class='text-green-600'>ဆရာခေါ်စာ တင်ပြီးပါပြီ။ Admin အတည်ပြုချက်စောင့်ပါ။</span>"[cite: 1];
+            await db.from('job_posts').insert([data]);
+            pushNoti("ဆရာခေါ်စာအသစ်", `မိဘ ${s_user.name} မှ ဆရာခေါ်ယူရန် ပို့စ်အသစ်တစ်ခု တင်ထားပါသည်။`);
+            document.getElementById('s-post-msg').innerHTML = "<span class='text-green-600'>ဆရာခေါ်စာ တင်ပြီးပါပြီ။ Admin အတည်ပြုချက်စောင့်ပါ။</span>";
             ['s-post-subj','s-post-town','s-post-fee','s-post-det'].forEach(id => document.getElementById(id).value='');
         }
 
@@ -880,15 +875,15 @@
             const cList = document.getElementById('s-my-comp-list');
             aList.innerHTML = "ဆွဲယူနေပါသည်..."; cList.innerHTML = "ဆွဲယူနေပါသည်...";
 
-            // Active Posts[cite: 1]
-            const pData = await db.from('job_posts').select('*').eq('stu_phone', s_user.phone).neq('status', 'completed')[cite: 1];
-            aList.innerHTML = (!pData.data || pData.data.length === 0) ? "<p class='text-gray-400'>Active Post မရှိသေးပါ။</p>" : ""[cite: 1];
+            // Active Posts
+            const pData = await db.from('job_posts').select('*').eq('stu_phone', s_user.phone).neq('status', 'completed');
+            aList.innerHTML = (!pData.data || pData.data.length === 0) ? "<p class='text-gray-400'>Active Post မရှိသေးပါ။</p>" : "";
             if(pData.data) {
                 for(let p of pData.data) {
-                    const apps = await db.from('job_applications').select('id', {count: 'exact'}).eq('job_id', p.id)[cite: 1];
-                    const count = apps.count || 0[cite: 1];
-                    let sCol = p.status === 'pending' ? 'orange' : 'green'[cite: 1];
-                    let sTxt = p.status === 'pending' ? 'အတည်ပြုချက်စောင့်ဆိုင်းဆဲ' : 'ဆရာများ လျှောက်ထားနိုင်ပါပြီ'[cite: 1];
+                    const apps = await db.from('job_applications').select('id', {count: 'exact'}).eq('job_id', p.id);
+                    const count = apps.count || 0;
+                    let sCol = p.status === 'pending' ? 'orange' : 'green';
+                    let sTxt = p.status === 'pending' ? 'အတည်ပြုချက်စောင့်ဆိုင်းဆဲ' : 'ဆရာများ လျှောက်ထားနိုင်ပါပြီ';
                     aList.innerHTML += `
                         <div class="bg-gray-50 p-3 rounded-xl border border-${sCol}-200 space-y-1">
                             <p class="font-bold text-blue-800">${p.subject}</p>
@@ -902,11 +897,11 @@
                 }
             }
 
-            // Completed History[cite: 1]
-            const rData = await db.from('requests').select('*, tutors(name, username, phone)').eq('student_phone', s_user.phone).eq('status', 'completed')[cite: 1];
-            cList.innerHTML = (!rData.data || rData.data.length === 0) ? "<p class='text-gray-400'>ချိတ်ဆက်ပြီးမြောက်ထားသော ဆရာမရှိသေးပါ။</p>" : ""[cite: 1];
+            // Completed History
+            const rData = await db.from('requests').select('*, tutors(name, username, phone)').eq('student_phone', s_user.phone).eq('status', 'completed');
+            cList.innerHTML = (!rData.data || rData.data.length === 0) ? "<p class='text-gray-400'>ချိတ်ဆက်ပြီးမြောက်ထားသော ဆရာမရှိသေးပါ။</p>" : "";
             rData.data?.forEach(r => {
-                const tName = r.tutors?.name || r.tutors?.username || "Unknown"[cite: 1];
+                const tName = r.tutors?.name || r.tutors?.username || "Unknown";
                 cList.innerHTML += `
                     <div class="bg-green-50 p-3 rounded-xl border border-green-200">
                         <p class="font-bold text-green-800"><i class="fa-solid fa-party-horn mr-1"></i> ဆရာ: ${tName}</p>
@@ -920,47 +915,47 @@
         /* ADMIN FUNCTIONS */
         /* ========================================================================= */
         function openAdmin() {
-            if(a_logged) { navTo('admin-tab', 'ADMIN DASHBOARD'); aShowGrid(); }[cite: 1]
-            else navTo('admin-login-screen', 'Admin Login');[cite: 1]
+            if(a_logged) { navTo('admin-tab', 'ADMIN DASHBOARD'); aShowGrid(); }
+            else navTo('admin-login-screen', 'Admin Login');
         }
 
         function aLogin() {
-            if(document.getElementById('a-pass').value === "G&b862013") { // Matches user's hardcoded password requirement
-                a_logged = true[cite: 1];
+            if(document.getElementById('a-pass').value === "G&b862013") {
+                a_logged = true;
                 document.getElementById('a-pass').value = '';
                 document.getElementById('a-msg').classList.add('hidden');
                 openAdmin();
             } else {
-                document.getElementById('a-msg').classList.remove('hidden')[cite: 1];
+                document.getElementById('a-msg').classList.remove('hidden');
             }
         }
 
         function aLogout() {
-            a_logged = false[cite: 1];
+            a_logged = false;
             goHome();
         }
 
         function aShowGrid() {
             document.getElementById('a-grid').style.display = 'grid';
             document.getElementById('a-sub').style.display = 'none';
-            document.getElementById('a-back-btn').style.display = 'none'[cite: 1];
-            document.getElementById('a-title').innerText = "ADMIN DASHBOARD"[cite: 1];
+            document.getElementById('a-back-btn').style.display = 'none';
+            document.getElementById('a-title').innerText = "ADMIN DASHBOARD";
         }
 
         async function openAPanel(type, title) {
             document.getElementById('a-grid').style.display = 'none';
             const sub = document.getElementById('a-sub');
             sub.style.display = 'block';
-            document.getElementById('a-back-btn').style.display = 'block'[cite: 1];
-            document.getElementById('a-title').innerText = title[cite: 1];
-            sub.innerHTML = "<p class='text-center py-10 text-gray-500'><i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i><br>Data ဆွဲယူနေပါသည်...</p>";
+            document.getElementById('a-back-btn').style.display = 'block';
+            document.getElementById('a-title').innerText = title;
+            sub.innerHTML = "<p class='text-center py-10 text-gray-500'><i class='fa-solid fa-spinner fa-spin text-2xl mb-2'></i><br>Data ဆွဲယူနေပါသည်...</p>";
 
             let html = "";
-            if(type === 'new') { // ဆရာသစ်အတည်ပြုရန်[cite: 1]
-                const { data } = await db.from('tutors').select('*').eq('status', 'pending')[cite: 1];
-                if(!data || data.length===0) html = "<p class='text-center text-gray-400'>စိစစ်ရန် မရှိသေးပါ</p>"[cite: 1];
+            if(type === 'new') { 
+                const { data } = await db.from('tutors').select('*').eq('status', 'pending');
+                if(!data || data.length===0) html = "<p class='text-center text-gray-400'>စိစစ်ရန် မရှိသေးပါ</p>";
                 data?.forEach(t => {
-                    let dTxt = t.name ? `${t.name} (${t.phone})<br>${t.state}, ${t.grade1}` : `[Profile လွတ်]<br>U: ${t.username} | P: ${t.password}`[cite: 1];
+                    let dTxt = t.name ? `${t.name} (${t.phone})<br>${t.state}, ${t.grade1}` : `[Profile လွတ်]<br>U: ${t.username} | P: ${t.password}`;
                     html += `
                         <div class="bg-white p-4 rounded-xl border shadow-sm mb-3">
                             <p class="text-xs text-gray-700 leading-relaxed mb-3">${dTxt}</p>
@@ -972,11 +967,11 @@
                     `;
                 });
             } 
-            else if(type === 'tutors') { // ဆရာစာရင်း[cite: 1]
-                const { data } = await db.from('tutors').select('*').eq('status', 'approved')[cite: 1];
-                if(!data || data.length===0) html = "<p class='text-center text-gray-400'>စာရင်း မရှိသေးပါ</p>"[cite: 1];
+            else if(type === 'tutors') { 
+                const { data } = await db.from('tutors').select('*').eq('status', 'approved');
+                if(!data || data.length===0) html = "<p class='text-center text-gray-400'>စာရင်း မရှိသေးပါ</p>";
                 data?.forEach(t => {
-                    let n = t.name ? `${t.name} (${t.gender})` : `User: ${t.username}`[cite: 1];
+                    let n = t.name ? `${t.name} (${t.gender})` : `User: ${t.username}`;
                     html += `
                         <div class="bg-white p-4 rounded-xl border shadow-sm mb-3">
                             <p class="font-bold text-gray-800 text-sm">${n}</p>
@@ -990,10 +985,10 @@
                     `;
                 });
             }
-            else if(type === 'p_posts' || type === 'a_posts' || type === 'c_posts') { // Posts[cite: 1]
-                let stat = type==='p_posts'?'pending':(type==='a_posts'?'approved':'completed')[cite: 1];
-                const { data } = await db.from('job_posts').select('*').eq('status', stat).order('id', {ascending: false})[cite: 1];
-                if(!data || data.length===0) html = "<p class='text-center text-gray-400'>စာရင်း မရှိသေးပါ</p>"[cite: 1];
+            else if(type === 'p_posts' || type === 'a_posts' || type === 'c_posts') { 
+                let stat = type==='p_posts'?'pending':(type==='a_posts'?'approved':'completed');
+                const { data } = await db.from('job_posts').select('*').eq('status', stat).order('id', {ascending: false});
+                if(!data || data.length===0) html = "<p class='text-center text-gray-400'>စာရင်း မရှိသေးပါ</p>";
                 for(let p of (data||[])) {
                     html += `<div class="bg-white p-4 rounded-xl border shadow-sm mb-3 text-xs leading-relaxed">
                         <p class="font-bold text-blue-800">ဘာသာရပ်: ${p.subject}</p>
@@ -1003,51 +998,51 @@
                         <hr class="my-2">
                     `;
                     if(stat === 'pending') {
-                        html += `<div class="flex space-x-2"><button onclick="aApprovePost(${p.id})" class="flex-1 bg-green-600 text-white font-bold py-2 rounded-lg">Approve</button><button onclick="aRejectPost(${p.id})" class="flex-1 bg-red-100 text-red-700 font-bold py-2 rounded-lg">Reject</button></div></div>`[cite: 1];
+                        html += `<div class="flex space-x-2"><button onclick="aApprovePost(${p.id})" class="flex-1 bg-green-600 text-white font-bold py-2 rounded-lg">Approve</button><button onclick="aRejectPost(${p.id})" class="flex-1 bg-red-100 text-red-700 font-bold py-2 rounded-lg">Reject</button></div></div>`;
                     } else if(stat === 'approved') {
-                        const apps = await db.from('job_applications').select('id', {count:'exact'}).eq('job_id', p.id)[cite: 1];
-                        html += `<div class="flex justify-between items-center"><button onclick="aViewApplicants(${p.id}, '${p.subject}', '${p.stu_name}', '${p.stu_phone}')" class="text-blue-600 font-bold underline"><i class="fa-solid fa-users"></i> လျှောက်ထားသူ (${apps.count||0})</button> <button onclick="aCompletePost(${p.id})" class="bg-green-600 text-white px-3 py-1.5 rounded-lg font-bold">Done</button></div></div>`[cite: 1];
+                        const apps = await db.from('job_applications').select('id', {count:'exact'}).eq('job_id', p.id);
+                        html += `<div class="flex justify-between items-center"><button onclick="aViewApplicants(${p.id}, '${p.subject}', '${p.stu_name}', '${p.stu_phone}')" class="text-blue-600 font-bold underline"><i class="fa-solid fa-users"></i> လျှောက်ထားသူ (${apps.count||0})</button> <button onclick="aCompletePost(${p.id})" class="bg-green-600 text-white px-3 py-1.5 rounded-lg font-bold">Done</button></div></div>`;
                     } else {
-                        html += `<p class="font-bold text-green-600"><i class="fa-solid fa-check"></i> ပြီးမြောက်ပြီး</p></div>`[cite: 1];
+                        html += `<p class="font-bold text-green-600"><i class="fa-solid fa-check"></i> ပြီးမြောက်ပြီး</p></div>`;
                     }
                 }
             }
-            else if(type === 'direct') { // Direct Booking[cite: 1]
-                const pReq = await db.from('requests').select('*, tutors(name)').eq('status', 'pending')[cite: 1];
+            else if(type === 'direct') { 
+                const pReq = await db.from('requests').select('*, tutors(name)').eq('status', 'pending');
                 html += `<h4 class="font-bold text-orange-600 mb-2">စိစစ်ဆဲ တောင်းဆိုမှုများ</h4>`;
                 pReq.data?.forEach(r => {
                     html += `<div class="bg-orange-50 p-3 rounded-xl border border-orange-200 mb-2 text-xs flex justify-between items-center">
                         <div><p class="font-bold">ကျောင်းသား: ${r.student_name}</p><p>ဆရာ: ${r.tutors?.name || 'Unknown'}</p></div>
                         <button onclick="aViewRequest(${r.id})" class="bg-orange-500 text-white px-3 py-1.5 rounded-lg font-bold">Detail</button>
-                    </div>`[cite: 1];
+                    </div>`;
                 });
-                const cReq = await db.from('requests').select('*, tutors(name)').neq('status', 'pending').limit(10)[cite: 1];
+                const cReq = await db.from('requests').select('*, tutors(name)').neq('status', 'pending').limit(10);
                 html += `<h4 class="font-bold text-gray-600 mt-4 mb-2">မှတ်တမ်းများ (History)</h4>`;
                 cReq.data?.forEach(r => {
-                    let col = r.status==='completed'?'green':'red'[cite: 1];
+                    let col = r.status==='completed'?'green':'red';
                     html += `<div class="bg-gray-50 p-2 rounded border mb-2 text-[10px] text-${col}-700">
                         <span class="font-bold uppercase">[${r.status}]</span> S: ${r.student_name} -> T: ${r.tutors?.name} ${r.reject_reason ? `(${r.reject_reason})`:''}
-                    </div>`[cite: 1];
+                    </div>`;
                 });
             }
-            else if(type === 'noti') { // Notifications[cite: 1]
-                const { data } = await db.from('notifications').select('*').order('timestamp', {ascending: false}).limit(20)[cite: 1];
+            else if(type === 'noti') { 
+                const { data } = await db.from('notifications').select('*').order('timestamp', {ascending: false}).limit(20);
                 data?.forEach(n => {
                     html += `<div class="bg-white p-3 rounded-xl border shadow-sm mb-2 text-xs border-l-4 border-l-orange-400">
                         <p class="font-bold text-blue-800">${n.title}</p>
                         <p class="text-gray-600">${n.message}</p>
                         <p class="text-[9px] text-gray-400 mt-1">${new Date(n.timestamp).toLocaleString()}</p>
-                    </div>`[cite: 1];
+                    </div>`;
                 });
             }
-            else if(type === 'chat') { // Chat list[cite: 1]
-                const { data } = await db.from('chat_messages').select('tutor_id, tutors(name, username)').order('timestamp', {ascending: false})[cite: 1];
+            else if(type === 'chat') { 
+                const { data } = await db.from('chat_messages').select('tutor_id, tutors(name, username)').order('timestamp', {ascending: false});
                 let tSet = new Set();
                 data?.forEach(r => {
                     if(!tSet.has(r.tutor_id)) {
                         tSet.add(r.tutor_id);
-                        let n = r.tutors?.name || r.tutors?.username[cite: 1];
-                        html += `<button onclick="aOpenChat(${r.tutor_id}, '${n}')" class="w-full text-left bg-white p-3 rounded-xl border shadow-sm mb-2 font-bold text-gray-700 text-sm hover:bg-blue-50 transition"><i class="fa-solid fa-user-circle text-blue-400 text-lg mr-2 align-middle"></i> ${n}</button>`[cite: 1];
+                        let n = r.tutors?.name || r.tutors?.username;
+                        html += `<button onclick="aOpenChat(${r.tutor_id}, '${n}')" class="w-full text-left bg-white p-3 rounded-xl border shadow-sm mb-2 font-bold text-gray-700 text-sm hover:bg-blue-50 transition"><i class="fa-solid fa-user-circle text-blue-400 text-lg mr-2 align-middle"></i> ${n}</button>`;
                     }
                 });
             }
@@ -1055,9 +1050,9 @@
         }
 
         // Admin Helpers
-        async function aApproveTutor(id) { await db.from('tutors').update({status:'approved'}).eq('id',id); openAPanel('new', 'ဆရာသစ် အတည်ပြုရန်'); }[cite: 1]
-        async function aApprovePost(id) { await db.from('job_posts').update({status:'approved'}).eq('id',id); openAPanel('p_posts', 'စိစစ်ရန် Post များ'); }[cite: 1]
-        async function aCompletePost(id) { await db.from('job_posts').update({status:'completed'}).eq('id',id); openAPanel('a_posts', 'စိစစ်ပြီး Post များ'); }[cite: 1]
+        async function aApproveTutor(id) { await db.from('tutors').update({status:'approved'}).eq('id',id); openAPanel('new', 'ဆရာသစ် အတည်ပြုရန်'); }
+        async function aApprovePost(id) { await db.from('job_posts').update({status:'approved'}).eq('id',id); openAPanel('p_posts', 'စိစစ်ရန် Post များ'); }
+        async function aCompletePost(id) { await db.from('job_posts').update({status:'completed'}).eq('id',id); openAPanel('a_posts', 'စိစစ်ပြီး Post များ'); }
 
         function aResetPass(id) {
             openModal(
@@ -1066,8 +1061,8 @@
             );
         }
         async function aExecuteReset(id) {
-            const p = document.getElementById('a-new-pass').value[cite: 1];
-            if(p) { await db.from('tutors').update({password:p}).eq('id',id); closeModal(); showAlert("အောင်မြင်သည်","Reset ချပြီးပါပြီ","green"); }[cite: 1]
+            const p = document.getElementById('a-new-pass').value;
+            if(p) { await db.from('tutors').update({password:p}).eq('id',id); closeModal(); showAlert("အောင်မြင်သည်","Reset ချပြီးပါပြီ","green"); }
         }
 
         function aBlacklist(id) {
@@ -1077,8 +1072,8 @@
             );
         }
         async function aExecuteBL(id) {
-            const r = document.getElementById('a-bl-reason').value[cite: 1];
-            if(r) { await db.from('tutors').update({status:'blacklisted', reject_reason:r}).eq('id',id); pushNoti("Blacklist","ဆရာအကောင့်တစ်ခုအား Black List သို့ ပြောင်းရွှေ့လိုက်ပါသည်။"); closeModal(); openAPanel('tutors', 'ဆရာများ စာရင်း'); }[cite: 1]
+            const r = document.getElementById('a-bl-reason').value;
+            if(r) { await db.from('tutors').update({status:'blacklisted', reject_reason:r}).eq('id',id); pushNoti("Blacklist","ဆရာအကောင့်တစ်ခုအား Black List သို့ ပြောင်းရွှေ့လိုက်ပါသည်။"); closeModal(); openAPanel('tutors', 'ဆရာများ စာရင်း'); }
         }
 
         function aRejectPost(id) {
@@ -1088,13 +1083,13 @@
             );
         }
         async function aExecuteRejPost(id) {
-            const r = document.getElementById('a-rej-reason').value[cite: 1];
-            if(r) { await db.from('job_posts').update({status:'rejected', reject_reason:r}).eq('id',id); closeModal(); openAPanel('p_posts', 'စိစစ်ရန် Post များ'); }[cite: 1]
+            const r = document.getElementById('a-rej-reason').value;
+            if(r) { await db.from('job_posts').update({status:'rejected', reject_reason:r}).eq('id',id); closeModal(); openAPanel('p_posts', 'စိစစ်ရန် Post များ'); }
         }
 
         async function aViewTutor(id, isApproved) {
-            const { data } = await db.from('tutors').select('*').eq('id', id)[cite: 1];
-            const r = data[0][cite: 1];
+            const { data } = await db.from('tutors').select('*').eq('id', id);
+            const r = data[0];
             let html = `
                 <div class="space-y-2 text-xs leading-relaxed">
                     <img src="${r.photo||'https://via.placeholder.com/80'}" class="w-16 h-16 rounded-full mx-auto object-cover border">
@@ -1110,7 +1105,7 @@
                     <button onclick="aApproveTutor(${id}); closeModal()" class="flex-1 bg-green-600 text-white py-2 rounded font-bold">Approve</button>
                     <button onclick="aRejectTutorPrompt(${id})" class="flex-1 bg-red-600 text-white py-2 rounded font-bold">Reject</button>
                     <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold">ပိတ်မည်</button>
-                `[cite: 1];
+                `;
             }
             openModal(html, btns);
         }
@@ -1122,16 +1117,16 @@
             );
         }
         async function aExecuteRejTutor(id) {
-            const r = document.getElementById('a-rej-t-reason').value[cite: 1];
-            if(r) { await db.from('tutors').update({status:'rejected', reject_reason:r}).eq('id',id); closeModal(); openAPanel('new', 'ဆရာသစ် အတည်ပြုရန်'); }[cite: 1]
+            const r = document.getElementById('a-rej-t-reason').value;
+            if(r) { await db.from('tutors').update({status:'rejected', reject_reason:r}).eq('id',id); closeModal(); openAPanel('new', 'ဆရာသစ် အတည်ပြုရန်'); }
         }
 
         async function aViewApplicants(jid, subj, sname, sphone) {
-            const { data } = await db.from('job_applications').select('*, tutors(*)').eq('job_id', jid)[cite: 1];
+            const { data } = await db.from('job_applications').select('*, tutors(*)').eq('job_id', jid);
             let html = `<h4 class="font-bold text-blue-800 text-sm sticky top-0 bg-white pb-2 border-b">Applicants for: ${subj}</h4><div class="mt-2 space-y-2">`;
-            if(!data || data.length===0) html += "<p>No applicants.</p>"[cite: 1];
+            if(!data || data.length===0) html += "<p>No applicants.</p>";
             data?.forEach(a => {
-                const t = a.tutors || {}[cite: 1];
+                const t = a.tutors || {};
                 html += `
                     <div class="bg-gray-50 p-2 rounded border text-xs">
                         <p class="font-bold">${t.name || t.username}</p><p>Ph: ${t.phone}</p>
@@ -1147,15 +1142,15 @@
         }
 
         async function aHire(tid, jid, sname, sphone) {
-            await db.from('job_posts').update({status:'completed'}).eq('id',jid)[cite: 1];
-            await db.from('requests').insert([{tutor_id:tid, student_name:sname, student_phone:sphone, status:'completed', reject_reason:'Post မှ ချိတ်ဆက်ပေးခြင်း'}])[cite: 1];
-            closeModal(); showAlert("အောင်မြင်သည်","ချိတ်ဆက်ပေးပြီးပါပြီ","green")[cite: 1];
+            await db.from('job_posts').update({status:'completed'}).eq('id',jid);
+            await db.from('requests').insert([{tutor_id:tid, student_name:sname, student_phone:sphone, status:'completed', reject_reason:'Post မှ ချိတ်ဆက်ပေးခြင်း'}]);
+            closeModal(); showAlert("အောင်မြင်သည်","ချိတ်ဆက်ပေးပြီးပါပြီ","green");
             openAPanel('a_posts', 'စိစစ်ပြီး Post များ');
         }
 
         async function aViewRequest(rid) {
-            const { data } = await db.from('requests').select('*, tutors(*)').eq('id', rid)[cite: 1];
-            const r = data[0]; const t = r.tutors || {}[cite: 1];
+            const { data } = await db.from('requests').select('*, tutors(*)').eq('id', rid);
+            const r = data[0]; const t = r.tutors || {};
             let html = `
                 <div class="text-xs leading-relaxed space-y-2">
                     <p class="font-bold text-blue-700 border-b pb-1">ကျောင်းသား: ${r.student_name} (${r.student_phone})</p>
@@ -1171,7 +1166,7 @@
         }
 
         async function aApproveReq(rid) {
-            await db.from('requests').update({status:'completed'}).eq('id',rid)[cite: 1]; closeModal(); openAPanel('direct', 'Direct Booking စိစစ်ရန်');
+            await db.from('requests').update({status:'completed'}).eq('id',rid); closeModal(); openAPanel('direct', 'Direct Booking စိစစ်ရန်');
         }
         function aRejectReqPrompt(rid) {
             openModal(
@@ -1180,17 +1175,17 @@
             );
         }
         async function aExecuteRejReq(rid) {
-            const r = document.getElementById('a-rej-r-reason').value[cite: 1];
+            const r = document.getElementById('a-rej-r-reason').value;
             if(r) { 
-                await db.from('requests').update({status:'rejected', reject_reason:r}).eq('id',rid)[cite: 1]; 
-                pushNoti("ချိတ်ဆက်မှု ငြင်းပယ်ခြင်း", "တောင်းဆိုချက်အား ငြင်းပယ်လိုက်ပါသည်။")[cite: 1];
+                await db.from('requests').update({status:'rejected', reject_reason:r}).eq('id',rid); 
+                pushNoti("ချိတ်ဆက်မှု ငြင်းပယ်ခြင်း", "တောင်းဆိုချက်အား ငြင်းပယ်လိုက်ပါသည်။");
                 closeModal(); openAPanel('direct', 'Direct Booking စိစစ်ရန်'); 
             }
         }
 
         // Admin Chat
         function aOpenChat(tid, tname) {
-            a_chat_id = tid[cite: 1];
+            a_chat_id = tid;
             document.getElementById('a-sub').innerHTML = `
                 <div class="bg-white p-3 rounded-xl border shadow flex flex-col h-[65vh]">
                     <h4 class="font-bold text-blue-800 border-b pb-2"><i class="fa-solid fa-comments"></i> Chat: ${tname}</h4>
@@ -1200,17 +1195,17 @@
                         <button onclick="aSendChat()" class="bg-blue-600 text-white px-4 rounded font-bold"><i class="fa-solid fa-paper-plane"></i></button>
                     </div>
                 </div>
-            `[cite: 1];
+            `;
             aLoadChatBox();
         }
 
         async function aLoadChatBox() {
-            if(!a_chat_id) return[cite: 1];
+            if(!a_chat_id) return;
             const box = document.getElementById('a-chat-box');
-            const { data } = await db.from('chat_messages').select('*').eq('tutor_id', a_chat_id).order('timestamp')[cite: 1];
+            const { data } = await db.from('chat_messages').select('*').eq('tutor_id', a_chat_id).order('timestamp');
             box.innerHTML = "";
             data?.forEach(msg => {
-                const me = msg.sender === 'admin'[cite: 1];
+                const me = msg.sender === 'admin';
                 box.innerHTML += `
                     <div class="flex ${me ? 'justify-end' : 'justify-start'}">
                         <div class="${me ? 'bg-green-100' : 'bg-white border'} p-2 rounded-lg max-w-[80%]">
@@ -1225,8 +1220,8 @@
 
         async function aSendChat() {
             const inp = document.getElementById('a-chat-input');
-            if(!inp.value.trim() || !a_chat_id) return[cite: 1];
-            await db.from('chat_messages').insert([{ tutor_id: a_chat_id, sender: 'admin', message: inp.value }])[cite: 1];
+            if(!inp.value.trim() || !a_chat_id) return;
+            await db.from('chat_messages').insert([{ tutor_id: a_chat_id, sender: 'admin', message: inp.value }]);
             inp.value = ""; aLoadChatBox();
         }
 
