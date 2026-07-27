@@ -321,14 +321,14 @@
 
                 <div id="s-search-view" class="space-y-3">
                     <div class="bg-white p-3 rounded-2xl border shadow-sm grid grid-cols-2 gap-2 text-xs">
-                        <select id="s-f-state" onchange="loadSTutors()" class="border p-2 rounded-xl bg-gray-50 outline-none">
+                        <select id="s-f-state" onchange="sLoadTutors()" class="border p-2 rounded-xl bg-gray-50 outline-none">
                             <option value="အားလုံး">တိုင်း/ပြည်နယ် (အားလုံး)</option>
                             <option value="ရန်ကုန်တိုင်းဒေသကြီး">ရန်ကုန်တိုင်း</option>
                             <option value="မန္တလေးတိုင်းဒေသကြီး">မန္တလေးတိုင်း</option>
                             <option value="ပဲခူးတိုင်းဒေသကြီး">ပဲခူးတိုင်း</option>
                             <option value="နေပြည်တော်">နေပြည်တော်</option>
                         </select>
-                        <input type="text" id="s-f-town" oninput="loadSTutors()" placeholder="မြို့နယ်ဖြင့်ရှာရန်" class="border p-2 rounded-xl bg-gray-50 outline-none">
+                        <input type="text" id="s-f-town" oninput="sLoadTutors()" placeholder="မြို့နယ်ဖြင့်ရှာရန်" class="border p-2 rounded-xl bg-gray-50 outline-none">
                     </div>
                     <div id="s-tutor-list" class="space-y-3 pb-8"></div>
                 </div>
