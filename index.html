@@ -3,6 +3,450 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Match Agency</title>
+    <!-- Tailwind CSS UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-100 font-sans min-h-screen text-gray-800 pb-10">
+
+    <!-- APP BAR -->
+    <header class="bg-slate-800 text-white p-4 shadow-md sticky top-0 z-50 flex justify-between items-center">
+        <button id="back-btn" onclick="showScreen('home-screen')" class="hidden text-sm bg-slate-700 px-3 py-1 rounded">← နောက်သို့</button>
+        <h1 id="app-title" class="text-lg font-bold text-center flex-1">Teacher Match</h1>
+        <div class="w-10"></div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-md mx-auto p-4">
+
+        <!-- 1. HOME SCREEN -->
+        <div id="home-screen" class="space-y-4">
+            <div class="text-center my-4">
+                <h2 class="text-2xl font-bold text-slate-800">ပင်မစာမျက်နှာ</h2>
+                <p class="text-xs text-gray-600">Teacher Match ဆရာရှာဖွေရေး Agency မှ ကြိုဆိုပါတယ်</p>
+            </div>
+
+            <!-- Top Row -->
+            <div class="grid grid-cols-3 gap-3">
+                <button onclick="showScreen('teacher-screen')" class="bg-lime-200 hover:bg-lime-300 p-4 rounded-xl flex flex-col items-center justify-center shadow">
+                    <span class="text-2xl">🎓</span>
+                    <span class="text-xs font-bold mt-1">Teacher</span>
+                </button>
+                <button onclick="showScreen('student-screen')" class="bg-red-200 hover:bg-red-300 p-4 rounded-xl flex flex-col items-center justify-center shadow">
+                    <span class="text-2xl">👨‍🎓</span>
+                    <span class="text-xs font-bold mt-1">Student</span>
+                </button>
+                <button onclick="showScreen('admin-login-screen')" class="bg-purple-200 hover:bg-purple-300 p-4 rounded-xl flex flex-col items-center justify-center shadow">
+                    <span class="text-2xl">⚙️</span>
+                    <span class="text-xs font-bold mt-1">Admin</span>
+                </button>
+            </div>
+
+            <!-- Mid Row -->
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="showScreen('blacklist-screen'); loadBlacklist();" class="bg-indigo-200 hover:bg-indigo-300 p-3 rounded-xl flex flex-col items-center justify-center shadow">
+                    <span class="text-xl">🛡️</span>
+                    <span class="text-xs font-bold mt-1">Black List</span>
+                </button>
+                <button onclick="showScreen('help-screen')" class="bg-blue-200 hover:bg-blue-300 p-3 rounded-xl flex flex-col items-center justify-center shadow">
+                    <span class="text-xl">❓</span>
+                    <span class="text-xs font-bold mt-1">Help & Support</span>
+                </button>
+            </div>
+
+            <button onclick="showScreen('terms-screen')" class="w-full bg-emerald-200 hover:bg-emerald-300 p-3 rounded-xl flex flex-col items-center justify-center shadow">
+                <span class="text-xl">📋</span>
+                <span class="text-xs font-bold mt-1">Terms & Conditions</span>
+            </button>
+
+            <!-- Guide Row -->
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="showScreen('teacher-guide-screen')" class="bg-sky-200 hover:bg-sky-300 p-3 rounded-xl flex flex-col items-center justify-center shadow">
+                    <span class="text-xl">📖</span>
+                    <span class="text-xs font-bold mt-1">Teacher Guide</span>
+                </button>
+                <button onclick="showScreen('student-guide-screen')" class="bg-orange-200 hover:bg-orange-300 p-3 rounded-xl flex flex-col items-center justify-center shadow">
+                    <span class="text-xl">📖</span>
+                    <span class="text-xs font-bold mt-1">Student Guide</span>
+                </button>
+            </div>
+            
+            <p class="text-center text-[10px] text-gray-400 mt-6">V 1.0.0 | Powered by Saw Yan Aung</p>
+        </div>
+
+        <!-- 2. TEACHER SCREEN -->
+        <div id="teacher-screen" class="hidden space-y-4">
+            <!-- Login/Register Toggle -->
+            <div id="teacher-auth-box" class="bg-white p-4 rounded-xl shadow space-y-3">
+                <h3 class="font-bold text-center text-blue-600">Teacher Login</h3>
+                <input type="text" id="t-login-user" placeholder="Username (ဥပမာ - KyawKyaw)" class="w-full border p-2 rounded text-xs outline-none">
+                <input type="password" id="t-login-pass" placeholder="Password" class="w-full border p-2 rounded text-xs outline-none">
+                <p id="t-login-msg" class="text-xs text-red-500 text-center"></p>
+                <button onclick="loginTeacher()" class="w-full bg-blue-600 text-white py-2 rounded text-xs font-bold">Login ဝင်မည်</button>
+                
+                <hr>
+                <div class="text-center">
+                    <p class="text-xs text-gray-500">အကောင့်မရှိသေးပါက -</p>
+                    <button onclick="showTeacherRegister(true)" class="text-xs text-blue-600 font-bold mt-1">Register အကောင့်သစ်ဆောက်ရန်</button>
+                </div>
+            </div>
+
+            <!-- Teacher Register Box -->
+            <div id="teacher-reg-box" class="hidden bg-white p-4 rounded-xl shadow space-y-3">
+                <h3 class="font-bold text-center text-green-600">Teacher Register</h3>
+                <input type="text" id="t-reg-user" placeholder="Username (ဥပမာ - KyawKyaw)" class="w-full border p-2 rounded text-xs">
+                <input type="password" id="t-reg-pass" placeholder="Password (ဥပမာ - Kk@12345)" class="w-full border p-2 rounded text-xs">
+                <p id="t-reg-msg" class="text-xs text-red-500 text-center"></p>
+                <button onclick="registerTeacher()" class="w-full bg-green-600 text-white py-2 rounded text-xs font-bold">အကောင့်သစ် မှတ်ပုံတင်မည်</button>
+                <button onclick="showTeacherRegister(false)" class="w-full text-xs text-gray-500">Login သို့ ပြန်သွားမည်</button>
+            </div>
+
+            <!-- Teacher Dashboard (Login ဝင်ပြီးမှ ပေါ်မည်) -->
+            <div id="teacher-dashboard" class="hidden space-y-3">
+                <div class="flex justify-between items-center bg-white p-2 rounded shadow">
+                    <span id="t-profile-name" class="font-bold text-xs text-blue-600">Profile</span>
+                    <button onclick="logoutTeacher()" class="text-xs bg-red-500 text-white px-2 py-1 rounded">Logout</button>
+                </div>
+
+                <!-- Form Profile -->
+                <div class="bg-white p-4 rounded-xl shadow space-y-2 text-xs">
+                    <h4 class="font-bold text-center">ဆရာ ကိုယ်ရေးအချက်အလက်</h4>
+                    <input type="text" id="t-name" placeholder="ဆရာ/ဆရာမ အမည်" class="w-full border p-2 rounded">
+                    <input type="text" id="t-phone" placeholder="ဆက်သွယ်ရန် ဖုန်းနံပါတ်" class="w-full border p-2 rounded">
+                    <input type="text" id="t-state" placeholder="တိုင်း/ပြည်နယ်" class="w-full border p-2 rounded">
+                    <input type="text" id="t-township" placeholder="မြို့နယ်" class="w-full border p-2 rounded">
+                    <input type="text" id="t-curriculum" placeholder="သင်ရိုးစနစ် (Government/International)" class="w-full border p-2 rounded">
+                    <input type="text" id="t-subject" placeholder="သင်ကြားမည့် အတန်း/ဘာသာရပ်" class="w-full border p-2 rounded">
+                    <input type="text" id="t-fee" placeholder="လစဉ်ကြေး (ကျပ်)" class="w-full border p-2 rounded">
+                    <button onclick="saveTeacherProfile()" class="w-full bg-orange-500 text-white py-2 rounded font-bold">ပြင်ဆင်ချက်များ သိမ်းဆည်းမည်</button>
+                    <p id="t-save-msg" class="text-xs text-center mt-1"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. STUDENT SCREEN -->
+        <div id="student-screen" class="hidden space-y-4">
+            <div id="student-auth-box" class="bg-white p-4 rounded-xl shadow space-y-3">
+                <h3 class="font-bold text-center text-red-600">Student Login</h3>
+                <input type="text" id="s-login-user" placeholder="Student Username" class="w-full border p-2 rounded text-xs">
+                <input type="password" id="s-login-pass" placeholder="Password" class="w-full border p-2 rounded text-xs">
+                <p id="s-login-msg" class="text-xs text-red-500 text-center"></p>
+                <button onclick="loginStudent()" class="w-full bg-red-600 text-white py-2 rounded text-xs font-bold">Login ဝင်မည်</button>
+            </div>
+
+            <!-- Student Main Area -->
+            <div id="student-dashboard" class="hidden space-y-3">
+                <div class="flex justify-between items-center bg-white p-2 rounded shadow">
+                    <span class="font-bold text-xs text-red-600">ကျောင်းသား Area</span>
+                    <button onclick="logoutStudent()" class="text-xs bg-red-500 text-white px-2 py-1 rounded">Logout</button>
+                </div>
+                
+                <h4 class="font-bold text-xs">အတည်ပြုပြီးသော ဆရာများ ရှာဖွေရန်</h4>
+                <div id="approved-tutors-list" class="space-y-2">
+                    <!-- Tutors List -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. ADMIN LOGIN & DASHBOARD -->
+        <div id="admin-login-screen" class="hidden space-y-4">
+            <div class="bg-white p-6 rounded-xl shadow space-y-4">
+                <h2 class="text-lg font-bold text-center">Admin Login</h2>
+                <input type="password" id="admin-pass-input" placeholder="Admin Password" class="w-full border p-2 rounded text-xs">
+                <p id="admin-login-error" class="text-xs text-red-500 hidden">Password မှားယွင်းနေပါသည်</p>
+                <button onclick="handleAdminLogin()" class="w-full bg-purple-600 text-white py-2 rounded text-xs font-bold">Login ဝင်မည်</button>
+            </div>
+        </div>
+
+        <div id="admin-dashboard-screen" class="hidden space-y-4">
+            <div class="flex justify-between items-center bg-white p-2 rounded shadow">
+                <h2 class="text-sm font-bold text-purple-600">Admin Dashboard</h2>
+                <button onclick="showScreen('home-screen')" class="text-xs bg-red-500 text-white px-2 py-1 rounded">Logout</button>
+            </div>
+            
+            <div class="bg-white p-3 rounded-xl shadow space-y-2">
+                <h3 class="font-bold text-xs text-blue-600">စိစစ်ရန် ဆရာသစ်များ (Pending)</h3>
+                <div id="admin-pending-tutors" class="space-y-2 text-xs">
+                    Data ဆွဲယူနေပါသည်...
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. BLACKLIST SCREEN -->
+        <div id="blacklist-screen" class="hidden space-y-4">
+            <div class="bg-white p-4 rounded-xl shadow space-y-3">
+                <h2 class="font-bold text-lg text-red-600">Black Listed (အမည်ပျက်စာရင်း)</h2>
+                <hr>
+                <div id="blacklist-container" class="space-y-2 text-xs">
+                    Data ဆွဲယူနေပါသည်...
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. TERMS SCREEN -->
+        <div id="terms-screen" class="hidden space-y-4">
+            <div class="bg-white p-4 rounded-xl shadow space-y-3 text-xs leading-relaxed">
+                <h2 class="font-bold text-lg text-blue-600">Terms & Conditions</h2>
+                <hr>
+                <p>၁။ ဤ Platform သည် ဆရာနှင့် ကျောင်းသား တိုက်ရိုက်ချိတ်ဆက်ပေးသော နေရာသာဖြစ်သည်။</p>
+                <p>၂။ ချိတ်ဆက်မှု ဝန်ဆောင်ခကို ဆရာများဘက်မှ ပေးရပါမည်။</p>
+                <p>၃။ ချိတ်ဆက်မှု ဝန်ဆောင်ခကို ကျောင်းသားများဘက်မှ ပေးစရာမလိုပါ။</p>
+                <p>၄။ ချိတ်ဆက်မှု ဝန်ဆောင်ခမှာ ပထမလ၏ ၁၀% ကို ပေးချေရမှာဖြစ်ပါသည်။</p>
+                <p>၅။ ကျောင်းသားမိဘများအနေဖြင့် လစာအား ပထမဦးဆုံးနေ့တွင် ဆရာအား တစ်လစာ ကြိုတင်ပေးချေရပါမည်။</p>
+                <p>၆။ အချက်အလက်များကို မှန်ကန်စွာ ဖြည့်စွက်ရပါမည်။</p>
+                <p>၇။ လိမ်လည်မှုများ၊ စည်းကမ်းဖောက်ဖျက်မှုများ တွေ့ရှိပါက Blacklist သွင်းခံရပါမည်။</p>
+            </div>
+        </div>
+
+        <!-- 7. HELP SCREEN -->
+        <div id="help-screen" class="hidden space-y-4">
+            <div class="bg-white p-4 rounded-xl shadow space-y-3 text-xs">
+                <h2 class="font-bold text-lg text-green-600">Help & Support (အကူအညီ)</h2>
+                <hr>
+                <p>အဆင်မပြေမှုများနှင့် အကြံပြုလိုသည်များ ရှိပါက ဆက်သွယ်နိုင်ပါသည်။</p>
+                <p class="font-bold text-blue-600">📧 Email us : teachermatching@gmail.com</p>
+            </div>
+        </div>
+
+        <!-- 8. GUIDES -->
+        <div id="teacher-guide-screen" class="hidden space-y-4">
+            <div class="bg-white p-4 rounded-xl shadow space-y-2 text-xs">
+                <h2 class="font-bold text-lg text-teal-600">Teacher User Guide</h2>
+                <hr>
+                <p>၁။ အကောင့်သစ်ပြုလုပ်ရန် Register တွင် Username နှင့် Password ဖြည့်ပါ။</p>
+                <p>၂။ Login ဝင်ပြီးနောက် ကိုယ်ရေးအချက်အလက်များကို ဖြည့်စွက်ပါ။</p>
+                <p>၃။ Admin Approve ပေးမှသာ ကျောင်းသားများ မြင်တွေ့ရပါမည်။</p>
+            </div>
+        </div>
+
+        <div id="student-guide-screen" class="hidden space-y-4">
+            <div class="bg-white p-4 rounded-xl shadow space-y-2 text-xs">
+                <h2 class="font-bold text-lg text-orange-600">Student User Guide</h2>
+                <hr>
+                <p>၁။ Register တွင် အကောင့်ပြုလုပ်၍ Login ဝင်ပါ။</p>
+                <p>၂။ 'ဆရာရှာရန်' တွင် ကိုက်ညီသော ဆရာများ၏ Profile ကို ကြည့်ရှုနိုင်ပါသည်။</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Supabase Init
+        const SUPABASE_URL = "https://ryberrmhwmjnqcovpxrv.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_7JG5cYQrpnme8TnImrqLCQ_z9RZSvPi";
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let currentTutorId = null;
+
+        // Navigation Control
+        function showScreen(screenId) {
+            const screens = [
+                'home-screen', 'teacher-screen', 'student-screen', 
+                'admin-login-screen', 'admin-dashboard-screen', 
+                'blacklist-screen', 'terms-screen', 'help-screen',
+                'teacher-guide-screen', 'student-guide-screen'
+            ];
+            screens.forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById(screenId).classList.remove('hidden');
+
+            const backBtn = document.getElementById('back-btn');
+            if (screenId === 'home-screen') {
+                backBtn.classList.add('hidden');
+            } else {
+                backBtn.classList.remove('hidden');
+            }
+        }
+
+        // Teacher Auth
+        function showTeacherRegister(showReg) {
+            if(showReg) {
+                document.getElementById('teacher-auth-box').classList.add('hidden');
+                document.getElementById('teacher-reg-box').classList.remove('hidden');
+            } else {
+                document.getElementById('teacher-auth-box').classList.remove('hidden');
+                document.getElementById('teacher-reg-box').classList.add('hidden');
+            }
+        }
+
+        async function registerTeacher() {
+            const u = document.getElementById('t-reg-user').value.trim();
+            const p = document.getElementById('t-reg-pass').value.trim();
+            const msg = document.getElementById('t-reg-msg');
+
+            if (!u || !p) { msg.innerText = "အချက်အလက်ဖြည့်ပါ"; return; }
+
+            const { data, error } = await supabase.from('tutors').insert([{ username: u, password: p, status: 'pending' }]);
+            if (error) {
+                msg.innerText = "အကောင့်ဆောက်၍ မရပါ (Username ရှိပြီးသားဖြစ်နိုင်ပါသည်)";
+            } else {
+                msg.className = "text-xs text-green-500 text-center";
+                msg.innerText = "အကောင့်ဆောက်ပြီးပါပြီ! Login ဝင်ပါ။";
+            }
+        }
+
+        async function loginTeacher() {
+            const u = document.getElementById('t-login-user').value.trim();
+            const p = document.getElementById('t-login-pass').value.trim();
+            const msg = document.getElementById('t-login-msg');
+
+            const { data, error } = await supabase.from('tutors').select('*').eq('username', u).eq('password', p);
+            if (data && data.length > 0) {
+                currentTutorId = data[0].id;
+                document.getElementById('teacher-auth-box').classList.add('hidden');
+                document.getElementById('teacher-dashboard').classList.remove('hidden');
+                document.getElementById('t-profile-name').innerText = "ဆရာ: " + (data[0].name || data[0].username);
+                
+                // Load profile data
+                document.getElementById('t-name').value = data[0].name || '';
+                document.getElementById('t-phone').value = data[0].phone || '';
+                document.getElementById('t-state').value = data[0].state || '';
+                document.getElementById('t-township').value = data[0].township || '';
+                document.getElementById('t-curriculum').value = data[0].curriculum || '';
+                document.getElementById('t-subject').value = data[0].subject1 || '';
+                document.getElementById('t-fee').value = data[0].fee || '';
+            } else {
+                msg.innerText = "Username သို့မဟုတ် Password မှားနေပါသည်";
+            }
+        }
+
+        async function saveTeacherProfile() {
+            const name = document.getElementById('t-name').value;
+            const phone = document.getElementById('t-phone').value;
+            const state = document.getElementById('t-state').value;
+            const township = document.getElementById('t-township').value;
+            const curriculum = document.getElementById('t-curriculum').value;
+            const subject = document.getElementById('t-subject').value;
+            const fee = document.getElementById('t-fee').value;
+
+            const { error } = await supabase.from('tutors').update({
+                name: name, phone: phone, state: state, township: township,
+                curriculum: curriculum, subject1: subject, fee: fee, status: 'pending'
+            }).eq('id', currentTutorId);
+
+            const msg = document.getElementById('t-save-msg');
+            if(!error) {
+                msg.className = "text-xs text-green-600 text-center";
+                msg.innerText = "Profile သိမ်းဆည်းပြီးပါပြီ။ Admin အတည်ပြုချက်စောင့်ပါ။";
+            }
+        }
+
+        function logoutTeacher() {
+            currentTutorId = null;
+            document.getElementById('teacher-dashboard').classList.add('hidden');
+            document.getElementById('teacher-auth-box').classList.remove('hidden');
+        }
+
+        // Student Section
+        async function loginStudent() {
+            const u = document.getElementById('s-login-user').value;
+            const p = document.getElementById('s-login-pass').value;
+            
+            const { data } = await supabase.from('students').select('*').eq('username', u).eq('password', p);
+            if (data && data.length > 0) {
+                document.getElementById('student-auth-box').classList.add('hidden');
+                document.getElementById('student-dashboard').classList.remove('hidden');
+                loadApprovedTutors();
+            } else {
+                document.getElementById('s-login-msg').innerText = "Login မှားယွင်းနေပါသည်";
+            }
+        }
+
+        async function loadApprovedTutors() {
+            const container = document.getElementById('approved-tutors-list');
+            const { data } = await supabase.from('tutors').select('*').eq('status', 'approved');
+            
+            if(!data || data.length === 0) {
+                container.innerHTML = "<p class='text-xs text-gray-400'>ဆရာမရှိသေးပါ</p>";
+                return;
+            }
+
+            container.innerHTML = "";
+            data.forEach(t => {
+                container.innerHTML += `
+                    <div class="bg-white p-3 rounded-lg shadow text-xs space-y-1 border-l-4 border-green-500">
+                        <p class="font-bold text-gray-800">${t.name || 'No Name'}</p>
+                        <p class="text-gray-500">ဒေသ: ${t.state || '-'}, ${t.township || '-'}</p>
+                        <p class="text-blue-600">သင်ရိုး: ${t.curriculum || '-'}</p>
+                        <p class="font-bold text-green-600">လစဉ်ကြေး: ${t.fee || '0'} Ks</p>
+                    </div>
+                `;
+            });
+        }
+
+        function logoutStudent() {
+            document.getElementById('student-dashboard').classList.add('hidden');
+            document.getElementById('student-auth-box').classList.remove('hidden');
+        }
+
+        // Admin Auth & Functions
+        function handleAdminLogin() {
+            const pass = document.getElementById('admin-pass-input').value;
+            if (pass === "G&b862013") {
+                showScreen('admin-dashboard-screen');
+                loadPendingTutorsAdmin();
+            } else {
+                document.getElementById('admin-login-error').classList.remove('hidden');
+            }
+        }
+
+        async function loadPendingTutorsAdmin() {
+            const container = document.getElementById('admin-pending-tutors');
+            const { data } = await supabase.from('tutors').select('*').eq('status', 'pending');
+            
+            if (!data || data.length === 0) {
+                container.innerHTML = "<p class='text-gray-400'>စိစစ်ရန် မရှိပါ</p>";
+                return;
+            }
+
+            container.innerHTML = "";
+            data.forEach(t => {
+                container.innerHTML += `
+                    <div class="border p-2 rounded bg-gray-50 flex justify-between items-center">
+                        <div>
+                            <p class="font-bold text-gray-800">${t.name || t.username}</p>
+                            <p class="text-gray-500">${t.phone || '-'}</p>
+                        </div>
+                        <button onclick="approveTutor(${t.id})" class="bg-green-600 text-white text-[10px] px-2 py-1 rounded">Approve</button>
+                    </div>
+                `;
+            });
+        }
+
+        async function approveTutor(id) {
+            await supabase.from('tutors').update({ status: 'approved' }).eq('id', id);
+            loadPendingTutorsAdmin();
+        }
+
+        // Blacklist Loader
+        async function loadBlacklist() {
+            const container = document.getElementById('blacklist-container');
+            const { data } = await supabase.from('tutors').select('*').eq('status', 'blacklisted');
+            
+            if (!data || data.length === 0) {
+                container.innerHTML = "<p class='text-gray-400'>Black List စာရင်း မရှိသေးပါ။</p>";
+                return;
+            }
+
+            container.innerHTML = "";
+            data.forEach(t => {
+                container.innerHTML += `
+                    <div class="border p-2 rounded bg-red-50 text-red-700">
+                        <p class="font-bold">${t.name || 'Unknown'}</p>
+                        <p class="text-[10px] text-gray-500">အကြောင်းရင်း: ${t.reject_reason || '-'}</p>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Match</title>
     <!-- Tailwind CSS (UI ဒီဇိုင်းအတွက်) -->
     <script src="https://cdn.tailwindcss.com"></script>
