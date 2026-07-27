@@ -1,460 +1,4 @@
-<!DOCTYPE html>
-<html lang="my">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Match</title>
-    <!-- Tailwind CSS (UI Design) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="bg-[#F4F6F9] font-sans min-h-screen text-gray-800 pb-12">
-
-    <!-- APP BAR (HEADER) -->
-    <header class="bg-slate-800 text-white p-3 shadow-md sticky top-0 z-40 flex items-center justify-between">
-        <button id="btn-back" onclick="goHome()" class="hidden text-[11px] bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg transition">
-            <i class="fa-solid fa-arrow-left mr-1"></i> နောက်သို့
-        </button>
-        <h1 id="app-title" class="text-base font-bold text-center flex-1">Teacher Match</h1>
-        <div class="w-16"></div>
-    </header>
-
-    <!-- MAIN APP CONTAINER -->
-    <main class="max-w-md mx-auto p-4 space-y-4">
-
-        <!-- ========================================== -->
-        <!-- 1. HOME SCREEN (ပင်မစာမျက်နှာ) -->
-        <!-- ========================================== -->
-        <div id="home-screen" class="space-y-4 fade-in">
-            <div class="text-center my-4">
-                <h2 class="text-2xl font-bold text-[#1a1a4b]">ပင်မစာမျက်နှာ</h2>
-                <p class="text-[13px] text-gray-600 mt-1 leading-relaxed">Teacher Match ဆရာရှာဖွေရေး<br>Agency မှ ကြိုဆိုပါတယ်</p>
-            </div>
-
-            <div class="grid grid-cols-3 gap-3">
-                <button onclick="navTo('teacher-screen', 'Teacher Panel')" class="bg-[#C5E1A5] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-24">
-                    <i class="fa-solid fa-graduation-cap text-3xl text-slate-800 mb-1"></i>
-                    <span class="text-xs font-bold text-slate-800">Teacher</span>
-                </button>
-                <button onclick="navTo('student-screen', 'Student Area')" class="bg-[#EF9A9A] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-24">
-                    <i class="fa-solid fa-user text-3xl text-slate-800 mb-1"></i>
-                    <span class="text-xs font-bold text-slate-800">Student</span>
-                </button>
-                <button onclick="openAdmin()" class="bg-[#CE93D8] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-24">
-                    <i class="fa-solid fa-gear text-3xl text-slate-800 mb-1"></i>
-                    <span class="text-xs font-bold text-slate-800">Admin</span>
-                </button>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="navTo('blacklist-screen', 'Black Listed'); loadBlacklist();" class="bg-[#9FA8DA] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-20">
-                    <i class="fa-solid fa-shield-halved text-xl text-slate-800 mb-1"></i>
-                    <span class="text-xs font-bold text-slate-800">Black List</span>
-                </button>
-                <button onclick="navTo('help-screen', 'Help & Support')" class="bg-[#90CAF9] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-20">
-                    <i class="fa-solid fa-circle-question text-xl text-slate-800 mb-1"></i>
-                    <span class="text-xs font-bold text-slate-800 text-center leading-tight">Help<br>Support & FAQ</span>
-                </button>
-            </div>
-
-            <button onclick="navTo('terms-screen', 'Terms & Conditions')" class="w-full bg-[#A5D6A7] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-16">
-                <i class="fa-solid fa-file-contract text-xl text-slate-800 mb-1"></i>
-                <span class="text-xs font-bold text-slate-800">Term & Condition</span>
-            </button>
-            <p class="text-[10px] text-gray-500 text-center">အသုံးမပြုမီ Term & Condition ကို အရင်ဖတ်ပေးပါ</p>
-
-            <div class="grid grid-cols-2 gap-3">
-                <button onclick="navTo('t-guide-screen', 'Teacher Guide')" class="bg-[#90CAF9] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-20">
-                    <i class="fa-solid fa-book text-xl text-slate-800 mb-1"></i>
-                    <span class="text-xs font-bold text-slate-800 text-center leading-tight">Teacher<br>UserGuide</span>
-                </button>
-                <button onclick="navTo('s-guide-screen', 'Student Guide')" class="bg-[#FFCCBC] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-20">
-                    <i class="fa-solid fa-book text-xl text-slate-800 mb-1"></i>
-                    <span class="text-xs font-bold text-slate-800 text-center leading-tight">Student<br>UserGuide</span>
-                </button>
-            </div>
-
-            <button onclick="checkUpdateManual()" class="w-full bg-[#00796B] text-white p-3 rounded-2xl flex items-center justify-center space-x-2 shadow hover:opacity-90 transition h-14">
-                <i class="fa-solid fa-download"></i>
-                <span class="text-sm font-bold">Update APP</span>
-            </button>
-
-            <div class="text-center pt-2">
-                <p class="text-[10px] font-bold text-gray-400">V 1.0.0</p>
-                <p class="text-[9px] text-gray-400">Powered by Saw Yan Aung</p>
-            </div>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- 2. TEACHER SCREEN -->
-        <!-- ========================================== -->
-        <div id="teacher-screen" class="hidden space-y-4">
-            <div id="t-tabs" class="hidden flex bg-white rounded-xl shadow p-1 space-x-1 text-xs font-bold border">
-                <button onclick="switchTTab('profile')" id="t-tab-profile" class="flex-1 py-2 rounded-lg bg-blue-600 text-white transition">My Profile</button>
-                <button onclick="switchTTab('posts')" id="t-tab-posts" class="flex-1 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">Post များ</button>
-                <button onclick="switchTTab('chat')" id="t-tab-chat" class="flex-1 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">Admin Chat</button>
-            </div>
-
-            <div id="t-login-view" class="space-y-4">
-                <h2 class="text-xl font-bold text-center text-[#1a1a4b]">TEACHER</h2>
-                <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
-                    <h3 class="font-bold text-[#2196F3] text-center text-sm">Teacher Login</h3>
-                    <input type="text" id="t-l-user" placeholder="Username" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
-                    <input type="password" id="t-l-pass" placeholder="Password" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
-                    <p id="t-l-msg" class="text-xs text-red-500 text-center font-bold"></p>
-                    <button onclick="tLogin()" class="w-full bg-[#F4F6F9] border text-[#1a1a4b] hover:bg-gray-200 font-bold py-2.5 rounded-full text-sm transition">Login ဝင်မည်</button>
-                </div>
-                <div class="bg-white border p-3 rounded-xl text-center text-xs space-x-1 shadow-sm">
-                    <span class="text-gray-500">အကောင့်မရှိသေးပါက -</span>
-                    <button onclick="toggleTAuth('reg')" class="text-blue-600 font-bold hover:underline">Register အကောင့်သစ်ဆောက်ရန်</button>
-                </div>
-            </div>
-
-            <div id="t-reg-view" class="hidden bg-white p-6 rounded-2xl border shadow-sm space-y-4">
-                <h3 class="font-bold text-green-600 text-center text-base">Teacher Register</h3>
-                <input type="text" id="t-r-user" placeholder="Username (ဥပမာ - KyawKyaw)" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
-                <input type="password" id="t-r-pass" placeholder="Password (ဥပမာ - Kk@12345)" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
-                <p id="t-r-msg" class="text-[11px] text-red-500 text-center"></p>
-                <button onclick="tRegister()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl text-sm transition">အကောင့်သစ် မှတ်ပုံတင်မည်</button>
-                <button onclick="toggleTAuth('login')" class="w-full text-blue-600 text-xs font-bold pt-2">Login စာမျက်နှာသို့ ပြန်သွားမည်</button>
-            </div>
-
-            <!-- Teacher Profile View (Image Upload Added) -->
-            <div id="t-profile-view" class="hidden space-y-4">
-                <div class="bg-white p-5 rounded-2xl shadow-sm border space-y-4">
-                    <h3 class="font-bold text-center text-gray-800 text-base">ဆရာ ကိုယ်ရေးအချက်အလက်</h3>
-                    
-                    <div class="flex items-center space-x-3 bg-gray-50 p-3 rounded-xl border">
-                        <!-- Profile Image Section -->
-                        <div class="relative">
-                            <img id="t-img" src="https://via.placeholder.com/100" class="w-20 h-20 rounded-full object-cover shadow border-2 border-white bg-white">
-                            <!-- Hidden input for file picking -->
-                            <input type="file" id="t-p-file" accept="image/*" class="hidden" onchange="handleProfilePhoto(event)">
-                            <input type="hidden" id="t-p-photo"> <!-- Hidden input for saving Base64 data -->
-                            <!-- Camera Button -->
-                            <button id="t-p-photo-btn" onclick="document.getElementById('t-p-file').click()" class="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-7 h-7 flex items-center justify-center shadow-lg hidden">
-                                <i class="fa-solid fa-camera text-[11px]"></i>
-                            </button>
-                        </div>
-                        <div class="flex-1">
-                            <textarea id="t-p-bio" placeholder="ကိုယ်ရေးအကျဉ်း (Bio)" class="w-full border p-2 rounded-lg text-xs h-20 outline-none" disabled></textarea>
-                        </div>
-                    </div>
-
-                    <input type="text" id="t-p-name" placeholder="ဆရာ/ဆရာမ အမည်" class="w-full border p-2.5 rounded-xl text-xs" disabled>
-                    <div class="grid grid-cols-2 gap-3">
-                        <select id="t-p-gender" class="border p-2.5 rounded-xl text-xs" disabled>
-                            <option value="Male">Male (ကျား)</option>
-                            <option value="Female">Female (မ)</option>
-                        </select>
-                        <input type="text" id="t-p-phone" placeholder="ဆက်သွယ်ရန် ဖုန်း" class="border p-2.5 rounded-xl text-xs" disabled>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <select id="t-p-state" class="border p-2.5 rounded-xl text-xs" disabled>
-                            <option value="ရန်ကုန်တိုင်းဒေသကြီး">ရန်ကုန်တိုင်းဒေသကြီး</option>
-                            <option value="မန္တလေးတိုင်းဒေသကြီး">မန္တလေးတိုင်းဒေသကြီး</option>
-                            <option value="ပဲခူးတိုင်းဒေသကြီး">ပဲခူးတိုင်းဒေသကြီး</option>
-                            <option value="နေပြည်တော်">နေပြည်တော်</option>
-                        </select>
-                        <input type="text" id="t-p-town" placeholder="မြို့နယ်" class="border p-2.5 rounded-xl text-xs" disabled>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <select id="t-p-curr" class="border p-2.5 rounded-xl text-xs" disabled>
-                            <option value="Government">Government</option>
-                            <option value="International">International</option>
-                            <option value="Dual">Dual</option>
-                        </select>
-                        <select id="t-p-mode" class="border p-2.5 rounded-xl text-xs" disabled>
-                            <option value="Online">Online</option>
-                            <option value="Inperson">Inperson</option>
-                            <option value="Online & Inperson">Online & Inperson</option>
-                        </select>
-                    </div>
-
-                    <div class="bg-blue-50 p-3 rounded-xl border space-y-2">
-                        <p class="font-bold text-[11px] text-blue-800">သင်ကြားမည့် အတန်း နှင့် ဘာသာရပ်များ</p>
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="text" id="t-p-g1" placeholder="အတန်း (၁)" class="border p-2 rounded-lg text-xs" disabled>
-                            <input type="text" id="t-p-s1" placeholder="ဘာသာရပ် (၁)" class="border p-2 rounded-lg text-xs" disabled>
-                            <input type="text" id="t-p-g2" placeholder="အတန်း (၂)" class="border p-2 rounded-lg text-xs" disabled>
-                            <input type="text" id="t-p-s2" placeholder="ဘာသာရပ် (၂)" class="border p-2 rounded-lg text-xs" disabled>
-                            <input type="text" id="t-p-g3" placeholder="အတန်း (၃)" class="border p-2 rounded-lg text-xs" disabled>
-                            <input type="text" id="t-p-s3" placeholder="ဘာသာရပ် (၃)" class="border p-2 rounded-lg text-xs" disabled>
-                            <input type="text" id="t-p-g4" placeholder="အတန်း (၄)" class="border p-2 rounded-lg text-xs" disabled>
-                            <input type="text" id="t-p-s4" placeholder="ဘာသာရပ် (၄)" class="border p-2 rounded-lg text-xs" disabled>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <select id="t-p-days" class="border p-2.5 rounded-xl text-xs" disabled>
-                            <option value="ရုံးဖွင့်ရက်">ရုံးဖွင့်ရက်</option>
-                            <option value="ရုံးပိတ်ရက်">ရုံးပိတ်ရက်</option>
-                            <option value="နေ့တိုင်း">နေ့တိုင်း</option>
-                        </select>
-                        <select id="t-p-time" class="border p-2.5 rounded-xl text-xs" disabled>
-                            <option value="မနက်">မနက်</option><option value="နေ့လည်">နေ့လည်</option>
-                            <option value="ညနေ">ညနေ</option><option value="တစ်ရက်လုံး">တစ်ရက်လုံး</option>
-                            <option value="မနက် နှင့် ညနေ">မနက် နှင့် ညနေ</option>
-                        </select>
-                    </div>
-                    <input type="text" id="t-p-rem" placeholder="အချိန်မှတ်ချက်" class="w-full border p-2.5 rounded-xl text-xs" disabled>
-                    <input type="text" id="t-p-fee" placeholder="လစဉ်ကြေး (ကျပ်)" class="w-full border p-2.5 rounded-xl text-xs font-bold text-green-700" disabled>
-
-                    <p id="t-p-msg" class="text-xs font-bold text-center"></p>
-
-                    <div id="t-p-btn-view" class="text-center pt-2">
-                        <button onclick="tEditMode(false)" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-2.5 rounded-full shadow text-sm transition"><i class="fa-solid fa-pen-to-square mr-1"></i> Profile ပြင်ဆင်မည်</button>
-                    </div>
-                    <div id="t-p-btn-edit" class="hidden flex justify-center space-x-2 pt-2">
-                        <button onclick="tSaveProfile()" class="bg-green-600 text-white font-bold px-5 py-2.5 rounded-xl shadow flex-1 text-sm"><i class="fa-solid fa-floppy-disk mr-1"></i> သိမ်းမည်</button>
-                        <button onclick="tEditMode(true)" class="bg-gray-400 text-white font-bold px-5 py-2.5 rounded-xl shadow text-sm">Cancel</button>
-                    </div>
-                </div>
-
-                <div class="bg-white border shadow-sm p-4 rounded-2xl space-y-3">
-                    <h4 class="font-bold text-gray-800 text-sm border-b pb-2"><i class="fa-solid fa-users text-blue-500 mr-1"></i> သင်တန်းသား အသစ်စာရင်း</h4>
-                    <div id="t-students-list" class="space-y-2 text-xs"></div>
-                </div>
-
-                <button onclick="tLogout()" class="w-full text-center text-red-500 font-bold py-3 text-sm hover:underline"><i class="fa-solid fa-right-from-bracket mr-1"></i> Logout ထွက်မည်</button>
-            </div>
-
-            <!-- Teacher Job Posts View -->
-            <div id="t-posts-view" class="hidden space-y-3">
-                <div id="t-jobs-list" class="space-y-3"></div>
-            </div>
-
-            <!-- Teacher Chat View (Image Upload Added) -->
-            <div id="t-chat-view" class="hidden bg-white p-3 rounded-2xl border shadow-sm flex flex-col h-[70vh]">
-                <h4 class="font-bold text-blue-600 text-sm border-b pb-2"><i class="fa-solid fa-comments mr-1"></i> Admin Chat Panel</h4>
-                <div id="t-chat-box" class="flex-1 overflow-y-auto space-y-3 p-2 bg-gray-50 mt-2 rounded-xl border text-xs"></div>
-                <div class="flex items-center space-x-2 mt-3">
-                    <!-- Chat Image Picker -->
-                    <input type="file" id="t-chat-file" accept="image/*" class="hidden" onchange="tSendChatImage(event)">
-                    <button onclick="document.getElementById('t-chat-file').click()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-10 h-10 rounded-xl transition"><i class="fa-solid fa-image"></i></button>
-                    
-                    <input type="text" id="t-chat-input" placeholder="စာရိုက်ပါ..." class="flex-1 border p-2.5 rounded-xl outline-none text-xs focus:border-blue-500">
-                    <button onclick="tSendChat()" class="bg-blue-600 text-white w-10 h-10 rounded-xl font-bold hover:bg-blue-700 transition"><i class="fa-solid fa-paper-plane"></i></button>
-                </div>
-            </div>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- 3. STUDENT SCREEN -->
-        <!-- ========================================== -->
-        <div id="student-screen" class="hidden space-y-4">
-            
-            <div id="s-tabs" class="hidden flex bg-white rounded-xl shadow p-1 space-x-1 text-xs font-bold border">
-                <button onclick="switchSTab('search')" id="s-tab-search" class="flex-1 py-2 rounded-lg bg-red-500 text-white transition">ဆရာရှာရန်</button>
-                <button onclick="switchSTab('post')" id="s-tab-post" class="flex-1 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">Post တင်ရန်</button>
-                <button onclick="switchSTab('myposts')" id="s-tab-myposts" class="flex-1 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">မိမိ၏ Post</button>
-            </div>
-
-            <div id="s-login-view" class="space-y-4">
-                <h2 class="text-xl font-bold text-center text-[#1a1a4b]">STUDENT</h2>
-                <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
-                    <h3 class="font-bold text-[#EF5350] text-center text-sm">Student Login</h3>
-                    <input type="text" id="s-l-user" placeholder="Student Username" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
-                    <input type="password" id="s-l-pass" placeholder="Password" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
-                    <p id="s-l-msg" class="text-xs text-red-500 text-center font-bold"></p>
-                    <button onclick="sLogin()" class="w-full bg-[#F4F6F9] border text-[#1a1a4b] hover:bg-gray-200 font-bold py-2.5 rounded-full text-sm transition">Login ဝင်မည်</button>
-                </div>
-                <div class="bg-white border p-3 rounded-xl text-center text-xs space-x-1 shadow-sm">
-                    <span class="text-gray-500">အကောင့်မရှိသေးပါက -</span>
-                    <button onclick="toggleSAuth('reg')" class="text-red-500 font-bold hover:underline">Register လုပ်ရန်</button>
-                </div>
-            </div>
-
-            <div id="s-reg-view" class="hidden bg-white p-6 rounded-2xl border shadow-sm space-y-4">
-                <h3 class="font-bold text-red-500 text-center text-base">Student Register</h3>
-                <input type="text" id="s-r-user" placeholder="Username (ဥပမာ - MaMa)" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
-                <input type="password" id="s-r-pass" placeholder="Password (မိမိဖုန်းနံပါတ်)" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
-                <input type="text" id="s-r-name" placeholder="ကျောင်းသား/မိဘ အမည်" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
-                <input type="text" id="s-r-phone" placeholder="ဆက်သွယ်ရန် ဖုန်းနံပါတ်" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
-                <p id="s-r-msg" class="text-[11px] text-red-500 text-center"></p>
-                <button onclick="sRegister()" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 rounded-xl text-sm transition">Register အကောင့်ဖွင့်မည်</button>
-                <button onclick="toggleSAuth('login')" class="w-full text-gray-500 text-xs font-bold pt-2">Login သို့ ပြန်သွားမည်</button>
-            </div>
-
-            <div id="s-main-view" class="hidden space-y-4">
-                <div class="flex justify-end">
-                    <button onclick="sLogout()" class="text-red-500 font-bold text-xs bg-white border px-3 py-1.5 rounded-lg shadow-sm"><i class="fa-solid fa-right-from-bracket mr-1"></i> Logout</button>
-                </div>
-
-                <div id="s-search-view" class="space-y-3">
-                    <div class="bg-white p-3 rounded-2xl border shadow-sm grid grid-cols-2 gap-2 text-xs">
-                        <select id="s-f-state" onchange="loadSTutors()" class="border p-2 rounded-xl bg-gray-50 outline-none">
-                            <option value="အားလုံး">တိုင်း/ပြည်နယ် (အားလုံး)</option>
-                            <option value="ရန်ကုန်တိုင်းဒေသကြီး">ရန်ကုန်တိုင်း</option>
-                            <option value="မန္တလေးတိုင်းဒေသကြီး">မန္တလေးတိုင်း</option>
-                            <option value="ပဲခူးတိုင်းဒေသကြီး">ပဲခူးတိုင်း</option>
-                            <option value="နေပြည်တော်">နေပြည်တော်</option>
-                        </select>
-                        <input type="text" id="s-f-town" oninput="loadSTutors()" placeholder="မြို့နယ်ဖြင့်ရှာရန်" class="border p-2 rounded-xl bg-gray-50 outline-none">
-                    </div>
-                    <div id="s-tutor-list" class="space-y-3 pb-8"></div>
-                </div>
-
-                <div id="s-post-view" class="hidden bg-white p-5 rounded-2xl border shadow-sm space-y-4 text-xs">
-                    <h4 class="font-bold text-sm text-gray-800 border-b pb-2"><i class="fa-solid fa-pen-nib text-blue-500 mr-1"></i> ဆရာခေါ်ယူရန် Post တင်ပါ</h4>
-                    <input type="text" id="s-post-subj" placeholder="လိုချင်သော ဘာသာရပ်/အတန်း" class="w-full border p-2.5 rounded-xl bg-gray-50 outline-none">
-                    <div class="grid grid-cols-2 gap-3">
-                        <select id="s-post-state" class="border p-2.5 rounded-xl bg-gray-50 outline-none">
-                            <option value="ရန်ကုန်တိုင်းဒေသကြီး">ရန်ကုန်တိုင်း</option>
-                            <option value="မန္တလေးတိုင်းဒေသကြီး">မန္တလေးတိုင်း</option>
-                            <option value="ပဲခူးတိုင်းဒေသကြီး">ပဲခူးတိုင်း</option>
-                            <option value="နေပြည်တော်">နေပြည်တော်</option>
-                        </select>
-                        <input type="text" id="s-post-town" placeholder="မြို့နယ်" class="border p-2.5 rounded-xl bg-gray-50 outline-none">
-                    </div>
-                    <input type="text" id="s-post-fee" placeholder="ပေးနိုင်သော လစဉ်ကြေး" class="w-full border p-2.5 rounded-xl bg-gray-50 outline-none">
-                    <textarea id="s-post-det" placeholder="အသေးစိတ်အချက်အလက်များ" class="w-full border p-2.5 rounded-xl bg-gray-50 h-20 outline-none"></textarea>
-                    <p id="s-post-msg" class="text-xs text-center font-bold"></p>
-                    <button onclick="submitSJob()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition"><i class="fa-solid fa-paper-plane mr-1"></i> Post တင်မည်</button>
-                </div>
-
-                <div id="s-myposts-view" class="hidden space-y-4">
-                    <div class="bg-white p-4 rounded-2xl border shadow-sm space-y-3">
-                        <h4 class="font-bold text-blue-600 text-sm"><i class="fa-solid fa-clock-rotate-left mr-1"></i> စောင့်ဆိုင်း/လျှောက်ထားဆဲ</h4>
-                        <div id="s-my-active-list" class="space-y-2 text-xs"></div>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border shadow-sm space-y-3">
-                        <h4 class="font-bold text-green-600 text-sm"><i class="fa-solid fa-check-double mr-1"></i> ချိတ်ဆက်ပြီးသော စာရင်း</h4>
-                        <div id="s-my-comp-list" class="space-y-2 text-xs"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- 4. ADMIN SCREEN -->
-        <!-- ========================================== -->
-        <div id="admin-login-screen" class="hidden space-y-4">
-            <div class="bg-white p-6 rounded-2xl border shadow-md space-y-5 text-xs max-w-sm mx-auto mt-10">
-                <div class="text-center">
-                    <i class="fa-solid fa-user-shield text-4xl text-purple-600 mb-2"></i>
-                    <h2 class="text-lg font-bold text-slate-800">Admin Login</h2>
-                </div>
-                <input type="password" id="a-pass" placeholder="Admin Password ထည့်ပါ" class="w-full border border-gray-300 p-3 rounded-xl outline-none text-center tracking-widest text-sm focus:border-purple-500">
-                <p id="a-msg" class="text-xs text-red-500 text-center hidden font-bold">Password မှားယွင်းနေပါသည်</p>
-                <button onclick="aLogin()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-xl text-sm transition">ဝင်ရောက်မည်</button>
-            </div>
-        </div>
-
-        <div id="admin-tab" class="hidden space-y-4">
-            <div class="flex justify-between items-center bg-white p-3 rounded-2xl shadow-sm border text-sm">
-                <button id="a-back-btn" onclick="showADash()" class="hidden text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg font-bold transition hover:bg-blue-100"><i class="fa-solid fa-arrow-left mr-1"></i> Back</button>
-                <span id="a-title" class="font-bold text-[#1a1a4b] uppercase tracking-wider ml-2">ADMIN DASHBOARD</span>
-                <button onclick="aLogout()" class="text-red-500 hover:text-red-700 bg-red-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-power-off"></i></button>
-            </div>
-
-            <!-- Admin Grid -->
-            <div id="a-grid" class="grid grid-cols-2 gap-3">
-                <button onclick="openAPanel('new', 'ဆရာသစ် အတည်ပြုရန်')" class="bg-teal-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-teal-900 h-28 shadow-sm hover:opacity-80">
-                    <i class="fa-solid fa-user-plus text-3xl mb-2"></i>
-                    <span class="text-xs text-center">ဆရာသစ်<br>အတည်ပြုရန်</span>
-                </button>
-                <button onclick="openAPanel('tutors', 'ဆရာများ စာရင်း')" class="bg-teal-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-teal-900 h-28 shadow-sm hover:opacity-80">
-                    <i class="fa-solid fa-users text-3xl mb-2"></i>
-                    <span class="text-xs text-center">ဆရာများ<br>စာရင်း</span>
-                </button>
-                <button onclick="openAPanel('p_posts', 'စိစစ်ရန် Post များ')" class="bg-blue-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-blue-900 h-28 shadow-sm hover:opacity-80">
-                    <i class="fa-solid fa-file-circle-question text-3xl mb-2"></i>
-                    <span class="text-xs text-center">စိစစ်ရန်<br>Post များ</span>
-                </button>
-                <button onclick="openAPanel('a_posts', 'စိစစ်ပြီး Post များ')" class="bg-blue-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-blue-900 h-28 shadow-sm hover:opacity-80">
-                    <i class="fa-solid fa-file-circle-check text-3xl mb-2"></i>
-                    <span class="text-xs text-center">စိစစ်ပြီး<br>Post များ</span>
-                </button>
-                <button onclick="openAPanel('c_posts', 'ချိတ်ဆက်ပြီး Post များ')" class="bg-purple-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-purple-900 h-28 shadow-sm hover:opacity-80">
-                    <i class="fa-solid fa-arrow-right-arrow-left text-3xl mb-2"></i>
-                    <span class="text-xs text-center">ချိတ်ဆက်ပြီး<br>Post များ</span>
-                </button>
-                <button onclick="openAPanel('direct', 'Direct Booking စိစစ်ရန်')" class="bg-purple-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-purple-900 h-28 shadow-sm hover:opacity-80">
-                    <i class="fa-solid fa-handshake-angle text-3xl mb-2"></i>
-                    <span class="text-xs text-center">Direct Booking<br>စိစစ်ရန်</span>
-                </button>
-                <button onclick="openAPanel('noti', 'အချက်ပေးစာ Notifications')" class="bg-orange-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-orange-900 h-28 shadow-sm hover:opacity-80">
-                    <i class="fa-solid fa-bell text-3xl mb-2"></i>
-                    <span class="text-xs text-center">အချက်ပေးစာ<br>Notification</span>
-                </button>
-                <button onclick="openAPanel('chat', 'Chat Panel')" class="bg-orange-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-orange-900 h-28 shadow-sm hover:opacity-80">
-                    <i class="fa-solid fa-comments text-3xl mb-2"></i>
-                    <span class="text-xs text-center">Chat<br>စာပို့ခြင်း</span>
-                </button>
-            </div>
-
-            <!-- Admin Sub Panel -->
-            <div id="a-sub" class="hidden space-y-3 pb-8"></div>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- STATIC PAGES -->
-        <!-- ========================================== -->
-        <div id="blacklist-screen" class="hidden bg-white p-5 rounded-2xl border shadow-sm space-y-4 text-xs">
-            <h3 class="font-bold text-base text-red-600 text-center"><i class="fa-solid fa-user-slash mr-1"></i> Black Listed စာရင်း</h3>
-            <hr>
-            <div id="bl-list" class="space-y-2"></div>
-        </div>
-
-        <div id="terms-screen" class="hidden bg-white p-6 rounded-2xl border shadow-sm space-y-4 text-xs leading-relaxed text-gray-700">
-            <h3 class="font-bold text-base text-blue-700 text-center">Terms & Conditions</h3>
-            <hr>
-            <p>၁။ ဤ Platform သည် ဆရာနှင့် ကျောင်းသား တိုက်ရိုက်ချိတ်ဆက်ပေးသော နေရာသာဖြစ်သည်။</p>
-            <p>၂။ ချိတ်ဆက်မှု ဝန်ဆောင်ခကို ဆရာများဘက်မှ ပေးရပါမည်။</p>
-            <p>၃။ ချိတ်ဆက်မှု ဝန်ဆောင်ခကို ကျောင်းသားများဘက်မှ ပေးစရာမလိုပါ။</p>
-            <p>၄။ ချိတ်ဆက်မှု ဝန်ဆောင်ခမှာ ပထမလ၏ ၁၀% ကို ပေးချေရမှာဖြစ်ပါသည်။</p>
-            <p>၅။ ကျောင်းသားမိဘများအနေဖြင့် လစာအား ပထမဦးဆုံးနေ့တွင် ဆရာအား တစ်လစာ ကြိုတင်ပေးချေရပါမည်။</p>
-            <p>၆။ အချက်အလက်များကို မှန်ကန်စွာ ဖြည့်စွက်ရပါမည်။</p>
-            <p>၇။ လိမ်လည်မှုများ၊ စည်းကမ်းဖောက်ဖျက်မှုများ တွေ့ရှိပါက Blacklist သွင်းခံရပါမည်။</p>
-        </div>
-
-        <div id="help-screen" class="hidden bg-white p-6 rounded-2xl border shadow-sm space-y-4 text-xs text-center">
-            <i class="fa-solid fa-headset text-4xl text-green-500 mb-2"></i>
-            <h3 class="font-bold text-base text-green-700">Help & Support</h3>
-            <hr>
-            <p class="text-gray-600">အဆင်မပြေမှုများနှင့် အကြံပြုလိုသည်များ ရှိပါက ဆက်သွယ်နိုင်ပါသည်။</p>
-            <p class="font-bold text-blue-600 text-sm mt-4 bg-blue-50 py-3 rounded-xl border border-blue-100">
-                <i class="fa-solid fa-envelope mr-1 text-red-500"></i> teachermatching@gmail.com
-            </p>
-        </div>
-
-        <div id="t-guide-screen" class="hidden bg-white p-6 rounded-2xl border shadow-sm space-y-3 text-xs leading-relaxed text-gray-700">
-            <h3 class="font-bold text-base text-teal-700 text-center"><i class="fa-solid fa-chalkboard-user mr-1"></i> Teacher User Guide</h3>
-            <hr>
-            <p>၁။ အကောင့်သစ်ပြုလုပ်ရန် Register တွင် မိမိ Username နှင့် Password ဖြည့်ပါ (ဥပမာ - KyawKyaw, Kk@12345)။</p>
-            <p>၂။ Login ဝင်ပြီးနောက် မိမိ ကိုယ်ရေးအချက်အလက်၊ ဓာတ်ပုံ၊ သင်ကြားနိုင်သော အတန်း/ဘာသာရပ်များကို 'Profile ပြင်ဆင်မည်' နှိပ်၍ ဖြည့်စွက်ပါ။</p>
-            <p>၃။ အချက်အလက်များ ဖြည့်ပြီးပါက Admin ထံ အတည်ပြုချက်စောင့်ပါ။ Admin Approve ပေးမှသာ ကျောင်းသားများ မြင်တွေ့ရပါမည်။</p>
-            <p>၄။ 'Post များ' Tab တွင် ကျောင်းသားများ တင်ထားသော ဆရာခေါ်စာများကို လေ့လာ၍ 'Apply' နှိပ်ပြီး လျှောက်ထားနိုင်ပါသည်။</p>
-            <p>၅။ Admin နှင့် တိုက်ရိုက် စကားပြောလိုပါက 'Admin Chat' ကို အသုံးပြုနိုင်ပါသည်။</p>
-        </div>
-
-        <div id="s-guide-screen" class="hidden bg-white p-6 rounded-2xl border shadow-sm space-y-3 text-xs leading-relaxed text-gray-700">
-            <h3 class="font-bold text-base text-orange-600 text-center"><i class="fa-solid fa-children mr-1"></i> Student User Guide</h3>
-            <hr>
-            <p>၁။ ပထမဦးစွာ Register တွင် အကောင့်ပြုလုပ်ပါ (ဥပမာ - Username: MaMa, Password: မိမိဖုန်းနံပါတ်)။</p>
-            <p>၂။ 'ဆရာရှာရန်' တွင် မိမိနေထိုင်ရာ တိုင်းနှင့် မြို့နယ် ရွေးချယ်/ရိုက်ထည့်ပြီး ကိုက်ညီသော ဆရာများ၏ Profile ကို ကြည့်ရှုနိုင်ပါသည်။</p>
-            <p>၃။ သဘောကျသော ဆရာတွေ့ပါက 'ဒီဆရာနဲ့ သင်မယ်' ကိုနှိပ်၍ Admin ထံ တောင်းဆိုနိုင်ပါသည်။</p>
-            <p>၄။ 'Post တင်ရန်' တွင် မိမိလိုချင်သော ဘာသာရပ်၊ သင်ကြားလိုသော ဒေသနှင့် ပေးနိုင်သည့် ကြေးနှုန်းထားများ ဖြည့်စွက်၍ Post တင်နိုင်ပါသည်။</p>
-            <p>၅။ 'မိမိ၏ Post များ' Tab တွင် မိမိတင်ထားသော Post ကို ဆရာမည်မျှ လျှောက်ထားသည်ကို ကြည့်ရှုနိုင်ပါသည်။</p>
-        </div>
-
-    </main>
-
-    <!-- ========================================== -->
-    <!-- REUSABLE MODAL (Popup) -->
-    <!-- ========================================== -->
-    <div id="modal-bg" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 text-xs shadow-2xl max-h-[85vh] flex flex-col" id="modal-box">
-            <div id="modal-content" class="overflow-y-auto pr-1 space-y-3"></div>
-            <div id="modal-actions" class="pt-2 border-t flex space-x-2 mt-auto shrink-0"></div>
-        </div>
-    </div>
-
-    <!-- GLOBAL JAVASCRIPT -->
+<!-- GLOBAL JAVASCRIPT -->
     <script>
         /* --- SUPABASE CONFIG --- */
         const SUPA_URL = "https://ryberrmhwmjnqcovpxrv.supabase.co";
@@ -463,10 +7,13 @@
 
         /* --- STATE VARIABLES --- */
         const APP_VERSION = "1.0.0";
-        let t_id = null; // Teacher ID
-        let s_user = null; // Student Info
-        let a_logged = false; // Admin Login State
-        let a_chat_id = null; // Admin Chat Target
+        let t_id = null; 
+        let s_user = null; 
+        let a_logged = false; 
+        let a_chat_id = null; 
+
+        // Auto Refresh (Live Chat) အတွက် Timer Variable
+        let chatInterval = null; 
 
         /* --- INITIALIZATION & UTILS --- */
         window.onload = () => { checkAppUpdate(true); };
@@ -487,14 +34,14 @@
             try { await db.from('notifications').insert([{ title: title, message: msg }]); } catch(e){}
         }
 
-        /* --- IMAGE COMPRESSION ENGINE (Base64) --- */
+        /* --- IMAGE COMPRESSION ENGINE --- */
         function compressImage(file, callback) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 400; // Small size for fast DB saving
+                    const MAX_WIDTH = 400; 
                     let width = img.width;
                     let height = img.height;
                     if (width > height) {
@@ -505,7 +52,7 @@
                     canvas.width = width; canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
-                    callback(canvas.toDataURL('image/jpeg', 0.6)); // 60% quality Base64
+                    callback(canvas.toDataURL('image/jpeg', 0.6)); 
                 };
                 img.src = e.target.result;
             };
@@ -586,6 +133,7 @@
         }
 
         function tLogout() {
+            if(chatInterval) clearInterval(chatInterval); // Clear timer
             t_id = null;
             document.getElementById('t-tabs').style.display = 'none';
             document.getElementById('t-profile-view').style.display = 'none';
@@ -596,15 +144,21 @@
         }
 
         function switchTTab(tab) {
+            if(chatInterval) clearInterval(chatInterval); // Tab ပြောင်းရင် Chat Timer အရင်ရပ်မည်
+
             ['profile','posts','chat'].forEach(t => {
                 document.getElementById(`t-${t}-view`).style.display = 'none';
                 document.getElementById(`t-tab-${t}`).className = "flex-1 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition";
             });
             document.getElementById(`t-${tab}-view`).style.display = (tab==='chat')?'flex':'block';
             document.getElementById(`t-tab-${tab}`).className = "flex-1 py-2 rounded-lg bg-blue-600 text-white shadow transition";
+            
             if(tab === 'profile') tLoadProfile();
             if(tab === 'posts') tLoadJobs();
-            if(tab === 'chat') tLoadChat();
+            if(tab === 'chat') {
+                tLoadChat();
+                chatInterval = setInterval(tLoadChat, 3000); // ၃ စက္ကန့်တိုင်း Live Refresh လုပ်မည်
+            }
         }
 
         function tEditMode(cancel) {
@@ -614,16 +168,13 @@
                 if(state) document.getElementById(id).classList.add('bg-white', 'border-blue-300');
                 else document.getElementById(id).classList.remove('bg-white', 'border-blue-300');
             });
-            // Show Camera Button
             document.getElementById('t-p-photo-btn').style.display = state ? 'flex' : 'none';
             document.getElementById('t-p-fee').disabled = !state;
-
             document.getElementById('t-p-btn-view').style.display = state ? 'none' : 'block';
             document.getElementById('t-p-btn-edit').style.display = state ? 'flex' : 'none';
             if(cancel) tLoadProfile();
         }
 
-        // Profile Photo Upload (Base64)
         function handleProfilePhoto(e) {
             const file = e.target.files[0];
             if(file) {
@@ -665,7 +216,6 @@
             }
             
             const sList = document.getElementById('t-students-list');
-            sList.innerHTML = "ဆွဲယူနေပါသည်...";
             const reqs = await db.from('requests').select('student_name, student_phone').eq('tutor_id', t_id).eq('status', 'completed');
             sList.innerHTML = "";
             if(!reqs.data || reqs.data.length === 0) sList.innerHTML = "<p class='text-gray-400 text-xs'>မရှိသေးပါ။</p>";
@@ -732,9 +282,14 @@
             tLoadJobs();
         }
 
-        // Chat (Images & Text)
+        // Live Chat Logic
         async function tLoadChat() {
+            if(!t_id) return;
             const box = document.getElementById('t-chat-box');
+            
+            // Check if user is scrolled near bottom before update
+            const isNearBottom = box.scrollHeight - box.clientHeight - box.scrollTop <= 50;
+
             const { data } = await db.from('chat_messages').select('*').eq('tutor_id', t_id).order('timestamp');
             box.innerHTML = "";
             data?.forEach(msg => {
@@ -752,7 +307,9 @@
                     </div>
                 `;
             });
-            box.scrollTop = box.scrollHeight;
+            
+            // Auto scroll down only if they were already near the bottom
+            if (isNearBottom) box.scrollTop = box.scrollHeight;
         }
 
         async function tSendChat() {
@@ -761,6 +318,7 @@
             await db.from('chat_messages').insert([{ tutor_id: t_id, sender: 'teacher', message: inp.value, image_data: null }]);
             inp.value = "";
             tLoadChat();
+            setTimeout(() => { document.getElementById('t-chat-box').scrollTop = document.getElementById('t-chat-box').scrollHeight; }, 100);
         }
 
         function tSendChatImage(e) {
@@ -769,6 +327,7 @@
                 compressImage(file, async function(base64data) {
                     await db.from('chat_messages').insert([{ tutor_id: t_id, sender: 'teacher', message: '[ဓာတ်ပုံ]', image_data: base64data }]);
                     tLoadChat();
+                    setTimeout(() => { document.getElementById('t-chat-box').scrollTop = document.getElementById('t-chat-box').scrollHeight; }, 300);
                 });
             }
         }
@@ -971,11 +530,13 @@
         }
 
         function aLogout() {
+            if(chatInterval) clearInterval(chatInterval); // Timer ရှင်းမည်
             a_logged = false;
             goHome();
         }
 
         function aShowGrid() {
+            if(chatInterval) clearInterval(chatInterval); // Chat မှ ထွက်လျှင် Timer ရှင်းမည်
             document.getElementById('a-grid').style.display = 'grid';
             document.getElementById('a-sub').style.display = 'none';
             document.getElementById('a-back-btn').style.display = 'none';
@@ -983,6 +544,8 @@
         }
 
         async function openAPanel(type, title) {
+            if(chatInterval) clearInterval(chatInterval); // Other panel သွားလျှင် Timer ရှင်းမည်
+            
             document.getElementById('a-grid').style.display = 'none';
             const sub = document.getElementById('a-sub');
             sub.style.display = 'block';
@@ -1222,15 +785,16 @@
             }
         }
 
-        // Admin Chat (Images & Text)
+        // Live Admin Chat (Images & Text)
         function aOpenChat(tid, tname) {
+            if(chatInterval) clearInterval(chatInterval); // Clear old timer
+
             a_chat_id = tid;
             document.getElementById('a-sub').innerHTML = `
                 <div class="bg-white p-3 rounded-xl border shadow flex flex-col h-[65vh]">
                     <h4 class="font-bold text-blue-800 border-b pb-2"><i class="fa-solid fa-comments"></i> Chat: ${tname}</h4>
                     <div id="a-chat-box" class="flex-1 overflow-y-auto space-y-2 p-2 bg-gray-50 mt-2 rounded border text-xs"></div>
                     <div class="flex items-center space-x-2 mt-2">
-                        <!-- Admin Chat Image Picker -->
                         <input type="file" id="a-chat-file" accept="image/*" class="hidden" onchange="aSendChatImage(event)">
                         <button onclick="document.getElementById('a-chat-file').click()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-10 h-10 rounded transition"><i class="fa-solid fa-image"></i></button>
 
@@ -1240,11 +804,16 @@
                 </div>
             `;
             aLoadChatBox();
+            chatInterval = setInterval(aLoadChatBox, 3000); // ၃ စက္ကန့်တိုင်း Live Refresh လုပ်မည်
         }
 
         async function aLoadChatBox() {
             if(!a_chat_id) return;
             const box = document.getElementById('a-chat-box');
+
+            // Scroll အောက်ဆုံးမှာ ရှိမရှိ စစ်မည် (စာဖတ်နေရင် Auto မဆွဲချစေရန်)
+            const isNearBottom = box.scrollHeight - box.clientHeight - box.scrollTop <= 50;
+
             const { data } = await db.from('chat_messages').select('*').eq('tutor_id', a_chat_id).order('timestamp');
             box.innerHTML = "";
             data?.forEach(msg => {
@@ -1262,14 +831,17 @@
                     </div>
                 `;
             });
-            box.scrollTop = box.scrollHeight;
+            
+            if (isNearBottom) box.scrollTop = box.scrollHeight;
         }
 
         async function aSendChat() {
             const inp = document.getElementById('a-chat-input');
             if(!inp.value.trim() || !a_chat_id) return;
             await db.from('chat_messages').insert([{ tutor_id: a_chat_id, sender: 'admin', message: inp.value, image_data: null }]);
-            inp.value = ""; aLoadChatBox();
+            inp.value = ""; 
+            aLoadChatBox();
+            setTimeout(() => { document.getElementById('a-chat-box').scrollTop = document.getElementById('a-chat-box').scrollHeight; }, 100);
         }
 
         function aSendChatImage(e) {
@@ -1278,10 +850,9 @@
                 compressImage(file, async function(base64data) {
                     await db.from('chat_messages').insert([{ tutor_id: a_chat_id, sender: 'admin', message: '[ဓာတ်ပုံ]', image_data: base64data }]);
                     aLoadChatBox();
+                    setTimeout(() => { document.getElementById('a-chat-box').scrollTop = document.getElementById('a-chat-box').scrollHeight; }, 300);
                 });
             }
         }
         
     </script>
-</body>
-</html>
