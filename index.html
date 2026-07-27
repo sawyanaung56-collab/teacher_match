@@ -1089,14 +1089,24 @@
                 });
             }
             else if(type === 'chat') { 
-                const { data } = await db.from('chat_messages').select('tutor_id, tutors(name, username)').order('timestamp', {ascending: false});
-                let tSet = new Set();
+                const { data } = await db.from('chat_messages').select('id, tutor_id, sender, is_read, tutors(name, username)').order('timestamp', {ascending: false});
+                let tMap = new Map();
                 data?.forEach(r => {
-                    if(!tSet.has(r.tutor_id)) {
-                        tSet.add(r.tutor_id);
+                    if(!tMap.has(r.tutor_id)) {
                         let n = r.tutors?.name || r.tutors?.username;
-                        html += `<button onclick="aOpenChat(${r.tutor_id}, '${n}')" class="w-full text-left bg-white p-3 rounded-xl border shadow-sm mb-2 font-bold text-gray-700 text-sm hover:bg-blue-50 transition"><i class="fa-solid fa-user-circle text-blue-400 text-lg mr-2 align-middle"></i> ${n}</button>`;
+                        tMap.set(r.tutor_id, { name: n, unread: 0 });
                     }
+                    // Admin မဖတ်ရသေးတဲ့ Teacher ရဲ့ စာတွေကို ရေတွက်မည်
+                    if(r.sender === 'teacher' && r.is_read === false) {
+                        tMap.get(r.tutor_id).unread += 1;
+                    }
+                });
+
+                tMap.forEach((info, tid) => {
+                    // မဖတ်ရသေးတဲ့စာရှိရင် အနီရောင် Badge လေးပြမည်
+                    let badge = info.unread > 0 ? `<span class="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full ml-auto animate-pulse">${info.unread} New</span>` : '';
+                    
+                    html += `<button onclick="aOpenChat(${tid}, '${info.name}')" class="w-full flex items-center text-left bg-white p-3 rounded-xl border shadow-sm mb-2 font-bold text-gray-700 text-sm hover:bg-blue-50 transition"><i class="fa-solid fa-user-circle text-blue-400 text-lg mr-2 align-middle"></i> <span class="flex-1">${info.name}</span> ${badge}</button>`;
                 });
             }
             sub.innerHTML = html || "<p class='text-center text-gray-400'>Data မရှိပါ</p>";
@@ -1264,6 +1274,15 @@
             const isNearBottom = box.scrollHeight - box.clientHeight - box.scrollTop <= 50;
 
             const { data } = await db.from('chat_messages').select('*').eq('tutor_id', a_chat_id).order('timestamp');
+
+            // --- Unread ကို ဖတ်ပြီးကြောင်း (Read) အဖြစ် ပြောင်းခြင်း ---
+            const unreadMsgs = data?.filter(m => m.sender === 'teacher' && m.is_read === false);
+            if (unreadMsgs && unreadMsgs.length > 0) {
+                const unreadIds = unreadMsgs.map(m => m.id);
+                await db.from('chat_messages').update({ is_read: true }).in('id', unreadIds);
+            }
+            // --------------------------------------------------------
+
             box.innerHTML = "";
             data?.forEach(msg => {
                 const me = msg.sender === 'admin';
