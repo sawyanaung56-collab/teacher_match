@@ -4,394 +4,408 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Match</title>
-    <!-- Tailwind CSS UI -->
+    <!-- Tailwind CSS (UI Design) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Font Awesome Icons -->
+    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 font-sans min-h-screen pb-12">
+<body class="bg-[#F4F6F9] font-sans min-h-screen text-gray-800 pb-12">
 
-    <!-- APP BAR -->
-    <header class="bg-slate-800 text-white p-4 shadow-md sticky top-0 z-40 flex items-center justify-between">
-        <button id="nav-back-btn" onclick="goToHome()" class="hidden text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg">
+    <!-- APP BAR (HEADER) -->
+    <header class="bg-slate-800 text-white p-3 shadow-md sticky top-0 z-40 flex items-center justify-between">
+        <button id="btn-back" onclick="goHome()" class="hidden text-[11px] bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg transition">
             <i class="fa-solid fa-arrow-left mr-1"></i> နောက်သို့
         </button>
         <h1 id="app-title" class="text-base font-bold text-center flex-1">Teacher Match</h1>
-        <div class="w-12"></div>
+        <div class="w-16"></div> <!-- Spacer for centering -->
     </header>
 
-    <!-- MAIN CONTAINER -->
+    <!-- MAIN APP CONTAINER -->
     <main class="max-w-md mx-auto p-4 space-y-4">
 
-        <!-- ========================================================================= -->
-        <!-- 1. HOME SCREEN -->
-        <!-- ========================================================================= -->
-        <div id="home-screen" class="space-y-4">
+        <!-- ========================================== -->
+        <!-- 1. HOME SCREEN (ပင်မစာမျက်နှာ) -->
+        <!-- ========================================== -->
+        <div id="home-screen" class="space-y-4 fade-in">
             <div class="text-center my-4">
-                <h2 class="text-2xl font-bold text-slate-800">ပင်မစာမျက်နှာ</h2>
-                <p class="text-xs text-gray-600 mt-1">Teacher Match ဆရာရှာဖွေရေး<br>Agency မှ ကြိုဆိုပါတယ်</p>
+                <h2 class="text-2xl font-bold text-[#1a1a4b]">ပင်မစာမျက်နှာ</h2>
+                <p class="text-[13px] text-gray-600 mt-1 leading-relaxed">Teacher Match ဆရာရှာဖွေရေး<br>Agency မှ ကြိုဆိုပါတယ်</p>
             </div>
 
-            <!-- Top Row -->
+            <!-- Top Buttons -->
             <div class="grid grid-cols-3 gap-3">
-                <button onclick="navigate('teacher-screen', 'Teacher Panel')" class="bg-[#C5E1A5] hover:opacity-90 p-4 rounded-2xl flex flex-col items-center justify-center shadow-sm h-24">
-                    <i class="fa-solid fa-graduation-cap text-2xl text-slate-800 mb-1"></i>
+                <button onclick="navTo('teacher-screen', 'Teacher Panel')" class="bg-[#C5E1A5] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-24">
+                    <i class="fa-solid fa-graduation-cap text-3xl text-slate-800 mb-1"></i>
                     <span class="text-xs font-bold text-slate-800">Teacher</span>
                 </button>
-                <button onclick="navigate('student-screen', 'Student Area')" class="bg-[#EF9A9A] hover:opacity-90 p-4 rounded-2xl flex flex-col items-center justify-center shadow-sm h-24">
-                    <i class="fa-solid fa-user text-2xl text-slate-800 mb-1"></i>
+                <button onclick="navTo('student-screen', 'Student Area')" class="bg-[#EF9A9A] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-24">
+                    <i class="fa-solid fa-user text-3xl text-slate-800 mb-1"></i>
                     <span class="text-xs font-bold text-slate-800">Student</span>
                 </button>
-                <button onclick="openAdminTab()" class="bg-[#CE93D8] hover:opacity-90 p-4 rounded-2xl flex flex-col items-center justify-center shadow-sm h-24">
-                    <i class="fa-solid fa-gear text-2xl text-slate-800 mb-1"></i>
+                <button onclick="openAdmin()" class="bg-[#CE93D8] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-24">
+                    <i class="fa-solid fa-gear text-3xl text-slate-800 mb-1"></i>
                     <span class="text-xs font-bold text-slate-800">Admin</span>
                 </button>
             </div>
 
-            <!-- Mid Row -->
+            <!-- Middle Buttons -->
             <div class="grid grid-cols-2 gap-3">
-                <button onclick="navigate('blacklist-screen', 'Black Listed'); loadBlacklist();" class="bg-[#9FA8DA] hover:opacity-90 p-3 rounded-2xl flex flex-col items-center justify-center shadow-sm h-16">
-                    <i class="fa-solid fa-shield-halved text-lg text-slate-800 mb-1"></i>
+                <button onclick="navTo('blacklist-screen', 'Black Listed'); loadBlacklist();" class="bg-[#9FA8DA] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-20">
+                    <i class="fa-solid fa-shield-halved text-xl text-slate-800 mb-1"></i>
                     <span class="text-xs font-bold text-slate-800">Black List</span>
                 </button>
-                <button onclick="navigate('help-screen', 'Help & Support')" class="bg-[#90CAF9] hover:opacity-90 p-3 rounded-2xl flex flex-col items-center justify-center shadow-sm h-16">
-                    <i class="fa-solid fa-circle-question text-lg text-slate-800 mb-1"></i>
+                <button onclick="navTo('help-screen', 'Help & Support')" class="bg-[#90CAF9] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-20">
+                    <i class="fa-solid fa-circle-question text-xl text-slate-800 mb-1"></i>
                     <span class="text-xs font-bold text-slate-800 text-center leading-tight">Help<br>Support & FAQ</span>
                 </button>
             </div>
 
             <!-- Terms Button -->
-            <button onclick="navigate('terms-screen', 'Terms & Conditions')" class="w-full bg-[#A5D6A7] hover:opacity-90 p-3 rounded-2xl flex flex-col items-center justify-center shadow-sm h-16">
-                <i class="fa-solid fa-file-contract text-lg text-slate-800 mb-1"></i>
+            <button onclick="navTo('terms-screen', 'Terms & Conditions')" class="w-full bg-[#A5D6A7] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-16">
+                <i class="fa-solid fa-file-contract text-xl text-slate-800 mb-1"></i>
                 <span class="text-xs font-bold text-slate-800">Term & Condition</span>
             </button>
-            <p class="text-[11px] text-gray-500 text-center">အသုံးမပြုမီ Term & Condition ကို အရင်ဖတ်ပေးပါ</p>
+            <p class="text-[10px] text-gray-500 text-center">အသုံးမပြုမီ Term & Condition ကို အရင်ဖတ်ပေးပါ</p>
 
-            <!-- Guide Row -->
+            <!-- Guide Buttons -->
             <div class="grid grid-cols-2 gap-3">
-                <button onclick="navigate('teacher-guide-screen', 'Teacher Guide')" class="bg-[#90CAF9] hover:opacity-90 p-3 rounded-2xl flex flex-col items-center justify-center shadow-sm h-16">
-                    <i class="fa-solid fa-book text-lg text-slate-800 mb-1"></i>
+                <button onclick="navTo('t-guide-screen', 'Teacher Guide')" class="bg-[#90CAF9] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-20">
+                    <i class="fa-solid fa-book text-xl text-slate-800 mb-1"></i>
                     <span class="text-xs font-bold text-slate-800 text-center leading-tight">Teacher<br>UserGuide</span>
                 </button>
-                <button onclick="navigate('student-guide-screen', 'Student Guide')" class="bg-[#FFCCBC] hover:opacity-90 p-3 rounded-2xl flex flex-col items-center justify-center shadow-sm h-16">
-                    <i class="fa-solid fa-book text-lg text-slate-800 mb-1"></i>
+                <button onclick="navTo('s-guide-screen', 'Student Guide')" class="bg-[#FFCCBC] p-3 rounded-2xl flex flex-col items-center justify-center shadow hover:opacity-90 transition h-20">
+                    <i class="fa-solid fa-book text-xl text-slate-800 mb-1"></i>
                     <span class="text-xs font-bold text-slate-800 text-center leading-tight">Student<br>UserGuide</span>
                 </button>
             </div>
 
-            <!-- Update App Button -->
-            <button onclick="openUpdateDialog()" class="w-full bg-[#00796B] hover:opacity-90 p-3 rounded-2xl flex items-center justify-center space-x-2 text-white shadow-sm h-14">
+            <!-- Update App -->
+            <button onclick="checkUpdateManual()" class="w-full bg-[#00796B] text-white p-3 rounded-2xl flex items-center justify-center space-x-2 shadow hover:opacity-90 transition h-14">
                 <i class="fa-solid fa-download"></i>
-                <span class="text-xs font-bold">Update APP</span>
+                <span class="text-sm font-bold">Update APP</span>
             </button>
 
+            <!-- Footer -->
             <div class="text-center pt-2">
-                <p class="text-[11px] font-bold text-gray-400">V 1.0.0</p>
+                <p class="text-[10px] font-bold text-gray-400">V 1.0.0</p>
                 <p class="text-[9px] text-gray-400">Powered by Saw Yan Aung</p>
             </div>
         </div>
 
-        <!-- ========================================================================= -->
+        <!-- ========================================== -->
         <!-- 2. TEACHER SCREEN -->
-        <!-- ========================================================================= -->
+        <!-- ========================================== -->
         <div id="teacher-screen" class="hidden space-y-4">
-            <!-- Nav Row (Visible after login) -->
-            <div id="teacher-nav" class="hidden flex justify-center space-x-2 bg-white p-2 rounded-xl shadow-sm border text-xs">
-                <button onclick="switchTeacherTab('profile')" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-bold" id="t-nav-prof">My Profile</button>
-                <button onclick="switchTeacherTab('posts')" class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 font-bold" id="t-nav-post">Post များ</button>
-                <button onclick="switchTeacherTab('chat')" class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 font-bold" id="t-nav-chat">Admin Chat</button>
+            <!-- Navigation Tabs (Visible when logged in) -->
+            <div id="t-tabs" class="hidden flex bg-white rounded-xl shadow p-1 space-x-1 text-xs font-bold border">
+                <button onclick="switchTTab('profile')" id="t-tab-profile" class="flex-1 py-2 rounded-lg bg-blue-600 text-white transition">My Profile</button>
+                <button onclick="switchTTab('posts')" id="t-tab-posts" class="flex-1 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">Post များ</button>
+                <button onclick="switchTTab('chat')" id="t-tab-chat" class="flex-1 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">Admin Chat</button>
             </div>
 
-            <!-- Login View -->
-            <div id="t-auth-view" class="space-y-4">
+            <!-- Teacher Login -->
+            <div id="t-login-view" class="space-y-4">
                 <h2 class="text-xl font-bold text-center text-[#1a1a4b]">TEACHER</h2>
-                <div class="bg-[#F9FAFE] p-5 rounded-2xl border shadow-sm space-y-3">
-                    <h3 class="font-bold text-sm text-[#2196F3] text-center">Teacher Login</h3>
-                    <input type="text" id="t-login-user" placeholder="Username" class="w-full border border-gray-300 p-2.5 rounded-xl text-xs bg-white outline-none">
-                    <input type="password" id="t-login-pass" placeholder="Password" class="w-full border border-gray-300 p-2.5 rounded-xl text-xs bg-white outline-none">
-                    <p id="t-login-msg" class="text-xs text-red-500 text-center"></p>
-                    <button onclick="loginTutor()" class="w-full bg-[#F4F6F9] text-[#1a1a4b] hover:bg-gray-200 font-bold py-2.5 rounded-full text-xs border">Login ဝင်မည်</button>
+                <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
+                    <h3 class="font-bold text-[#2196F3] text-center text-sm">Teacher Login</h3>
+                    <input type="text" id="t-l-user" placeholder="Username" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none focus:border-blue-400">
+                    <input type="password" id="t-l-pass" placeholder="Password" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none focus:border-blue-400">
+                    <p id="t-l-msg" class="text-xs text-red-500 text-center font-bold"></p>
+                    <button onclick="tLogin()" class="w-full bg-[#F4F6F9] border text-[#1a1a4b] hover:bg-gray-200 font-bold py-2.5 rounded-full text-sm transition">Login ဝင်မည်</button>
                 </div>
-                <div class="bg-[#F9FAFE] p-3 rounded-2xl border text-center text-xs text-gray-500 space-x-1">
-                    <span>အကောင့်မရှိသေးပါက -</span>
-                    <button onclick="toggleTeacherAuth('reg')" class="text-blue-600 font-bold">Register အကောင့်သစ်ဆောက်ရန်</button>
+                <div class="bg-white border p-3 rounded-xl text-center text-xs space-x-1 shadow-sm">
+                    <span class="text-gray-500">အကောင့်မရှိသေးပါက -</span>
+                    <button onclick="toggleTAuth('reg')" class="text-blue-600 font-bold hover:underline">Register အကောင့်သစ်ဆောက်ရန်</button>
                 </div>
             </div>
 
-            <!-- Register View -->
-            <div id="t-reg-view" class="hidden bg-white p-5 rounded-2xl border shadow-sm space-y-3 text-xs">
-                <h3 class="font-bold text-base text-green-600 text-center">Teacher Register</h3>
-                <input type="text" id="t-reg-user" placeholder="Username (ဥပမာ - KyawKyaw)" class="w-full border p-2.5 rounded-xl">
-                <input type="password" id="t-reg-pass" placeholder="Password အသစ် (ဥပမာ - Kk@12345)" class="w-full border p-2.5 rounded-xl">
-                <p id="t-reg-msg" class="text-xs text-red-500 text-center"></p>
-                <button onclick="registerTutor()" class="w-full bg-green-600 text-white font-bold py-2.5 rounded-xl">အကောင့်သစ် မှတ်ပုံတင်မည်</button>
-                <button onclick="toggleTeacherAuth('login')" class="w-full text-blue-600 py-1">Login စာမျက်နှာသို့ ပြန်သွားမည်</button>
+            <!-- Teacher Register -->
+            <div id="t-reg-view" class="hidden bg-white p-6 rounded-2xl border shadow-sm space-y-4">
+                <h3 class="font-bold text-green-600 text-center text-base">Teacher Register</h3>
+                <input type="text" id="t-r-user" placeholder="Username (ဥပမာ - KyawKyaw)" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
+                <input type="password" id="t-r-pass" placeholder="Password (ဥပမာ - Kk@12345)" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
+                <p id="t-r-msg" class="text-[11px] text-red-500 text-center"></p>
+                <button onclick="tRegister()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl text-sm transition">အကောင့်သစ် မှတ်ပုံတင်မည်</button>
+                <button onclick="toggleTAuth('login')" class="w-full text-blue-600 text-xs font-bold pt-2">Login စာမျက်နှာသို့ ပြန်သွားမည်</button>
             </div>
 
-            <!-- Profile View -->
-            <div id="t-profile-view" class="hidden space-y-3 text-xs">
-                <div class="bg-[#F4F6F9] p-4 rounded-2xl space-y-3 border">
-                    <h3 class="font-bold text-base text-center text-gray-800">ဆရာ ကိုယ်ရေးအချက်အလက်</h3>
-                    <div class="flex items-center space-x-3 bg-white p-3 rounded-xl">
-                        <img id="t-img-preview" src="https://via.placeholder.com/90" class="w-16 h-16 rounded-full object-cover border">
-                        <div class="flex-1 space-y-1">
-                            <input type="text" id="t-photo-url" placeholder="ဓာတ်ပုံ URL လမ်းကြောင်း" class="w-full border p-1.5 rounded text-[11px]" disabled>
-                            <textarea id="t-bio" placeholder="ကိုယ်ရေးအကျဉ်း (Bio)" class="w-full border p-1.5 rounded text-[11px] h-12" disabled></textarea>
+            <!-- Teacher Profile View -->
+            <div id="t-profile-view" class="hidden space-y-4">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border space-y-4">
+                    <h3 class="font-bold text-center text-gray-800 text-base">ဆရာ ကိုယ်ရေးအချက်အလက်</h3>
+                    
+                    <div class="flex items-center space-x-3 bg-gray-50 p-3 rounded-xl border">
+                        <img id="t-img" src="https://via.placeholder.com/100" class="w-20 h-20 rounded-full object-cover shadow border-2 border-white">
+                        <div class="flex-1 space-y-2">
+                            <input type="text" id="t-p-photo" placeholder="Photo URL လင့်ခ် (ရှိပါက)" class="w-full border p-2 rounded-lg text-[10px]" disabled>
+                            <textarea id="t-p-bio" placeholder="ကိုယ်ရေးအကျဉ်း (Bio)" class="w-full border p-2 rounded-lg text-xs h-12" disabled></textarea>
                         </div>
                     </div>
-                    <input type="text" id="t-name" placeholder="ဆရာ/ဆရာမ အမည်" class="w-full border p-2 rounded-xl bg-white" disabled>
-                    <div class="grid grid-cols-2 gap-2">
-                        <select id="t-gender" class="border p-2 rounded-xl bg-white" disabled>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
+
+                    <input type="text" id="t-p-name" placeholder="ဆရာ/ဆရာမ အမည်" class="w-full border p-2.5 rounded-xl text-xs" disabled>
+                    <div class="grid grid-cols-2 gap-3">
+                        <select id="t-p-gender" class="border p-2.5 rounded-xl text-xs" disabled>
+                            <option value="Male">Male (ကျား)</option>
+                            <option value="Female">Female (မ)</option>
                         </select>
-                        <input type="text" id="t-phone" placeholder="ဆက်သွယ်ရန် ဖုန်းနံပါတ်" class="border p-2 rounded-xl bg-white" disabled>
+                        <input type="text" id="t-p-phone" placeholder="ဆက်သွယ်ရန် ဖုန်း" class="border p-2.5 rounded-xl text-xs" disabled>
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <select id="t-state" class="border p-2 rounded-xl bg-white" disabled>
+                    <div class="grid grid-cols-2 gap-3">
+                        <select id="t-p-state" class="border p-2.5 rounded-xl text-xs" disabled>
                             <option value="ရန်ကုန်တိုင်းဒေသကြီး">ရန်ကုန်တိုင်းဒေသကြီး</option>
                             <option value="မန္တလေးတိုင်းဒေသကြီး">မန္တလေးတိုင်းဒေသကြီး</option>
                             <option value="ပဲခူးတိုင်းဒေသကြီး">ပဲခူးတိုင်းဒေသကြီး</option>
                             <option value="နေပြည်တော်">နေပြည်တော်</option>
                         </select>
-                        <input type="text" id="t-township" placeholder="မြို့နယ်" class="border p-2 rounded-xl bg-white" disabled>
+                        <input type="text" id="t-p-town" placeholder="မြို့နယ်" class="border p-2.5 rounded-xl text-xs" disabled>
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <select id="t-curriculum" class="border p-2 rounded-xl bg-white" disabled>
+                    <div class="grid grid-cols-2 gap-3">
+                        <select id="t-p-curr" class="border p-2.5 rounded-xl text-xs" disabled>
                             <option value="Government">Government</option>
                             <option value="International">International</option>
                             <option value="Dual">Dual</option>
                         </select>
-                        <select id="t-mode" class="border p-2 rounded-xl bg-white" disabled>
+                        <select id="t-p-mode" class="border p-2.5 rounded-xl text-xs" disabled>
                             <option value="Online">Online</option>
                             <option value="Inperson">Inperson</option>
                             <option value="Online & Inperson">Online & Inperson</option>
                         </select>
                     </div>
 
-                    <!-- Grades and Subjects -->
-                    <div class="space-y-1 bg-white p-2.5 rounded-xl border">
-                        <p class="font-bold text-gray-600">သင်ကြားမည့် အတန်း/ဘာသာရပ်များ</p>
-                        <div class="grid grid-cols-2 gap-1.5">
-                            <input type="text" id="t-g1" placeholder="အတန်း ၁" class="border p-1.5 rounded" disabled>
-                            <input type="text" id="t-s1" placeholder="ဘာသာရပ် ၁" class="border p-1.5 rounded" disabled>
-                            <input type="text" id="t-g2" placeholder="အတန်း ၂" class="border p-1.5 rounded" disabled>
-                            <input type="text" id="t-s2" placeholder="ဘာသာရပ် ၂" class="border p-1.5 rounded" disabled>
+                    <div class="bg-blue-50 p-3 rounded-xl border space-y-2">
+                        <p class="font-bold text-[11px] text-blue-800">သင်ကြားမည့် အတန်း နှင့် ဘာသာရပ်များ</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="t-p-g1" placeholder="အတန်း (၁)" class="border p-2 rounded-lg text-xs" disabled>
+                            <input type="text" id="t-p-s1" placeholder="ဘာသာရပ် (၁)" class="border p-2 rounded-lg text-xs" disabled>
+                            <input type="text" id="t-p-g2" placeholder="အတန်း (၂)" class="border p-2 rounded-lg text-xs" disabled>
+                            <input type="text" id="t-p-s2" placeholder="ဘာသာရပ် (၂)" class="border p-2 rounded-lg text-xs" disabled>
+                            <input type="text" id="t-p-g3" placeholder="အတန်း (၃)" class="border p-2 rounded-lg text-xs" disabled>
+                            <input type="text" id="t-p-s3" placeholder="ဘာသာရပ် (၃)" class="border p-2 rounded-lg text-xs" disabled>
+                            <input type="text" id="t-p-g4" placeholder="အတန်း (၄)" class="border p-2 rounded-lg text-xs" disabled>
+                            <input type="text" id="t-p-s4" placeholder="ဘာသာရပ် (၄)" class="border p-2 rounded-lg text-xs" disabled>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2">
-                        <select id="t-days" class="border p-2 rounded-xl bg-white" disabled>
+                    <div class="grid grid-cols-2 gap-3">
+                        <select id="t-p-days" class="border p-2.5 rounded-xl text-xs" disabled>
                             <option value="ရုံးဖွင့်ရက်">ရုံးဖွင့်ရက်</option>
                             <option value="ရုံးပိတ်ရက်">ရုံးပိတ်ရက်</option>
                             <option value="နေ့တိုင်း">နေ့တိုင်း</option>
                         </select>
-                        <select id="t-time" class="border p-2 rounded-xl bg-white" disabled>
-                            <option value="မနက်">မနက်</option>
-                            <option value="နေ့လည်">နေ့လည်</option>
-                            <option value="ညနေ">ညနေ</option>
-                            <option value="တစ်ရက်လုံး">တစ်ရက်လုံး</option>
+                        <select id="t-p-time" class="border p-2.5 rounded-xl text-xs" disabled>
+                            <option value="မနက်">မနက်</option><option value="နေ့လည်">နေ့လည်</option>
+                            <option value="ညနေ">ညနေ</option><option value="တစ်ရက်လုံး">တစ်ရက်လုံး</option>
+                            <option value="မနက် နှင့် ညနေ">မနက် နှင့် ညနေ</option>
                         </select>
                     </div>
-                    <input type="text" id="t-fee" placeholder="လစဉ်ကြေး (ကျပ်)" class="w-full border p-2 rounded-xl bg-white" disabled>
-                    
-                    <p id="t-status-msg" class="text-xs font-bold text-center py-1"></p>
+                    <input type="text" id="t-p-rem" placeholder="အချိန်မှတ်ချက်" class="w-full border p-2.5 rounded-xl text-xs" disabled>
+                    <input type="text" id="t-p-fee" placeholder="လစဉ်ကြေး (ကျပ်)" class="w-full border p-2.5 rounded-xl text-xs font-bold text-green-700" disabled>
 
-                    <div id="t-view-btns" class="text-center">
-                        <button onclick="setTeacherFormDisabled(false)" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-2 rounded-full shadow">Profile ပြင်ဆင်မည်</button>
+                    <p id="t-p-msg" class="text-xs font-bold text-center"></p>
+
+                    <!-- Edit Buttons -->
+                    <div id="t-p-btn-view" class="text-center pt-2">
+                        <button onclick="tEditMode(false)" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-2.5 rounded-full shadow text-sm transition"><i class="fa-solid fa-pen-to-square mr-1"></i> Profile ပြင်ဆင်မည်</button>
                     </div>
-                    <div id="t-edit-btns" class="hidden flex justify-center space-x-2">
-                        <button onclick="saveTeacherProfile()" class="bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded-xl shadow">သိမ်းဆည်းမည်</button>
-                        <button onclick="setTeacherFormDisabled(true); loadTutorProfile();" class="bg-gray-400 text-white px-4 py-2 rounded-xl">Cancel</button>
+                    <div id="t-p-btn-edit" class="hidden flex justify-center space-x-2 pt-2">
+                        <button onclick="tSaveProfile()" class="bg-green-600 text-white font-bold px-5 py-2.5 rounded-xl shadow flex-1 text-sm"><i class="fa-solid fa-floppy-disk mr-1"></i> သိမ်းမည်</button>
+                        <button onclick="tEditMode(true)" class="bg-gray-400 text-white font-bold px-5 py-2.5 rounded-xl shadow text-sm">Cancel</button>
                     </div>
                 </div>
 
-                <div class="bg-white p-3 rounded-2xl border space-y-2">
-                    <h4 class="font-bold text-gray-700">သင်တန်းသား အသစ်စာရင်း</h4>
-                    <div id="t-completed-students" class="space-y-1 text-gray-500 text-[11px]"></div>
+                <!-- Completed Students -->
+                <div class="bg-white border shadow-sm p-4 rounded-2xl space-y-3">
+                    <h4 class="font-bold text-gray-800 text-sm border-b pb-2"><i class="fa-solid fa-users text-blue-500 mr-1"></i> သင်တန်းသား အသစ်စာရင်း</h4>
+                    <div id="t-students-list" class="space-y-2 text-xs"></div>
                 </div>
 
-                <button onclick="logoutTutor()" class="w-full text-center text-red-500 font-bold py-2">Logout ပြန်ထွက်မည်</button>
+                <button onclick="tLogout()" class="w-full text-center text-red-500 font-bold py-3 text-sm hover:underline"><i class="fa-solid fa-right-from-bracket mr-1"></i> Logout ထွက်မည်</button>
             </div>
 
-            <!-- Job Posts View for Teacher -->
+            <!-- Teacher Job Posts View -->
             <div id="t-posts-view" class="hidden space-y-3">
-                <div id="teacher-job-list" class="space-y-3 text-xs"></div>
+                <div id="t-jobs-list" class="space-y-3"></div>
             </div>
 
-            <!-- Teacher Admin Chat View -->
-            <div id="t-chat-view" class="hidden bg-white p-3 rounded-2xl border shadow-sm space-y-3 text-xs h-[450px] flex flex-col">
-                <h4 class="font-bold text-blue-600">Admin နှင့် စကားပြောရန် Panel</h4>
-                <div id="t-chat-messages" class="flex-1 overflow-y-auto space-y-2 p-2 bg-gray-50 rounded-xl border"></div>
-                <div class="flex space-x-1">
-                    <input type="text" id="t-chat-input" placeholder="Admin ဆီ စာပို့ရန်..." class="flex-1 border p-2 rounded-xl outline-none">
-                    <button onclick="sendTeacherMessage()" class="bg-blue-600 text-white px-4 py-2 rounded-xl font-bold"><i class="fa-solid fa-paper-plane"></i></button>
+            <!-- Teacher Chat View -->
+            <div id="t-chat-view" class="hidden bg-white p-3 rounded-2xl border shadow-sm flex flex-col h-[70vh]">
+                <h4 class="font-bold text-blue-600 text-sm border-b pb-2"><i class="fa-solid fa-comments mr-1"></i> Admin Chat Panel</h4>
+                <div id="t-chat-box" class="flex-1 overflow-y-auto space-y-3 p-2 bg-gray-50 mt-2 rounded-xl border text-xs"></div>
+                <div class="flex space-x-2 mt-3">
+                    <input type="text" id="t-chat-input" placeholder="စာရိုက်ပါ..." class="flex-1 border p-2.5 rounded-xl outline-none text-xs focus:border-blue-500">
+                    <button onclick="tSendChat()" class="bg-blue-600 text-white px-4 py-2 rounded-xl font-bold hover:bg-blue-700 transition"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
             </div>
         </div>
 
-        <!-- ========================================================================= -->
+        <!-- ========================================== -->
         <!-- 3. STUDENT SCREEN -->
-        <!-- ========================================================================= -->
+        <!-- ========================================== -->
         <div id="student-screen" class="hidden space-y-4">
-            <!-- Login View -->
-            <div id="s-auth-view" class="space-y-4">
+            
+            <div id="s-tabs" class="hidden flex bg-white rounded-xl shadow p-1 space-x-1 text-xs font-bold border">
+                <button onclick="switchSTab('search')" id="s-tab-search" class="flex-1 py-2 rounded-lg bg-red-500 text-white transition">ဆရာရှာရန်</button>
+                <button onclick="switchSTab('post')" id="s-tab-post" class="flex-1 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">Post တင်ရန်</button>
+                <button onclick="switchSTab('myposts')" id="s-tab-myposts" class="flex-1 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition">မိမိ၏ Post</button>
+            </div>
+
+            <!-- Student Login -->
+            <div id="s-login-view" class="space-y-4">
                 <h2 class="text-xl font-bold text-center text-[#1a1a4b]">STUDENT</h2>
-                <div class="bg-[#F9FAFE] p-5 rounded-2xl border shadow-sm space-y-3">
-                    <h3 class="font-bold text-sm text-[#2196F3] text-center">Student Login</h3>
-                    <input type="text" id="s-login-user" placeholder="Student Username" class="w-full border p-2.5 rounded-xl text-xs bg-white outline-none">
-                    <input type="password" id="s-login-pass" placeholder="Password" class="w-full border p-2.5 rounded-xl text-xs bg-white outline-none">
-                    <p id="s-login-msg" class="text-xs text-red-500 text-center"></p>
-                    <button onclick="loginStudent()" class="w-full bg-[#F4F6F9] text-[#1a1a4b] font-bold py-2.5 rounded-full text-xs border">Login ဝင်မည်</button>
+                <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
+                    <h3 class="font-bold text-[#EF5350] text-center text-sm">Student Login</h3>
+                    <input type="text" id="s-l-user" placeholder="Student Username" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
+                    <input type="password" id="s-l-pass" placeholder="Password" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
+                    <p id="s-l-msg" class="text-xs text-red-500 text-center font-bold"></p>
+                    <button onclick="sLogin()" class="w-full bg-[#F4F6F9] border text-[#1a1a4b] hover:bg-gray-200 font-bold py-2.5 rounded-full text-sm transition">Login ဝင်မည်</button>
                 </div>
-                <div class="bg-[#F9FAFE] p-3 rounded-2xl border text-center text-xs text-gray-500 space-x-1">
-                    <span>အကောင့်မရှိသေးပါက -</span>
-                    <button onclick="toggleStudentAuth('reg')" class="text-blue-600 font-bold">Register လုပ်ရန်</button>
+                <div class="bg-white border p-3 rounded-xl text-center text-xs space-x-1 shadow-sm">
+                    <span class="text-gray-500">အကောင့်မရှိသေးပါက -</span>
+                    <button onclick="toggleSAuth('reg')" class="text-red-500 font-bold hover:underline">Register လုပ်ရန်</button>
                 </div>
             </div>
 
-            <!-- Register View -->
-            <div id="s-reg-view" class="hidden bg-white p-5 rounded-2xl border shadow-sm space-y-3 text-xs">
-                <h3 class="font-bold text-base text-green-600 text-center">Student Register</h3>
-                <input type="text" id="s-reg-user" placeholder="Username (ဥပမာ - MaMa)" class="w-full border p-2.5 rounded-xl">
-                <input type="password" id="s-reg-pass" placeholder="Password (မိမိဖုန်းနံပါတ်)" class="w-full border p-2.5 rounded-xl">
-                <input type="text" id="s-reg-name" placeholder="ကျောင်းသား/မိဘ အမည်" class="w-full border p-2.5 rounded-xl">
-                <input type="text" id="s-reg-phone" placeholder="ဆက်သွယ်ရန် ဖုန်းနံပါတ်" class="w-full border p-2.5 rounded-xl">
-                <p id="s-reg-msg" class="text-xs text-red-500 text-center"></p>
-                <button onclick="registerStudent()" class="w-full bg-green-600 text-white font-bold py-2.5 rounded-xl">Register အကောင့်ဖွင့်မည်</button>
-                <button onclick="toggleStudentAuth('login')" class="w-full text-gray-500 py-1">Login သို့ ပြန်သွားမည်</button>
+            <!-- Student Register -->
+            <div id="s-reg-view" class="hidden bg-white p-6 rounded-2xl border shadow-sm space-y-4">
+                <h3 class="font-bold text-red-500 text-center text-base">Student Register</h3>
+                <input type="text" id="s-r-user" placeholder="Username (ဥပမာ - MaMa)" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
+                <input type="password" id="s-r-pass" placeholder="Password (မိမိဖုန်းနံပါတ်)" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
+                <input type="text" id="s-r-name" placeholder="ကျောင်းသား/မိဘ အမည်" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
+                <input type="text" id="s-r-phone" placeholder="ဆက်သွယ်ရန် ဖုန်းနံပါတ်" class="w-full border p-2.5 rounded-xl text-xs bg-gray-50 outline-none">
+                <p id="s-r-msg" class="text-[11px] text-red-500 text-center"></p>
+                <button onclick="sRegister()" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 rounded-xl text-sm transition">Register အကောင့်ဖွင့်မည်</button>
+                <button onclick="toggleSAuth('login')" class="w-full text-gray-500 text-xs font-bold pt-2">Login သို့ ပြန်သွားမည်</button>
             </div>
 
-            <!-- Main Student Dashboard -->
-            <div id="s-main-view" class="hidden space-y-3">
-                <div class="flex items-center justify-between bg-white p-2 rounded-xl border text-xs">
-                    <div class="flex space-x-1">
-                        <button onclick="switchStudentTab('search')" id="s-tab-search" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-bold">ဆရာရှာရန်</button>
-                        <button onclick="switchStudentTab('post')" id="s-tab-post" class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 font-bold">Post တင်ရန်</button>
-                        <button onclick="switchStudentTab('myposts')" id="s-tab-myposts" class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 font-bold">မိမိ၏ Post များ</button>
-                    </div>
-                    <button onclick="logoutStudent()" class="text-red-500 text-base px-2"><i class="fa-solid fa-right-from-bracket"></i></button>
+            <!-- Student Main Views -->
+            <div id="s-main-view" class="hidden space-y-4">
+                <div class="flex justify-end">
+                    <button onclick="sLogout()" class="text-red-500 font-bold text-xs bg-white border px-3 py-1.5 rounded-lg shadow-sm"><i class="fa-solid fa-right-from-bracket mr-1"></i> Logout</button>
                 </div>
 
-                <!-- Search Tutors View -->
-                <div id="s-search-view" class="space-y-3 text-xs">
-                    <div class="grid grid-cols-2 gap-2">
-                        <select id="s-filter-state" onchange="refreshStudentTutors()" class="border p-2 rounded-xl bg-white">
+                <!-- Search Tutors -->
+                <div id="s-search-view" class="space-y-3">
+                    <div class="bg-white p-3 rounded-2xl border shadow-sm grid grid-cols-2 gap-2 text-xs">
+                        <select id="s-f-state" onchange="loadSTutors()" class="border p-2 rounded-xl bg-gray-50 outline-none">
                             <option value="အားလုံး">တိုင်း/ပြည်နယ် (အားလုံး)</option>
-                            <option value="ရန်ကုန်တိုင်းဒေသကြီး">ရန်ကုန်တိုင်းဒေသကြီး</option>
-                            <option value="မန္တလေးတိုင်းဒေသကြီး">မန္တလေးတိုင်းဒေသကြီး</option>
-                            <option value="ပဲခူးတိုင်းဒေသကြီး">ပဲခူးတိုင်းဒေသကြီး</option>
+                            <option value="ရန်ကုန်တိုင်းဒေသကြီး">ရန်ကုန်တိုင်း</option>
+                            <option value="မန္တလေးတိုင်းဒေသကြီး">မန္တလေးတိုင်း</option>
+                            <option value="ပဲခူးတိုင်းဒေသကြီး">ပဲခူးတိုင်း</option>
                             <option value="နေပြည်တော်">နေပြည်တော်</option>
                         </select>
-                        <input type="text" id="s-filter-township" oninput="refreshStudentTutors()" placeholder="မြို့နယ်ဖြင့်ရှာရန်" class="border p-2 rounded-xl bg-white">
+                        <input type="text" id="s-f-town" oninput="loadSTutors()" placeholder="မြို့နယ်ဖြင့်ရှာရန်" class="border p-2 rounded-xl bg-gray-50 outline-none">
                     </div>
-                    <div id="student-tutor-list" class="space-y-3"></div>
+                    <div id="s-tutor-list" class="space-y-3 pb-8"></div>
                 </div>
 
-                <!-- Post Job View -->
-                <div id="s-post-view" class="hidden bg-white p-4 rounded-2xl border space-y-3 text-xs">
-                    <h4 class="font-bold text-sm text-gray-700">ဆရာခေါ်ယူရန် Post တင်ပါ</h4>
-                    <input type="text" id="post-s-name" placeholder="ကျောင်းသား/မိဘ အမည်" class="w-full border p-2 rounded-xl bg-gray-50" disabled>
-                    <input type="text" id="post-s-phone" placeholder="ဆက်သွယ်ရန် ဖုန်းနံပါတ်" class="w-full border p-2 rounded-xl bg-gray-50" disabled>
-                    <input type="text" id="post-subject" placeholder="လိုချင်သော ဘာသာရပ်/အတန်း" class="w-full border p-2 rounded-xl">
-                    <select id="post-state" class="w-full border p-2 rounded-xl bg-white">
-                        <option value="ရန်ကုန်တိုင်းဒေသကြီး">ရန်ကုန်တိုင်းဒေသကြီး</option>
-                        <option value="မန္တလေးတိုင်းဒေသကြီး">မန္တလေးတိုင်းဒေသကြီး</option>
-                        <option value="ပဲခူးတိုင်းဒေသကြီး">ပဲခူးတိုင်းဒေသကြီး</option>
-                        <option value="နေပြည်တော်">နေပြည်တော်</option>
-                    </select>
-                    <input type="text" id="post-township" placeholder="မြို့နယ်" class="w-full border p-2 rounded-xl">
-                    <input type="text" id="post-fee" placeholder="ပေးနိုင်သော လစဉ်ကြေးနှုန်းထား" class="w-full border p-2 rounded-xl">
-                    <textarea id="post-details" placeholder="အသေးစိတ်အချက်အလက်" class="w-full border p-2 rounded-xl h-20"></textarea>
-                    <p id="post-msg" class="text-xs text-center font-bold"></p>
-                    <button onclick="submitJobPost()" class="w-full bg-blue-600 text-white font-bold py-2.5 rounded-xl"><i class="fa-solid fa-plus mr-1"></i> Post တင်မည်</button>
+                <!-- Post Job -->
+                <div id="s-post-view" class="hidden bg-white p-5 rounded-2xl border shadow-sm space-y-4 text-xs">
+                    <h4 class="font-bold text-sm text-gray-800 border-b pb-2"><i class="fa-solid fa-pen-nib text-blue-500 mr-1"></i> ဆရာခေါ်ယူရန် Post တင်ပါ</h4>
+                    <input type="text" id="s-post-subj" placeholder="လိုချင်သော ဘာသာရပ်/အတန်း" class="w-full border p-2.5 rounded-xl bg-gray-50 outline-none">
+                    <div class="grid grid-cols-2 gap-3">
+                        <select id="s-post-state" class="border p-2.5 rounded-xl bg-gray-50 outline-none">
+                            <option value="ရန်ကုန်တိုင်းဒေသကြီး">ရန်ကုန်တိုင်း</option>
+                            <option value="မန္တလေးတိုင်းဒေသကြီး">မန္တလေးတိုင်း</option>
+                            <option value="ပဲခူးတိုင်းဒေသကြီး">ပဲခူးတိုင်း</option>
+                            <option value="နေပြည်တော်">နေပြည်တော်</option>
+                        </select>
+                        <input type="text" id="s-post-town" placeholder="မြို့နယ်" class="border p-2.5 rounded-xl bg-gray-50 outline-none">
+                    </div>
+                    <input type="text" id="s-post-fee" placeholder="ပေးနိုင်သော လစဉ်ကြေး" class="w-full border p-2.5 rounded-xl bg-gray-50 outline-none">
+                    <textarea id="s-post-det" placeholder="အသေးစိတ်အချက်အလက်များ" class="w-full border p-2.5 rounded-xl bg-gray-50 h-20 outline-none"></textarea>
+                    <p id="s-post-msg" class="text-xs text-center font-bold"></p>
+                    <button onclick="submitSJob()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition"><i class="fa-solid fa-paper-plane mr-1"></i> Post တင်မည်</button>
                 </div>
 
-                <!-- My Posts View -->
-                <div id="s-myposts-view" class="hidden space-y-3 text-xs">
-                    <h4 class="font-bold text-blue-600">စောင့်ဆိုင်းဆဲ / လျှောက်ထားဆဲ Post များ</h4>
-                    <div id="student-my-posts-list" class="space-y-2"></div>
-                    <hr>
-                    <h4 class="font-bold text-green-600">✅ အောင်မြင်စွာ ချိတ်ဆက်ပြီးသော စာရင်း</h4>
-                    <div id="student-completed-tutors-list" class="space-y-2"></div>
+                <!-- My Posts & History -->
+                <div id="s-myposts-view" class="hidden space-y-4">
+                    <div class="bg-white p-4 rounded-2xl border shadow-sm space-y-3">
+                        <h4 class="font-bold text-blue-600 text-sm"><i class="fa-solid fa-clock-rotate-left mr-1"></i> စောင့်ဆိုင်း/လျှောက်ထားဆဲ</h4>
+                        <div id="s-my-active-list" class="space-y-2 text-xs"></div>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border shadow-sm space-y-3">
+                        <h4 class="font-bold text-green-600 text-sm"><i class="fa-solid fa-check-double mr-1"></i> ချိတ်ဆက်ပြီးသော စာရင်း</h4>
+                        <div id="s-my-comp-list" class="space-y-2 text-xs"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- ========================================================================= -->
-        <!-- 4. ADMIN LOGIN & DASHBOARD -->
-        <!-- ========================================================================= -->
+        <!-- ========================================== -->
+        <!-- 4. ADMIN SCREEN -->
+        <!-- ========================================== -->
         <div id="admin-login-screen" class="hidden space-y-4">
-            <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4 text-xs">
-                <h2 class="text-base font-bold text-center text-slate-800">Admin Login</h2>
-                <input type="password" id="admin-pass-input" placeholder="Admin Password" class="w-full border p-2.5 rounded-xl outline-none">
-                <p id="admin-login-error" class="text-xs text-red-500 text-center hidden">Admin Password မှားယွင်းနေပါသည်</p>
-                <button onclick="doAdminLogin()" class="w-full bg-purple-600 text-white font-bold py-2.5 rounded-xl">Login ဝင်မည်</button>
-            </div>
-        </div>
-
-        <div id="admin-tab" class="hidden space-y-3">
-            <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border text-xs">
-                <div class="flex items-center space-x-2">
-                    <button id="admin-back-btn" onclick="showAdminDashboard()" class="hidden text-blue-600"><i class="fa-solid fa-arrow-left"></i></button>
-                    <span id="admin-panel-title" class="font-bold text-slate-800 text-sm">ADMIN</span>
+            <div class="bg-white p-6 rounded-2xl border shadow-md space-y-5 text-xs max-w-sm mx-auto mt-10">
+                <div class="text-center">
+                    <i class="fa-solid fa-user-shield text-4xl text-purple-600 mb-2"></i>
+                    <h2 class="text-lg font-bold text-slate-800">Admin Login</h2>
                 </div>
-                <button onclick="logoutAdmin()" class="text-red-500 font-bold"><i class="fa-solid fa-right-from-bracket"></i></button>
+                <input type="password" id="a-pass" placeholder="Admin Password ထည့်ပါ" class="w-full border border-gray-300 p-3 rounded-xl outline-none text-center tracking-widest text-sm focus:border-purple-500">
+                <p id="a-msg" class="text-xs text-red-500 text-center hidden font-bold">Password မှားယွင်းနေပါသည်</p>
+                <button onclick="aLogin()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-xl text-sm transition">ဝင်ရောက်မည်</button>
             </div>
-
-            <!-- Admin Grid Dashboard -->
-            <div id="admin-dashboard-grid" class="grid grid-cols-2 gap-3 text-xs">
-                <button onclick="showAdminPanel('new', 'ဆရာသစ် အတည်ပြုရန်')" class="bg-[#B2DFDB] p-4 rounded-2xl flex flex-col items-center justify-center font-bold h-28 space-y-1">
-                    <i class="fa-solid fa-user-plus text-2xl"></i>
-                    <span class="text-center">ဆရာသစ်<br>အတည်ပြုရန်</span>
-                </button>
-                <button onclick="showAdminPanel('approved_list', 'ဆရာများ စာရင်း')" class="bg-[#B2DFDB] p-4 rounded-2xl flex flex-col items-center justify-center font-bold h-28 space-y-1">
-                    <i class="fa-solid fa-id-card text-2xl"></i>
-                    <span class="text-center">ဆရာများ<br>စာရင်း</span>
-                </button>
-                <button onclick="showAdminPanel('post_pending', 'စိစစ်ရန် Post များ')" class="bg-[#BBDEFB] p-4 rounded-2xl flex flex-col items-center justify-center font-bold h-28 space-y-1">
-                    <i class="fa-solid fa-magnifying-glass text-2xl"></i>
-                    <span class="text-center">စိစစ်ရန်<br>post များ</span>
-                </button>
-                <button onclick="showAdminPanel('post_approved', 'စိစစ်ပြီး Post များ')" class="bg-[#BBDEFB] p-4 rounded-2xl flex flex-col items-center justify-center font-bold h-28 space-y-1">
-                    <i class="fa-solid fa-square-check text-2xl"></i>
-                    <span class="text-center">စိစစ်ပြီး<br>post များ</span>
-                </button>
-                <button onclick="showAdminPanel('post_completed', 'ချိတ်ဆက်ပြီး Post များ')" class="bg-[#D1C4E9] p-4 rounded-2xl flex flex-col items-center justify-center font-bold h-28 space-y-1">
-                    <i class="fa-solid fa-arrow-right-arrow-left text-2xl"></i>
-                    <span class="text-center">ချိတ်ဆက်ပြီး<br>Post များ</span>
-                </button>
-                <button onclick="showAdminPanel('direct', 'ချိတ်ဆက်ခြင်း အတည်ပြုရန်')" class="bg-[#D1C4E9] p-4 rounded-2xl flex flex-col items-center justify-center font-bold h-28 space-y-1">
-                    <i class="fa-solid fa-handshake text-2xl"></i>
-                    <span class="text-center">ဆရာများအား<br>ချိတ်ဆက်ခြင်း</span>
-                </button>
-                <button onclick="showAdminPanel('noti', 'Notification')" class="bg-[#FFCCBC] p-4 rounded-2xl flex flex-col items-center justify-center font-bold h-28 space-y-1">
-                    <i class="fa-solid fa-bell text-2xl"></i>
-                    <span class="text-center">အချက်ပေးစာ<br>Notification</span>
-                </button>
-                <button onclick="showAdminPanel('chat', 'Chat စာပို့ခြင်း')" class="bg-[#FFCCBC] p-4 rounded-2xl flex flex-col items-center justify-center font-bold h-28 space-y-1">
-                    <i class="fa-solid fa-comments text-2xl"></i>
-                    <span class="text-center">Chat<br>စာပို့ခြင်း</span>
-                </button>
-            </div>
-
-            <!-- Admin Dynamic Sub-Panels -->
-            <div id="admin-sub-content" class="hidden space-y-3 text-xs"></div>
         </div>
 
-        <!-- ========================================================================= -->
-        <!-- 5. OTHER STATIC SCREENS -->
-        <!-- ========================================================================= -->
-        <div id="blacklist-screen" class="hidden space-y-3 text-xs">
-            <h3 class="font-bold text-base text-red-600">Black Listed (အမည်ပျက်စာရင်း)</h3>
+        <div id="admin-tab" class="hidden space-y-4">
+            <div class="flex justify-between items-center bg-white p-3 rounded-2xl shadow-sm border text-sm">
+                <button id="a-back-btn" onclick="showADash()" class="hidden text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg font-bold transition hover:bg-blue-100"><i class="fa-solid fa-arrow-left mr-1"></i> Back</button>
+                <span id="a-title" class="font-bold text-[#1a1a4b] uppercase tracking-wider ml-2">ADMIN DASHBOARD</span>
+                <button onclick="aLogout()" class="text-red-500 hover:text-red-700 bg-red-50 px-3 py-1.5 rounded-lg transition"><i class="fa-solid fa-power-off"></i></button>
+            </div>
+
+            <!-- Admin Grid -->
+            <div id="a-grid" class="grid grid-cols-2 gap-3">
+                <button onclick="openAPanel('new', 'ဆရာသစ် အတည်ပြုရန်')" class="bg-teal-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-teal-900 h-28 shadow-sm hover:opacity-80">
+                    <i class="fa-solid fa-user-plus text-3xl mb-2"></i>
+                    <span class="text-xs text-center">ဆရာသစ်<br>အတည်ပြုရန်</span>
+                </button>
+                <button onclick="openAPanel('tutors', 'ဆရာများ စာရင်း')" class="bg-teal-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-teal-900 h-28 shadow-sm hover:opacity-80">
+                    <i class="fa-solid fa-users text-3xl mb-2"></i>
+                    <span class="text-xs text-center">ဆရာများ<br>စာရင်း</span>
+                </button>
+                <button onclick="openAPanel('p_posts', 'စိစစ်ရန် Post များ')" class="bg-blue-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-blue-900 h-28 shadow-sm hover:opacity-80">
+                    <i class="fa-solid fa-file-circle-question text-3xl mb-2"></i>
+                    <span class="text-xs text-center">စိစစ်ရန်<br>Post များ</span>
+                </button>
+                <button onclick="openAPanel('a_posts', 'စိစစ်ပြီး Post များ')" class="bg-blue-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-blue-900 h-28 shadow-sm hover:opacity-80">
+                    <i class="fa-solid fa-file-circle-check text-3xl mb-2"></i>
+                    <span class="text-xs text-center">စိစစ်ပြီး<br>Post များ</span>
+                </button>
+                <button onclick="openAPanel('c_posts', 'ချိတ်ဆက်ပြီး Post များ')" class="bg-purple-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-purple-900 h-28 shadow-sm hover:opacity-80">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-3xl mb-2"></i>
+                    <span class="text-xs text-center">ချိတ်ဆက်ပြီး<br>Post များ</span>
+                </button>
+                <button onclick="openAPanel('direct', 'Direct Booking စိစစ်ရန်')" class="bg-purple-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-purple-900 h-28 shadow-sm hover:opacity-80">
+                    <i class="fa-solid fa-handshake-angle text-3xl mb-2"></i>
+                    <span class="text-xs text-center">Direct Booking<br>စိစစ်ရန်</span>
+                </button>
+                <button onclick="openAPanel('noti', 'အချက်ပေးစာ Notifications')" class="bg-orange-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-orange-900 h-28 shadow-sm hover:opacity-80">
+                    <i class="fa-solid fa-bell text-3xl mb-2"></i>
+                    <span class="text-xs text-center">အချက်ပေးစာ<br>Notification</span>
+                </button>
+                <button onclick="openAPanel('chat', 'Chat Panel')" class="bg-orange-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-orange-900 h-28 shadow-sm hover:opacity-80">
+                    <i class="fa-solid fa-comments text-3xl mb-2"></i>
+                    <span class="text-xs text-center">Chat<br>စာပို့ခြင်း</span>
+                </button>
+            </div>
+
+            <!-- Admin Sub Panel -->
+            <div id="a-sub" class="hidden space-y-3 pb-8"></div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- STATIC PAGES -->
+        <!-- ========================================== -->
+        <div id="blacklist-screen" class="hidden bg-white p-5 rounded-2xl border shadow-sm space-y-4 text-xs">
+            <h3 class="font-bold text-base text-red-600 text-center"><i class="fa-solid fa-user-slash mr-1"></i> Black Listed စာရင်း</h3>
             <hr>
-            <div id="blacklist-list" class="space-y-2"></div>
+            <div id="bl-list" class="space-y-2"></div>
         </div>
 
-        <div id="terms-screen" class="hidden space-y-3 text-xs leading-relaxed bg-white p-4 rounded-2xl border">
-            <h3 class="font-bold text-base text-blue-600">Terms & Conditions (စည်းမျဉ်းစည်းကမ်းများ)</h3>
+        <div id="terms-screen" class="hidden bg-white p-6 rounded-2xl border shadow-sm space-y-4 text-xs leading-relaxed text-gray-700">
+            <h3 class="font-bold text-base text-blue-700 text-center">Terms & Conditions</h3>
             <hr>
             <p>၁။ ဤ Platform သည် ဆရာနှင့် ကျောင်းသား တိုက်ရိုက်ချိတ်ဆက်ပေးသော နေရာသာဖြစ်သည်။</p>
             <p>၂။ ချိတ်ဆက်မှု ဝန်ဆောင်ခကို ဆရာများဘက်မှ ပေးရပါမည်။</p>
@@ -402,15 +416,18 @@
             <p>၇။ လိမ်လည်မှုများ၊ စည်းကမ်းဖောက်ဖျက်မှုများ တွေ့ရှိပါက Blacklist သွင်းခံရပါမည်။</p>
         </div>
 
-        <div id="help-screen" class="hidden space-y-3 text-xs bg-white p-4 rounded-2xl border">
-            <h3 class="font-bold text-base text-green-600">Help & Support (အကူအညီ)</h3>
+        <div id="help-screen" class="hidden bg-white p-6 rounded-2xl border shadow-sm space-y-4 text-xs text-center">
+            <i class="fa-solid fa-headset text-4xl text-green-500 mb-2"></i>
+            <h3 class="font-bold text-base text-green-700">Help & Support</h3>
             <hr>
-            <p>အဆင်မပြေမှုများနှင့် အကြံပြုလိုသည်များ ရှိပါက ဆက်သွယ်နိုင်ပါသည်။</p>
-            <p class="font-bold text-blue-600 text-sm"><i class="fa-solid fa-envelope mr-1"></i> Email us : teachermatching@gmail.com</p>
+            <p class="text-gray-600">အဆင်မပြေမှုများနှင့် အကြံပြုလိုသည်များ ရှိပါက ဆက်သွယ်နိုင်ပါသည်။</p>
+            <p class="font-bold text-blue-600 text-sm mt-4 bg-blue-50 py-3 rounded-xl border border-blue-100">
+                <i class="fa-solid fa-envelope mr-1 text-red-500"></i> teachermatching@gmail.com
+            </p>
         </div>
 
-        <div id="teacher-guide-screen" class="hidden space-y-3 text-xs bg-white p-4 rounded-2xl border">
-            <h3 class="font-bold text-base text-teal-600">Teacher User Guide (ဆရာများအတွက် အသုံးပြုပုံ)</h3>
+        <div id="t-guide-screen" class="hidden bg-white p-6 rounded-2xl border shadow-sm space-y-3 text-xs leading-relaxed text-gray-700">
+            <h3 class="font-bold text-base text-teal-700 text-center"><i class="fa-solid fa-chalkboard-user mr-1"></i> Teacher User Guide</h3>
             <hr>
             <p>၁။ အကောင့်သစ်ပြုလုပ်ရန် Register တွင် မိမိ Username နှင့် Password ဖြည့်ပါ (ဥပမာ - KyawKyaw, Kk@12345)။</p>
             <p>၂။ Login ဝင်ပြီးနောက် မိမိ ကိုယ်ရေးအချက်အလက်၊ ဓာတ်ပုံ၊ သင်ကြားနိုင်သော အတန်း/ဘာသာရပ်များကို 'Profile ပြင်ဆင်မည်' နှိပ်၍ ဖြည့်စွက်ပါ။</p>
@@ -419,8 +436,8 @@
             <p>၅။ Admin နှင့် တိုက်ရိုက် စကားပြောလိုပါက 'Admin Chat' ကို အသုံးပြုနိုင်ပါသည်။</p>
         </div>
 
-        <div id="student-guide-screen" class="hidden space-y-3 text-xs bg-white p-4 rounded-2xl border">
-            <h3 class="font-bold text-base text-orange-600">Student User Guide (ကျောင်းသား/မိဘများအတွက်)</h3>
+        <div id="s-guide-screen" class="hidden bg-white p-6 rounded-2xl border shadow-sm space-y-3 text-xs leading-relaxed text-gray-700">
+            <h3 class="font-bold text-base text-orange-600 text-center"><i class="fa-solid fa-children mr-1"></i> Student User Guide</h3>
             <hr>
             <p>၁။ ပထမဦးစွာ Register တွင် အကောင့်ပြုလုပ်ပါ (ဥပမာ - Username: MaMa, Password: မိမိဖုန်းနံပါတ်)။</p>
             <p>၂။ 'ဆရာရှာရန်' တွင် မိမိနေထိုင်ရာ တိုင်းနှင့် မြို့နယ် ရွေးချယ်/ရိုက်ထည့်ပြီး ကိုက်ညီသော ဆရာများ၏ Profile ကို ကြည့်ရှုနိုင်ပါသည်။</p>
@@ -431,500 +448,788 @@
 
     </main>
 
-    <!-- ========================================================================= -->
-    <!-- MODALS / DIALOGS -->
-    <!-- ========================================================================= -->
-    <div id="generic-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-4 space-y-3 text-xs max-h-[80vh] overflow-y-auto" id="modal-container">
-            <!-- Dynamic Content -->
+    <!-- ========================================== -->
+    <!-- REUSABLE MODAL (Popup) -->
+    <!-- ========================================== -->
+    <div id="modal-bg" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 text-xs shadow-2xl max-h-[85vh] flex flex-col" id="modal-box">
+            <div id="modal-content" class="overflow-y-auto pr-1 space-y-3"></div>
+            <div id="modal-actions" class="pt-2 border-t flex space-x-2 mt-auto shrink-0"></div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- GLOBAL JAVASCRIPT -->
     <script>
-        // =========================================================================
-        // IMPORTANT FIX: NAME CONFLICT RESOLVED 
-        // =========================================================================
-        const SUPABASE_URL = "https://ryberrmhwmjnqcovpxrv.supabase.co";
-        const SUPABASE_KEY = "sb_publishable_7JG5cYQrpnme8TnImrqLCQ_z9RZSvPi";
-        
-        // Use 'dbClient' to avoid conflicting with the global 'supabase' object from CDN
-        const dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        /* --- SUPABASE CONFIG --- */
+        const SUPA_URL = "https://ryberrmhwmjnqcovpxrv.supabase.co";
+        const SUPA_KEY = "sb_publishable_7JG5cYQrpnme8TnImrqLCQ_z9RZSvPi";
+        // To avoid conflicts with browser built-ins, use a specific variable name.
+        const db = window.supabase.createClient(SUPA_URL, SUPA_KEY)[cite: 1];
 
-        // State Variables
-        let CURRENT_VERSION = "1.0.0";
-        let loggedInTutorId = null;
-        let loggedInStudent = null;
-        let isAdminLoggedIn = false;
-        let adminSelectedTutorId = null;
+        /* --- STATE VARIABLES --- */
+        const APP_VERSION = "1.0.0"[cite: 1];
+        let t_id = null; // Logged in teacher ID
+        let s_user = null; // Logged in student object {id, name, phone}[cite: 1]
+        let a_logged = false; // Admin auth state[cite: 1]
+        let a_chat_id = null; // Admin active chat tutor ID[cite: 1]
 
-        // --- NAVIGATION ---
-        function navigate(screenId, title) {
-            const screens = ['home-screen', 'teacher-screen', 'student-screen', 'admin-login-screen', 'admin-tab', 'blacklist-screen', 'terms-screen', 'help-screen', 'teacher-guide-screen', 'student-guide-screen'];
-            screens.forEach(id => document.getElementById(id).classList.add('hidden'));
-            document.getElementById(screenId).classList.remove('hidden');
+        /* --- INITIALIZATION & UTILS --- */
+        window.onload = () => { checkAppUpdate(true); };
 
-            const backBtn = document.getElementById('nav-back-btn');
-            if (screenId === 'home-screen') {
-                backBtn.classList.add('hidden');
-            } else {
-                backBtn.classList.remove('hidden');
-            }
-            document.getElementById('app-title').innerText = title || "Teacher Match";
+        function navTo(screen, title) {
+            ['home-screen', 'teacher-screen', 'student-screen', 'admin-login-screen', 'admin-tab', 
+             'blacklist-screen', 'terms-screen', 'help-screen', 't-guide-screen', 's-guide-screen']
+            .forEach(id => document.getElementById(id).classList.add('hidden'));
+            
+            document.getElementById(screen).classList.remove('hidden');
+            document.getElementById('app-title').innerText = title || "Teacher Match"[cite: 1];
+            document.getElementById('btn-back').style.display = (screen === 'home-screen') ? 'none' : 'block'[cite: 1];
         }
 
-        function goToHome() {
-            navigate('home-screen', 'Teacher Match');
+        function goHome() { navTo('home-screen', 'Teacher Match'); }[cite: 1]
+
+        // Notifications helper
+        async function pushNoti(title, msg) {
+            try { await db.from('notifications').insert([{ title: title, message: msg }]); } catch(e){}[cite: 1]
         }
 
-        // --- APP VERSION CHECK ---
-        async function checkAppVersion() {
+        /* --- MODAL ENGINE --- */
+        function openModal(htmlContent, actionButtonsHtml = '') {
+            document.getElementById('modal-content').innerHTML = htmlContent;
+            document.getElementById('modal-actions').innerHTML = actionButtonsHtml || 
+                `<button onclick="closeModal()" class="w-full bg-gray-200 text-gray-800 font-bold py-2.5 rounded-xl">ပိတ်မည်</button>`;
+            document.getElementById('modal-bg').classList.remove('hidden');
+        }
+        function closeModal() { document.getElementById('modal-bg').classList.add('hidden'); }
+
+        // Alert Helper
+        function showAlert(title, msg, color="blue") {
+            openModal(`
+                <h3 class="font-bold text-${color}-600 text-sm text-center">${title}</h3>
+                <p class="text-center">${msg}</p>
+            `);
+        }
+
+        /* --- VERSION CHECK --- */
+        async function checkAppUpdate(silent = false) {
             try {
-                const { data } = await dbClient.from('app_settings').select('*').eq('id', 1);
-                if (data && data.length > 0) {
-                    const serverVer = data[0].latest_version;
-                    if (serverVer && serverVer !== CURRENT_VERSION) {
-                        openModal(`
-                            <h3 class="font-bold text-red-600 text-sm">⚠️ App Update ရရှိနိုင်ပါပြီ</h3>
-                            <p>အက်ပ် Version အသစ် (v${serverVer}) ထွက်ရှိနေပါသည်။ ပုံမှန် အသုံးပြုနိုင်ရန် Update ပြုလုပ်ပေးပါ။</p>
-                            <a href="${data[0].update_url || '#'}" target="_blank" class="block w-full bg-green-600 text-white text-center py-2 rounded-xl font-bold">Update ပြုလုပ်မည်</a>
-                        `);
+                const { data } = await db.from('app_settings').select('*').eq('id', 1)[cite: 1];
+                if(data && data.length > 0) {
+                    const serverV = data[0].latest_version[cite: 1];
+                    const url = data[0].update_url || '#'[cite: 1];
+                    if(serverV && serverV !== APP_VERSION) {
+                        openModal(
+                            `<div class="text-center space-y-2">
+                                <i class="fa-solid fa-circle-exclamation text-4xl text-red-500"></i>
+                                <h3 class="font-bold text-red-600 text-sm">App Update ရရှိနိုင်ပါပြီ</h3>
+                                <p>Version အသစ် (v${serverV}) ထွက်ရှိနေပါသည်။<br>ပုံမှန် အသုံးပြုနိုင်ရန် Update ပြုလုပ်ပေးပါ။</p>
+                            </div>`,
+                            `<a href="${url}" target="_blank" class="w-full bg-green-600 text-white font-bold py-2.5 rounded-xl text-center"><i class="fa-solid fa-download mr-1"></i> Update ပြုလုပ်မည်</a>`
+                        );
+                    } else if(!silent) {
+                        showAlert("Up to date", `သင့် App သည် နောက်ဆုံးပေါ် Version (v${APP_VERSION}) ဖြစ်နေပါပြီ။`, "green")[cite: 1];
                     }
                 }
             } catch(e){}
         }
-        checkAppVersion();
+        function checkUpdateManual() { checkAppUpdate(false); }
 
-        function openUpdateDialog() {
-            openModal(`
-                <h3 class="font-bold text-sm">📱 App Version & Update</h3>
-                <p>သင့် App သည် နောက်ဆုံးပေါ် Version (v${CURRENT_VERSION}) ဖြစ်နေပါပြီ။</p>
-                <button onclick="closeModal()" class="w-full bg-gray-200 py-2 rounded-xl font-bold">ပိတ်မည်</button>
-            `);
+        /* ========================================================================= */
+        /* TEACHER FUNCTIONS */
+        /* ========================================================================= */
+        function toggleTAuth(type) {
+            document.getElementById('t-login-view').style.display = type === 'login' ? 'block' : 'none';
+            document.getElementById('t-reg-view').style.display = type === 'reg' ? 'block' : 'none';
+            document.getElementById('t-r-msg').innerText = ''; document.getElementById('t-l-msg').innerText = '';
         }
 
-        // --- MODAL UTILS ---
-        function openModal(contentHtml) {
-            document.getElementById('modal-container').innerHTML = contentHtml;
-            document.getElementById('generic-modal').classList.remove('hidden');
-        }
-        function closeModal() {
-            document.getElementById('generic-modal').classList.add('hidden');
-        }
+        async function tRegister() {
+            const u = document.getElementById('t-r-user').value.trim();
+            const p = document.getElementById('t-r-pass').value.trim();
+            const msg = document.getElementById('t-r-msg');
 
-        // --- TEACHER LOGIC ---
-        function toggleTeacherAuth(type) {
-            if(type === 'reg') {
-                document.getElementById('t-auth-view').classList.add('hidden');
-                document.getElementById('t-reg-view').classList.remove('hidden');
-            } else {
-                document.getElementById('t-auth-view').classList.remove('hidden');
-                document.getElementById('t-reg-view').classList.add('hidden');
+            if (!/^([A-Z][a-z]+)+$/.test(u)) { msg.innerText = "Username သည် Space မပါဘဲ နာမည်အစစာလုံးတိုင်း UpperCase ဖြစ်ရပါမည် (ဥပမာ - KyawKyaw)။"; return; }[cite: 1]
+            if (p.length < 8 || !/[A-Z]/.test(p) || !/[a-z]/.test(p) || !/[0-9]/.test(p) || !/[@#$!%*?&_]/.test(p)) { msg.innerText = "Password သည် အနည်းဆုံး ၈ လုံး ရှိရမည်ဖြစ်ပြီး စာလုံးကြီး၊ စာလုံးအသေး၊ ဂဏန်းနှင့် သင်္ကေတ ပါဝင်ရပါမည်။"; return; }[cite: 1]
+
+            const { error } = await db.from('tutors').insert([{ username: u, password: p, status: 'pending', reject_reason: '' }])[cite: 1];
+            if(error) msg.innerText = "ဤ Username က ရှိပြီးသား ဖြစ်နေသဖြင့် အခြားပေးပါ။";[cite: 1]
+            else { 
+                msg.className = "text-[11px] text-green-600 text-center font-bold"; msg.innerText = "အကောင့်ဆောက်အောင်မြင်ပါသည်။ Login ဝင်နိုင်ပါပြီ။";[cite: 1]
+                pushNoti("ဆရာ အကောင့်သစ်", `${u} အမည်ဖြင့် ဆရာအကောင့်သစ် တစ်ခု ဖွင့်ထားပါသည်။`);[cite: 1]
             }
         }
 
-        async function registerTutor() {
-            const u = document.getElementById('t-reg-user').value.trim();
-            const p = document.getElementById('t-reg-pass').value.trim();
-            const msg = document.getElementById('t-reg-msg');
+        async function tLogin() {
+            const u = document.getElementById('t-l-user').value.trim();
+            const p = document.getElementById('t-l-pass').value.trim();
+            const msg = document.getElementById('t-l-msg');
 
-            if (!/^([A-Z][a-z]+)+$/.test(u)) {
-                msg.innerText = "Username သည် Space မပါဘဲ နာမည်အစစာလုံးတိုင်း UpperCase ဖြစ်ရပါမည် (ဥပမာ - KyawKyaw)။";
-                return;
-            }
-            if (p.length < 8 || !/[A-Z]/.test(p) || !/[a-z]/.test(p) || !/[0-9]/.test(p) || !/[@#$!%*?&_]/.test(p)) {
-                msg.innerText = "Password သည် အနည်းဆုံး ၈ လုံး ရှိရမည် (ဥပမာ - Kk@12345)။";
-                return;
-            }
-
-            const { error } = await dbClient.from('tutors').insert([{ username: u, password: p, status: 'pending', reject_reason: '' }]);
-            if (error) {
-                msg.innerText = "ဤ Username က ရှိပြီးသား ဖြစ်နေသဖြင့် အခြားပေးပါ။";
-            } else {
-                msg.className = "text-xs text-green-600 text-center font-bold";
-                msg.innerText = "အကောင့်ဆောက်အောင်မြင်ပါသည်။ Login ဝင်နိုင်ပါပြီ။";
-            }
-        }
-
-        async function loginTutor() {
-            const u = document.getElementById('t-login-user').value.trim();
-            const p = document.getElementById('t-login-pass').value.trim();
-            const msg = document.getElementById('t-login-msg');
-
-            const { data } = await dbClient.from('tutors').select('*').eq('username', u).eq('password', p);
-            if (data && data.length > 0) {
-                if (data[0].status === 'blacklisted') {
-                    msg.innerText = "သင့်အကောင့်အား Blacklist သွင်းထားသဖြင့် ဝင်ရောက်ခွင့်မပြုတော့ပါ။";
-                    return;
-                }
-                loggedInTutorId = data[0].id;
-                document.getElementById('t-auth-view').classList.add('hidden');
-                document.getElementById('teacher-nav').classList.remove('hidden');
-                document.getElementById('t-profile-view').classList.remove('hidden');
-                loadTutorProfile();
-            } else {
-                msg.innerText = "Username သို့မဟုတ် Password မှားယွင်းနေပါသည်။";
-            }
-        }
-
-        function switchTeacherTab(tab) {
-            ['profile', 'posts', 'chat'].forEach(t => {
-                document.getElementById(`t-${t}-view`).classList.add('hidden');
-                document.getElementById(`t-nav-${t === 'profile' ? 'prof' : t}`).className = "px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 font-bold";
-            });
-            document.getElementById(`t-${tab}-view`).classList.remove('hidden');
-            document.getElementById(`t-nav-${tab === 'profile' ? 'prof' : tab}`).className = "px-3 py-1.5 rounded-lg bg-blue-600 text-white font-bold";
-
-            if(tab === 'posts') loadTeacherJobs();
-            if(tab === 'chat') loadTeacherChat();
-        }
-
-        function setTeacherFormDisabled(disabled) {
-            ['t-name', 't-gender', 't-phone', 't-bio', 't-state', 't-township', 't-curriculum', 't-mode', 't-g1', 't-s1', 't-g2', 't-s2', 't-days', 't-time', 't-fee', 't-photo-url'].forEach(id => {
-                document.getElementById(id).disabled = disabled;
-            });
-            document.getElementById('t-view-btns').className = disabled ? 'text-center' : 'hidden';
-            document.getElementById('t-edit-btns').className = disabled ? 'hidden' : 'flex justify-center space-x-2';
-        }
-
-        async function loadTutorProfile() {
-            if(!loggedInTutorId) return;
-            const { data } = await dbClient.from('tutors').select('*').eq('id', loggedInTutorId);
+            const { data } = await db.from('tutors').select('*').eq('username', u).eq('password', p)[cite: 1];
             if(data && data.length > 0) {
-                const row = data[0];
-                document.getElementById('t-name').value = row.name || '';
-                document.getElementById('t-gender').value = row.gender || 'Male';
-                document.getElementById('t-phone').value = row.phone || '';
-                document.getElementById('t-bio').value = row.bio || '';
-                document.getElementById('t-state').value = row.state || 'ရန်ကုန်တိုင်းဒေသကြီး';
-                document.getElementById('t-township').value = row.township || '';
-                document.getElementById('t-curriculum').value = row.curriculum || 'Government';
-                document.getElementById('t-mode').value = row.teaching_mode || 'Online';
-                document.getElementById('t-g1').value = row.grade1 || '';
-                document.getElementById('t-s1').value = row.subject1 || '';
-                document.getElementById('t-g2').value = row.grade2 || '';
-                document.getElementById('t-s2').value = row.subject2 || '';
-                document.getElementById('t-days').value = row.days || 'နေ့တိုင်း';
-                document.getElementById('t-time').value = row.time || 'မနက်';
-                document.getElementById('t-fee').value = row.fee || '';
-                document.getElementById('t-photo-url').value = row.photo || '';
-                if(row.photo) document.getElementById('t-img-preview').src = row.photo;
-
-                const msg = document.getElementById('t-status-msg');
-                if(row.status === 'rejected') { msg.innerText = `သင့် Profile ကို Admin က Reject လုပ်ထားပါသည် (${row.reject_reason})`; msg.className = "text-xs font-bold text-red-500 text-center"; }
-                else if(row.status === 'pending') { msg.innerText = "သင့် Profile သည် အတည်ပြုချက် စောင့်ဆိုင်းနေဆဲ ဖြစ်သည်။"; msg.className = "text-xs font-bold text-orange-500 text-center"; }
-                else { msg.innerText = "သင့် Profile အား အတည်ပြုပြီး ဖြစ်သည်။"; msg.className = "text-xs font-bold text-green-600 text-center"; }
-            }
-            setTeacherFormDisabled(true);
+                if(data[0].status === 'blacklisted') { msg.innerText = "သင့်အကောင့်အား Blacklist သွင်းထားသဖြင့် ဝင်ရောက်ခွင့်မပြုတော့ပါ။"; return; }[cite: 1]
+                t_id = data[0].id[cite: 1];
+                document.getElementById('t-login-view').style.display = 'none';
+                document.getElementById('t-tabs').style.display = 'flex';
+                switchTTab('profile');
+            } else msg.innerText = "Username သို့မဟုတ် Password မှားယွင်းနေပါသည်။";[cite: 1]
         }
 
-        async function saveTeacherProfile() {
-            const updates = {
-                name: document.getElementById('t-name').value,
-                gender: document.getElementById('t-gender').value,
-                phone: document.getElementById('t-phone').value,
-                bio: document.getElementById('t-bio').value,
-                state: document.getElementById('t-state').value,
-                township: document.getElementById('t-township').value,
-                curriculum: document.getElementById('t-curriculum').value,
-                teaching_mode: document.getElementById('t-mode').value,
-                grade1: document.getElementById('t-g1').value,
-                subject1: document.getElementById('t-s1').value,
-                grade2: document.getElementById('t-g2').value,
-                subject2: document.getElementById('t-s2').value,
-                days: document.getElementById('t-days').value,
-                time: document.getElementById('t-time').value,
-                fee: document.getElementById('t-fee').value,
-                photo: document.getElementById('t-photo-url').value,
-                status: 'pending'
+        function tLogout() {
+            t_id = null[cite: 1];
+            document.getElementById('t-tabs').style.display = 'none';
+            document.getElementById('t-profile-view').style.display = 'none';
+            document.getElementById('t-posts-view').style.display = 'none';
+            document.getElementById('t-chat-view').style.display = 'none';
+            document.getElementById('t-login-view').style.display = 'block';
+            document.getElementById('t-l-user').value = ''; document.getElementById('t-l-pass').value = '';
+        }
+
+        function switchTTab(tab) {
+            ['profile','posts','chat'].forEach(t => {
+                document.getElementById(`t-${t}-view`).style.display = 'none';
+                document.getElementById(`t-tab-${t}`).className = "flex-1 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition";
+            });
+            document.getElementById(`t-${tab}-view`).style.display = (tab==='chat')?'flex':'block';
+            document.getElementById(`t-tab-${tab}`).className = "flex-1 py-2 rounded-lg bg-blue-600 text-white shadow transition";
+            if(tab === 'profile') tLoadProfile();[cite: 1]
+            if(tab === 'posts') tLoadJobs();[cite: 1]
+            if(tab === 'chat') tLoadChat();[cite: 1]
+        }
+
+        function tEditMode(cancel) {
+            const state = !cancel; // if cancel is false, we want to edit (enable fields)
+            ['t-p-name', 't-p-gender', 't-p-phone', 't-p-bio', 't-p-state', 't-p-town', 't-p-curr', 't-p-mode', 't-p-g1', 't-p-s1', 't-p-g2', 't-p-s2', 't-p-g3', 't-p-s3', 't-p-g4', 't-p-s4', 't-p-days', 't-p-time', 't-p-rem', 't-p-fee', 't-p-photo'].forEach(id => {
+                document.getElementById(id).disabled = !state[cite: 1];
+                if(state) document.getElementById(id).classList.add('bg-white', 'border-blue-300');
+                else document.getElementById(id).classList.remove('bg-white', 'border-blue-300');
+            });
+            document.getElementById('t-p-btn-view').style.display = state ? 'none' : 'block'[cite: 1];
+            document.getElementById('t-p-btn-edit').style.display = state ? 'flex' : 'none'[cite: 1];
+            if(cancel) tLoadProfile();[cite: 1]
+        }
+
+        async function tLoadProfile() {
+            if(!t_id) return[cite: 1];
+            const { data } = await db.from('tutors').select('*').eq('id', t_id)[cite: 1];
+            if(data && data.length > 0) {
+                const r = data[0][cite: 1];
+                document.getElementById('t-p-name').value = r.name || ''[cite: 1];
+                document.getElementById('t-p-gender').value = r.gender || 'Male'[cite: 1];
+                document.getElementById('t-p-phone').value = r.phone || ''[cite: 1];
+                document.getElementById('t-p-bio').value = r.bio || ''[cite: 1];
+                document.getElementById('t-p-state').value = r.state || 'ရန်ကုန်တိုင်းဒေသကြီး'[cite: 1];
+                document.getElementById('t-p-town').value = r.township || ''[cite: 1];
+                document.getElementById('t-p-curr').value = r.curriculum || 'Government'[cite: 1];
+                document.getElementById('t-p-mode').value = r.teaching_mode || 'Online'[cite: 1];
+                document.getElementById('t-p-g1').value = r.grade1 || ''[cite: 1]; document.getElementById('t-p-s1').value = r.subject1 || ''[cite: 1];
+                document.getElementById('t-p-g2').value = r.grade2 || ''[cite: 1]; document.getElementById('t-p-s2').value = r.subject2 || ''[cite: 1];
+                document.getElementById('t-p-g3').value = r.grade3 || ''[cite: 1]; document.getElementById('t-p-s3').value = r.subject3 || ''[cite: 1];
+                document.getElementById('t-p-g4').value = r.grade4 || ''[cite: 1]; document.getElementById('t-p-s4').value = r.subject4 || ''[cite: 1];
+                document.getElementById('t-p-days').value = r.days || 'နေ့တိုင်း'[cite: 1];
+                document.getElementById('t-p-time').value = r.time || 'မနက်'[cite: 1];
+                document.getElementById('t-p-rem').value = r.current_time_remark || ''[cite: 1];
+                document.getElementById('t-p-fee').value = r.fee || ''[cite: 1];
+                document.getElementById('t-p-photo').value = r.photo || ''[cite: 1];
+                if(r.photo) document.getElementById('t-img').src = r.photo[cite: 1];
+
+                const msg = document.getElementById('t-p-msg');
+                if(r.status === 'rejected') { msg.innerHTML = `<span class="text-red-600">Profile ကို Reject လုပ်ထားပါသည် (${r.reject_reason})</span>`; }[cite: 1]
+                else if(r.status === 'pending') { msg.innerHTML = `<span class="text-orange-500">အတည်ပြုချက် စောင့်ဆိုင်းနေဆဲ ဖြစ်သည်</span>`; }[cite: 1]
+                else { msg.innerHTML = `<span class="text-green-600"><i class="fa-solid fa-circle-check"></i> အတည်ပြုပြီး ဖြစ်သည်</span>`; }[cite: 1]
+            }
+            
+            // Load completed students[cite: 1]
+            const sList = document.getElementById('t-students-list');
+            sList.innerHTML = "ဆွဲယူနေပါသည်...";
+            const reqs = await db.from('requests').select('student_name, student_phone').eq('tutor_id', t_id).eq('status', 'completed')[cite: 1];
+            sList.innerHTML = "";
+            if(!reqs.data || reqs.data.length === 0) sList.innerHTML = "<p class='text-gray-400'>မရှိသေးပါ။</p>"[cite: 1];
+            else {
+                reqs.data.forEach(r => sList.innerHTML += `<div class="bg-gray-50 p-2 rounded border"><p class="font-bold text-green-700">${r.student_name}</p><p class="text-gray-600"><i class="fa-solid fa-phone text-[10px]"></i> ${r.student_phone}</p></div>`[cite: 1]);
+            }
+        }
+
+        async function tSaveProfile() {
+            const data = {
+                name: document.getElementById('t-p-name').value[cite: 1], gender: document.getElementById('t-p-gender').value[cite: 1],
+                phone: document.getElementById('t-p-phone').value[cite: 1], bio: document.getElementById('t-p-bio').value[cite: 1],
+                state: document.getElementById('t-p-state').value[cite: 1], township: document.getElementById('t-p-town').value[cite: 1],
+                curriculum: document.getElementById('t-p-curr').value[cite: 1], teaching_mode: document.getElementById('t-p-mode').value[cite: 1],
+                grade1: document.getElementById('t-p-g1').value[cite: 1], subject1: document.getElementById('t-p-s1').value[cite: 1],
+                grade2: document.getElementById('t-p-g2').value[cite: 1], subject2: document.getElementById('t-p-s2').value[cite: 1],
+                grade3: document.getElementById('t-p-g3').value[cite: 1], subject3: document.getElementById('t-p-s3').value[cite: 1],
+                grade4: document.getElementById('t-p-g4').value[cite: 1], subject4: document.getElementById('t-p-s4').value[cite: 1],
+                days: document.getElementById('t-p-days').value[cite: 1], time: document.getElementById('t-p-time').value[cite: 1],
+                current_time_remark: document.getElementById('t-p-rem').value[cite: 1], fee: document.getElementById('t-p-fee').value[cite: 1],
+                photo: document.getElementById('t-p-photo').value[cite: 1], status: 'pending'[cite: 1]
             };
-            await dbClient.from('tutors').update(updates).eq('id', loggedInTutorId);
-            loadTutorProfile();
+            if(!data.name || !data.phone || !data.grade1 || !data.subject1) { showAlert("အမှား", "အမည်၊ ဖုန်း နှင့် အနည်းဆုံး အတန်း/ဘာသာရပ်(၁) ခု ဖြည့်ပါ", "red"); return; }[cite: 1]
+            
+            await db.from('tutors').update(data).eq('id', t_id)[cite: 1];
+            pushNoti("Profile ပြင်ဆင်မှု", `ဆရာ ${data.name} က အချက်အလက်များ ပြင်ဆင်လိုက်ပါသည်။`)[cite: 1];
+            showAlert("အောင်မြင်သည်", "Profile သိမ်းဆည်းပြီးပါပြီ။ Admin အတည်ပြုချက် ထပ်မံစောင့်ပါ။", "green")[cite: 1];
+            tEditMode(true);
         }
 
-        function logoutTutor() {
-            loggedInTutorId = null;
-            document.getElementById('t-profile-view').classList.add('hidden');
-            document.getElementById('teacher-nav').classList.add('hidden');
-            document.getElementById('t-auth-view').classList.remove('hidden');
-        }
+        async function tLoadJobs() {
+            const c = document.getElementById('t-jobs-list');
+            c.innerHTML = "<p class='text-center text-gray-500 py-4'>ဆွဲယူနေပါသည်...</p>";
+            const { data } = await db.from('job_posts').select('*').eq('status', 'approved')[cite: 1];
+            c.innerHTML = "";
+            if(!data || data.length === 0) { c.innerHTML = "<p class='text-gray-400 text-center'>ကျောင်းသားများ၏ ဖိတ်ခေါ်စာ မရှိသေးပါ။</p>"; return; }[cite: 1]
+            
+            // Check applied jobs[cite: 1]
+            const apps = await db.from('job_applications').select('job_id').eq('tutor_id', t_id)[cite: 1];
+            const appliedIds = apps.data ? apps.data.map(a => a.job_id) : [][cite: 1];
 
-        async function loadTeacherJobs() {
-            const container = document.getElementById('teacher-job-list');
-            const { data } = await dbClient.from('job_posts').select('*').eq('status', 'approved');
-            container.innerHTML = "";
-            if(!data || data.length === 0) {
-                container.innerHTML = "<p class='text-gray-400 text-center'>ကျောင်းသားများ၏ ဖိတ်ခေါ်စာ မရှိသေးပါ။</p>";
-                return;
-            }
             data.forEach(job => {
-                container.innerHTML += `
-                    <div class="bg-white p-3 rounded-2xl border shadow-sm space-y-1">
-                        <p class="font-bold text-blue-600 text-sm">လိုအပ်သော ဘာသာရပ်: ${job.subject}</p>
-                        <p class="text-red-500">ဒေသ: ${job.state}, ${job.township}</p>
-                        <p class="font-bold text-green-600">ပေးနိုင်သောနှုန်းထား: ${job.fee_offer} Ks</p>
-                        <p class="text-gray-600">အသေးစိတ်: ${job.details || '-'}</p>
-                        <button onclick="applyJob(${job.id}, '${job.subject}')" class="w-full bg-blue-600 text-white font-bold py-2 rounded-xl mt-2">လျှောက်ထားရန် (Apply)</button>
+                const isApplied = appliedIds.includes(job.id)[cite: 1];
+                let btn = isApplied 
+                    ? `<button disabled class="w-full bg-green-100 text-green-700 font-bold py-2 rounded-xl mt-2 cursor-not-allowed"><i class="fa-solid fa-check"></i> လျှောက်ထားပြီးပြီ</button>`[cite: 1]
+                    : `<button onclick="tApplyJob(${job.id}, '${job.subject}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl mt-2 transition shadow-sm"><i class="fa-solid fa-briefcase"></i> လျှောက်ထားရန် (Apply)</button>`[cite: 1];
+                
+                c.innerHTML += `
+                    <div class="bg-white p-4 rounded-2xl border shadow-sm space-y-1 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-orange-500 text-white text-[9px] font-bold px-3 py-1 rounded-bl-xl">Urgent</div>
+                        <p class="font-bold text-blue-800 text-sm mt-1">လိုအပ်သော ဘာသာရပ်: ${job.subject}</p>
+                        <p class="text-gray-700"><i class="fa-solid fa-location-dot text-red-500 w-4"></i> ${job.state}, ${job.township}</p>
+                        <p class="text-gray-700"><i class="fa-solid fa-sack-dollar text-green-600 w-4"></i> <span class="font-bold text-green-700">${job.fee_offer} Ks</span></p>
+                        <p class="text-gray-500 bg-gray-50 p-2 rounded-lg mt-1 leading-tight"><i class="fa-solid fa-circle-info text-blue-400"></i> ${job.details || 'အသေးစိတ်မရှိပါ'}</p>
+                        ${btn}
                     </div>
                 `;
             });
         }
 
-        async function applyJob(jobId, subj) {
-            await dbClient.from('job_applications').insert([{ job_id: jobId, tutor_id: loggedInTutorId }]);
-            alert("အလုပ်လျှောက်လွှာ အောင်မြင်စွာ တင်ပြီးပါပြီ။");
+        async function tApplyJob(jid, subj) {
+            await db.from('job_applications').insert([{ job_id: jid, tutor_id: t_id }])[cite: 1];
+            pushNoti("အလုပ်လျှောက်လွှာ", `ဆရာတစ်ဦးမှ ကျောင်းသားပို့စ် [${subj}] ကို လျှောက်ထားပါသည်။`)[cite: 1];
+            showAlert("အောင်မြင်သည်", "အလုပ်လျှောက်လွှာ အောင်မြင်စွာ တင်ပြီးပါပြီ။", "green")[cite: 1];
+            tLoadJobs();
         }
 
-        async function loadTeacherChat() {
-            const container = document.getElementById('t-chat-messages');
-            const { data } = await dbClient.from('chat_messages').select('*').eq('tutor_id', loggedInTutorId).order('timestamp');
-            container.innerHTML = "";
+        async function tLoadChat() {
+            const box = document.getElementById('t-chat-box');
+            const { data } = await db.from('chat_messages').select('*').eq('tutor_id', t_id).order('timestamp')[cite: 1];
+            box.innerHTML = "";
             data?.forEach(msg => {
-                const isMe = msg.sender === 'teacher';
-                container.innerHTML += `
-                    <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
-                        <div class="${isMe ? 'bg-blue-100 text-slate-800' : 'bg-gray-200 text-slate-800'} p-2 rounded-xl max-w-[80%]">
-                            <p class="font-bold text-[10px] text-gray-500">${isMe ? 'Me' : 'Admin'}</p>
+                const me = msg.sender === 'teacher'[cite: 1];
+                box.innerHTML += `
+                    <div class="flex ${me ? 'justify-end' : 'justify-start'}">
+                        <div class="${me ? 'bg-blue-500 text-white rounded-br-none' : 'bg-gray-200 text-gray-800 rounded-bl-none'} p-2.5 rounded-2xl max-w-[85%] shadow-sm">
+                            <p class="font-bold text-[9px] ${me ? 'text-blue-200' : 'text-gray-500'} mb-0.5">${me ? 'Me' : 'Admin'}</p>
                             <p>${msg.message}</p>
                         </div>
                     </div>
                 `;
             });
+            box.scrollTop = box.scrollHeight;
         }
 
-        async function sendTeacherMessage() {
-            const input = document.getElementById('t-chat-input');
-            if(!input.value.trim()) return;
-            await dbClient.from('chat_messages').insert([{ tutor_id: loggedInTutorId, sender: 'teacher', message: input.value }]);
-            input.value = "";
-            loadTeacherChat();
+        async function tSendChat() {
+            const inp = document.getElementById('t-chat-input');
+            if(!inp.value.trim()) return[cite: 1];
+            await db.from('chat_messages').insert([{ tutor_id: t_id, sender: 'teacher', message: inp.value }])[cite: 1];
+            inp.value = "";
+            tLoadChat();
         }
 
-        // --- STUDENT LOGIC ---
-        function toggleStudentAuth(type) {
-            if(type === 'reg') {
-                document.getElementById('s-auth-view').classList.add('hidden');
-                document.getElementById('s-reg-view').classList.remove('hidden');
-            } else {
-                document.getElementById('s-auth-view').classList.remove('hidden');
-                document.getElementById('s-reg-view').classList.add('hidden');
-            }
+        /* ========================================================================= */
+        /* STUDENT FUNCTIONS */
+        /* ========================================================================= */
+        function toggleSAuth(type) {
+            document.getElementById('s-login-view').style.display = type === 'login' ? 'block' : 'none';
+            document.getElementById('s-reg-view').style.display = type === 'reg' ? 'block' : 'none';
+            document.getElementById('s-r-msg').innerText = ''; document.getElementById('s-l-msg').innerText = '';
         }
 
-        async function registerStudent() {
-            const u = document.getElementById('s-reg-user').value.trim();
-            const p = document.getElementById('s-reg-pass').value.trim();
-            const n = document.getElementById('s-reg-name').value.trim();
-            const ph = document.getElementById('s-reg-phone').value.trim();
-            const msg = document.getElementById('s-reg-msg');
+        async function sRegister() {
+            const u = document.getElementById('s-r-user').value.trim();
+            const p = document.getElementById('s-r-pass').value.trim();
+            const n = document.getElementById('s-r-name').value.trim();
+            const ph = document.getElementById('s-r-phone').value.trim();
+            const msg = document.getElementById('s-r-msg');
 
-            if(!u || !p || !n || !ph) { msg.innerText = "အချက်အလက်များကို ပြည့်စုံစွာဖြည့်စွက်ပါ။"; return; }
-            const { error } = await dbClient.from('students').insert([{ username: u, password: p, name: n, phone: ph }]);
-            if(error) { msg.innerText = "Username ရှိပြီးသားဖြစ်ပါသည်"; }
-            else { msg.className = "text-xs text-green-600 text-center font-bold"; msg.innerText = "အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်။ Login ဝင်နိုင်ပါပြီ။"; }
+            if(!u || !p || !n || !ph) { msg.innerText = "အချက်အလက်များကို ပြည့်စုံစွာဖြည့်စွက်ပါ။"; return; }[cite: 1]
+            if(!/^(09|\u1040\u1049)?[0-9\u1040-\u1049]{7,11}$/.test(ph) || p !== ph) { msg.innerText = "Password သည် မှန်ကန်သော ဖုန်းနံပါတ် အတိအကျ ဖြစ်ရပါမည်။"; return; }[cite: 1]
+
+            const { error } = await db.from('students').insert([{ username: u, password: p, name: n, phone: ph }])[cite: 1];
+            if(error) msg.innerText = "Username ရှိပြီးသားဖြစ်ပါသည်";[cite: 1]
+            else { msg.className = "text-[11px] text-green-600 text-center font-bold"; msg.innerText = "အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်။ Login ဝင်နိုင်ပါပြီ။"; }[cite: 1]
         }
 
-        async function loginStudent() {
-            const u = document.getElementById('s-login-user').value.trim();
-            const p = document.getElementById('s-login-pass').value.trim();
-            const { data } = await dbClient.from('students').select('*').eq('username', u).eq('password', p);
+        async function sLogin() {
+            const u = document.getElementById('s-l-user').value.trim();
+            const p = document.getElementById('s-l-pass').value.trim();
+            const { data } = await db.from('students').select('*').eq('username', u).eq('password', p)[cite: 1];
             if(data && data.length > 0) {
-                loggedInStudent = data[0];
-                document.getElementById('s-auth-view').classList.add('hidden');
-                document.getElementById('s-main-view').classList.remove('hidden');
-                document.getElementById('post-s-name').value = loggedInStudent.name;
-                document.getElementById('post-s-phone').value = loggedInStudent.phone;
-                refreshStudentTutors();
-            } else {
-                document.getElementById('s-login-msg').innerText = "Username သို့မဟုတ် Password မှားယွင်းနေပါသည်။";
-            }
+                s_user = data[0][cite: 1];
+                document.getElementById('s-login-view').style.display = 'none';
+                document.getElementById('s-tabs').style.display = 'flex';
+                document.getElementById('s-main-view').style.display = 'block';
+                switchSTab('search');
+            } else { document.getElementById('s-l-msg').innerText = "Username သို့မဟုတ် Password မှားယွင်းနေပါသည်။"; }[cite: 1]
         }
 
-        function switchStudentTab(tab) {
-            ['search', 'post', 'myposts'].forEach(t => {
-                document.getElementById(`s-${t}-view`).classList.add('hidden');
-                document.getElementById(`s-tab-${t}`).className = "px-3 py-1.5 rounded-lg bg-gray-100 text-gray-700 font-bold";
+        function sLogout() {
+            s_user = null[cite: 1];
+            document.getElementById('s-tabs').style.display = 'none';
+            document.getElementById('s-main-view').style.display = 'none';
+            document.getElementById('s-login-view').style.display = 'block';
+            document.getElementById('s-l-user').value = ''; document.getElementById('s-l-pass').value = '';
+        }
+
+        function switchSTab(tab) {
+            ['search','post','myposts'].forEach(t => {
+                document.getElementById(`s-${t}-view`).style.display = 'none';
+                document.getElementById(`s-tab-${t}`).className = "flex-1 py-2 rounded-lg text-gray-600 hover:bg-gray-100 transition";
             });
-            document.getElementById(`s-${tab}-view`).classList.remove('hidden');
-            document.getElementById(`s-tab-${tab}`).className = "px-3 py-1.5 rounded-lg bg-blue-600 text-white font-bold";
-
-            if(tab === 'search') refreshStudentTutors();
-            if(tab === 'myposts') loadStudentMyPosts();
+            document.getElementById(`s-${tab}-view`).style.display = 'block';
+            document.getElementById(`s-tab-${tab}`).className = "flex-1 py-2 rounded-lg bg-red-500 text-white shadow transition";
+            if(tab === 'search') sLoadTutors();[cite: 1]
+            if(tab === 'myposts') sLoadMyPosts();[cite: 1]
         }
 
-        async function refreshStudentTutors() {
-            const container = document.getElementById('student-tutor-list');
-            const state = document.getElementById('s-filter-state').value;
-            const township = document.getElementById('s-filter-township').value.trim();
+        async function sLoadTutors() {
+            const c = document.getElementById('s-tutor-list');
+            const state = document.getElementById('s-f-state').value;
+            const town = document.getElementById('s-f-town').value.trim();
+            c.innerHTML = "<p class='text-center py-4 text-gray-400'>ရှာဖွေနေပါသည်...</p>";
 
-            let query = dbClient.from('tutors').select('*').eq('status', 'approved');
-            if(state !== 'အားလုံး') query = query.eq('state', state);
+            let q = db.from('tutors').select('*').eq('status', 'approved')[cite: 1];
+            if(state !== 'အားလုံး') q = q.eq('state', state)[cite: 1];
+            
+            const { data } = await q;
+            let list = data || [][cite: 1];
+            if(town) list = list.filter(t => t.township && t.township.includes(town))[cite: 1];
 
-            const { data } = await query;
-            container.innerHTML = "";
-            let filtered = data || [];
-            if(township) filtered = filtered.filter(t => t.township && t.township.includes(township));
+            c.innerHTML = "";
+            if(list.length === 0) { c.innerHTML = "<p class='text-gray-400 text-center py-4'>ဤဒေသတွင် ဆရာမရှိသေးပါ။</p>"; return; }[cite: 1]
 
-            if(filtered.length === 0) {
-                container.innerHTML = "<p class='text-gray-400 text-center py-4'>ဤဒေသတွင် ဆရာမရှိသေးပါ။</p>";
-                return;
-            }
+            list.forEach(t => {
+                let subs = (t.grade1 && t.subject1) ? `• ${t.grade1} (${t.subject1})<br>` : '';[cite: 1]
+                if(t.grade2 && t.subject2) subs += `• ${t.grade2} (${t.subject2})<br>`;[cite: 1]
+                if(t.grade3 && t.subject3) subs += `• ${t.grade3} (${t.subject3})<br>`;[cite: 1]
+                if(t.grade4 && t.subject4) subs += `• ${t.grade4} (${t.subject4})<br>`;[cite: 1]
 
-            filtered.forEach(t => {
-                container.innerHTML += `
-                    <div class="bg-white p-4 rounded-2xl border shadow-sm space-y-2 text-xs">
-                        <div class="flex items-center space-x-3">
-                            <img src="${t.photo || 'https://via.placeholder.com/80'}" class="w-14 h-16 rounded-full object-cover border">
-                            <div>
-                                <h4 class="font-bold text-sm text-gray-800">${t.name || 'Unknown'} (${t.gender || '-'})</h4>
-                                <p class="text-orange-500 font-bold">သင်ရိုး: ${t.curriculum || '-'}</p>
-                                <p class="text-red-500">ဒေသ: ${t.state || '-'}, ${t.township || '-'}</p>
+                c.innerHTML += `
+                    <div class="bg-white p-4 rounded-2xl border shadow-sm space-y-3">
+                        <div class="flex items-center space-x-4 border-b pb-2">
+                            <img src="${t.photo || 'https://via.placeholder.com/80'}" class="w-16 h-16 rounded-full object-cover border-2 shadow-sm">
+                            <div class="flex-1">
+                                <h4 class="font-bold text-sm text-gray-800">${t.name} <span class="text-[10px] text-gray-500 font-normal">(${t.gender})</span></h4>
+                                <p class="text-orange-500 font-bold text-[11px]"><i class="fa-solid fa-book"></i> ${t.curriculum} | ${t.teaching_mode}</p>
+                                <p class="text-red-500 text-[11px]"><i class="fa-solid fa-location-dot"></i> ${t.state}, ${t.township}</p>
                             </div>
                         </div>
-                        <p class="font-bold text-green-600 text-sm">လစဉ်ကြေး: ${t.fee || '0'} Ks</p>
-                        <button onclick="requestDirectTutor(${t.id})" class="w-full bg-blue-600 text-white font-bold py-2 rounded-xl"><i class="fa-solid fa-phone mr-1"></i> ဒီဆရာနဲ့ သင်မယ် (Admin ထံတောင်းဆိုရန်)</button>
-                    </div>
-                `;
-            });
-        }
-
-        async function requestDirectTutor(tutorId) {
-            await dbClient.from('requests').insert([{
-                tutor_id: tutorId, student_name: loggedInStudent.name, student_phone: loggedInStudent.phone, status: 'pending'
-            }]);
-            alert("ချိတ်ဆက်ပေးရန် Admin ထံ တောင်းဆိုချက် ပို့ပြီးပါပြီ။");
-        }
-
-        async function submitJobPost() {
-            const subj = document.getElementById('post-subject').value;
-            const st = document.getElementById('post-state').value;
-            const town = document.getElementById('post-township').value;
-            const fee = document.getElementById('post-fee').value;
-            const details = document.getElementById('post-details').value;
-
-            await dbClient.from('job_posts').insert([{
-                stu_name: loggedInStudent.name, stu_phone: loggedInStudent.phone, subject: subj, state: st, township: town, fee_offer: fee, details: details, status: 'pending'
-            }]);
-            document.getElementById('post-msg').innerText = "ဆရာခေါ်စာ တင်ပြီးပါပြီ။ Admin အတည်ပြုချက်စောင့်ပါ။";
-            document.getElementById('post-msg').className = "text-xs text-center font-bold text-green-600";
-        }
-
-        async function loadStudentMyPosts() {
-            const container = document.getElementById('student-my-posts-list');
-            const { data } = await dbClient.from('job_posts').select('*').eq('stu_phone', loggedInStudent.phone);
-            container.innerHTML = "";
-            data?.forEach(p => {
-                container.innerHTML += `
-                    <div class="bg-white p-3 rounded-2xl border shadow-sm space-y-1">
-                        <p class="font-bold text-blue-600">ဘာသာရပ်: ${p.subject}</p>
-                        <p>ဒေသ: ${p.state}, ${p.township} | နှုန်းထား: ${p.fee_offer} Ks</p>
-                        <p class="font-bold ${p.status==='pending'?'text-orange-500':'text-green-600'}">အခြေအနေ: ${p.status}</p>
-                    </div>
-                `;
-            });
-        }
-
-        function logoutStudent() {
-            loggedInStudent = null;
-            document.getElementById('s-main-view').classList.add('hidden');
-            document.getElementById('s-auth-view').classList.remove('hidden');
-        }
-
-        // --- ADMIN LOGIC ---
-        function openAdminTab() {
-            if(isAdminLoggedIn) {
-                navigate('admin-tab', 'Admin Panel');
-                showAdminDashboard();
-            } else {
-                navigate('admin-login-screen', 'Admin Login');
-            }
-        }
-
-        function doAdminLogin() {
-            const pass = document.getElementById('admin-pass-input').value;
-            if (pass === "G&b862013") {
-                isAdminLoggedIn = true;
-                navigate('admin-tab', 'Admin Panel');
-                showAdminDashboard();
-            } else {
-                document.getElementById('admin-login-error').classList.remove('hidden');
-            }
-        }
-
-        function showAdminDashboard() {
-            document.getElementById('admin-dashboard-grid').classList.remove('hidden');
-            document.getElementById('admin-sub-content').classList.add('hidden');
-            document.getElementById('admin-back-btn').classList.add('hidden');
-            document.getElementById('admin-panel-title').innerText = "ADMIN";
-        }
-
-        async function showAdminPanel(key, title) {
-            document.getElementById('admin-dashboard-grid').classList.add('hidden');
-            const sub = document.getElementById('admin-sub-content');
-            sub.classList.remove('hidden');
-            document.getElementById('admin-back-btn').classList.remove('hidden');
-            document.getElementById('admin-panel-title').innerText = title;
-
-            sub.innerHTML = "Data ဆွဲယူနေပါသည်...";
-
-            if(key === 'new') {
-                const { data } = await dbClient.from('tutors').select('*').eq('status', 'pending');
-                sub.innerHTML = data?.length ? "" : "<p class='text-gray-400'>စိစစ်ရန် မရှိသေးပါ</p>";
-                data?.forEach(t => {
-                    sub.innerHTML += `
-                        <div class="bg-white p-3 rounded-2xl border flex justify-between items-center">
+                        <div class="bg-gray-50 p-2 rounded-xl border text-[11px] leading-relaxed">
+                            <span class="font-bold text-gray-600 block mb-1">သင်ကြားမည့် အတန်း/ဘာသာရပ်များ:</span>
+                            ${subs || '-'}
+                        </div>
+                        <div class="flex justify-between items-center bg-green-50 p-2 rounded-xl border border-green-100">
                             <div>
-                                <p class="font-bold text-gray-800">${t.name || t.username}</p>
-                                <p class="text-gray-500">${t.phone || '-'}</p>
+                                <p class="text-[10px] text-gray-500">ရက်/အချိန်: ${t.days} (${t.time})</p>
+                                <p class="font-bold text-green-700 text-sm">လစဉ်ကြေး: ${t.fee || 'ညှိနှိုင်း'} Ks</p>
                             </div>
-                            <button onclick="approveTutor(${t.id})" class="bg-green-600 text-white px-3 py-1 rounded-xl font-bold">Approve</button>
+                        </div>
+                        <button onclick="sBookTutor(${t.id}, '${t.name}')" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 rounded-xl shadow transition"><i class="fa-solid fa-phone-volume mr-1"></i> ဒီဆရာနဲ့ သင်မယ် (တောင်းဆိုရန်)</button>
+                    </div>
+                `;
+            });
+        }
+
+        function sBookTutor(tid, tname) {
+            openModal(`
+                <h3 class="font-bold text-center text-red-600 text-base mb-2">ချိတ်ဆက်မှု အတည်ပြုရန်</h3>
+                <p class="text-center text-gray-600 mb-4">ဆရာ <span class="font-bold text-gray-800">${tname}</span> နှင့် ချိတ်ဆက်ပေးရန် Admin ထံ တောင်းဆိုမည်လား?</p>
+                <div class="bg-gray-50 p-3 rounded-xl border space-y-2 mb-4">
+                    <p class="font-bold text-gray-700 text-[11px]">သင့်အချက်အလက် (Admin သာမြင်ရမည်)</p>
+                    <input type="text" value="${s_user.name}" class="w-full border p-2 rounded bg-gray-100 text-xs" disabled>
+                    <input type="text" value="${s_user.phone}" class="w-full border p-2 rounded bg-gray-100 text-xs" disabled>
+                </div>
+            `, `
+                <button onclick="sConfirmBook(${tid})" class="flex-1 bg-green-600 text-white font-bold py-2.5 rounded-xl">တောင်းဆိုမည်</button>
+                <button onclick="closeModal()" class="flex-1 bg-gray-200 text-gray-800 font-bold py-2.5 rounded-xl">ပိတ်မည်</button>
+            `);
+        }
+
+        async function sConfirmBook(tid) {
+            await db.from('requests').insert([{ tutor_id: tid, student_name: s_user.name, student_phone: s_user.phone, status: 'pending', reject_reason: '' }])[cite: 1];
+            pushNoti("ချိတ်ဆက်မှုတောင်းဆိုချက်", `ကျောင်းသား ${s_user.name} မှ ဆရာတစ်ဦးနှင့် matching ရန် တောင်းဆိုထားပါသည်။`)[cite: 1];
+            closeModal();
+            showAlert("အောင်မြင်သည်", "Admin ထံ တောင်းဆိုချက် ပို့ပြီးပါပြီ။ Admin မှ ဆက်သွယ်ပေးပါမည်။", "green")[cite: 1];
+        }
+
+        async function submitSJob() {
+            const data = {
+                stu_name: s_user.name, stu_phone: s_user.phone[cite: 1],
+                subject: document.getElementById('s-post-subj').value[cite: 1], state: document.getElementById('s-post-state').value[cite: 1],
+                township: document.getElementById('s-post-town').value[cite: 1], fee_offer: document.getElementById('s-post-fee').value[cite: 1],
+                details: document.getElementById('s-post-det').value[cite: 1], status: 'pending', reject_reason: ''[cite: 1]
+            };
+            if(!data.subject || !data.township) { document.getElementById('s-post-msg').innerHTML = "<span class='text-red-500'>လိုအပ်ချက်များ ဖြည့်ပါ</span>"; return; }[cite: 1]
+            
+            await db.from('job_posts').insert([data])[cite: 1];
+            pushNoti("ဆရာခေါ်စာအသစ်", `မိဘ ${s_user.name} မှ ဆရာခေါ်ယူရန် ပို့စ်အသစ်တစ်ခု တင်ထားပါသည်။`)[cite: 1];
+            document.getElementById('s-post-msg').innerHTML = "<span class='text-green-600'>ဆရာခေါ်စာ တင်ပြီးပါပြီ။ Admin အတည်ပြုချက်စောင့်ပါ။</span>"[cite: 1];
+            ['s-post-subj','s-post-town','s-post-fee','s-post-det'].forEach(id => document.getElementById(id).value='');
+        }
+
+        async function sLoadMyPosts() {
+            const aList = document.getElementById('s-my-active-list');
+            const cList = document.getElementById('s-my-comp-list');
+            aList.innerHTML = "ဆွဲယူနေပါသည်..."; cList.innerHTML = "ဆွဲယူနေပါသည်...";
+
+            // Active Posts[cite: 1]
+            const pData = await db.from('job_posts').select('*').eq('stu_phone', s_user.phone).neq('status', 'completed')[cite: 1];
+            aList.innerHTML = (!pData.data || pData.data.length === 0) ? "<p class='text-gray-400'>Active Post မရှိသေးပါ။</p>" : ""[cite: 1];
+            if(pData.data) {
+                for(let p of pData.data) {
+                    const apps = await db.from('job_applications').select('id', {count: 'exact'}).eq('job_id', p.id)[cite: 1];
+                    const count = apps.count || 0[cite: 1];
+                    let sCol = p.status === 'pending' ? 'orange' : 'green'[cite: 1];
+                    let sTxt = p.status === 'pending' ? 'အတည်ပြုချက်စောင့်ဆိုင်းဆဲ' : 'ဆရာများ လျှောက်ထားနိုင်ပါပြီ'[cite: 1];
+                    aList.innerHTML += `
+                        <div class="bg-gray-50 p-3 rounded-xl border border-${sCol}-200 space-y-1">
+                            <p class="font-bold text-blue-800">${p.subject}</p>
+                            <p class="text-[10px] text-gray-600">${p.state}, ${p.township} | ${p.fee_offer} Ks</p>
+                            <div class="flex justify-between items-center mt-2 pt-2 border-t">
+                                <span class="text-[10px] font-bold text-${sCol}-600 bg-${sCol}-100 px-2 py-1 rounded">${sTxt}</span>
+                                <span class="text-[10px] font-bold text-teal-700 bg-teal-100 px-2 py-1 rounded"><i class="fa-solid fa-users"></i> ${count} ယောက် လျှောက်ထားသည်</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            // Completed History[cite: 1]
+            const rData = await db.from('requests').select('*, tutors(name, username, phone)').eq('student_phone', s_user.phone).eq('status', 'completed')[cite: 1];
+            cList.innerHTML = (!rData.data || rData.data.length === 0) ? "<p class='text-gray-400'>ချိတ်ဆက်ပြီးမြောက်ထားသော ဆရာမရှိသေးပါ။</p>" : ""[cite: 1];
+            rData.data?.forEach(r => {
+                const tName = r.tutors?.name || r.tutors?.username || "Unknown"[cite: 1];
+                cList.innerHTML += `
+                    <div class="bg-green-50 p-3 rounded-xl border border-green-200">
+                        <p class="font-bold text-green-800"><i class="fa-solid fa-party-horn mr-1"></i> ဆရာ: ${tName}</p>
+                        <p class="text-xs text-gray-700"><i class="fa-solid fa-phone text-[10px]"></i> ဖုန်း: ${r.tutors?.phone || '-'}</p>
+                    </div>
+                `;
+            });
+        }
+
+        /* ========================================================================= */
+        /* ADMIN FUNCTIONS */
+        /* ========================================================================= */
+        function openAdmin() {
+            if(a_logged) { navTo('admin-tab', 'ADMIN DASHBOARD'); aShowGrid(); }[cite: 1]
+            else navTo('admin-login-screen', 'Admin Login');[cite: 1]
+        }
+
+        function aLogin() {
+            if(document.getElementById('a-pass').value === "G&b862013") { // Matches user's hardcoded password requirement
+                a_logged = true[cite: 1];
+                document.getElementById('a-pass').value = '';
+                document.getElementById('a-msg').classList.add('hidden');
+                openAdmin();
+            } else {
+                document.getElementById('a-msg').classList.remove('hidden')[cite: 1];
+            }
+        }
+
+        function aLogout() {
+            a_logged = false[cite: 1];
+            goHome();
+        }
+
+        function aShowGrid() {
+            document.getElementById('a-grid').style.display = 'grid';
+            document.getElementById('a-sub').style.display = 'none';
+            document.getElementById('a-back-btn').style.display = 'none'[cite: 1];
+            document.getElementById('a-title').innerText = "ADMIN DASHBOARD"[cite: 1];
+        }
+
+        async function openAPanel(type, title) {
+            document.getElementById('a-grid').style.display = 'none';
+            const sub = document.getElementById('a-sub');
+            sub.style.display = 'block';
+            document.getElementById('a-back-btn').style.display = 'block'[cite: 1];
+            document.getElementById('a-title').innerText = title[cite: 1];
+            sub.innerHTML = "<p class='text-center py-10 text-gray-500'><i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i><br>Data ဆွဲယူနေပါသည်...</p>";
+
+            let html = "";
+            if(type === 'new') { // ဆရာသစ်အတည်ပြုရန်[cite: 1]
+                const { data } = await db.from('tutors').select('*').eq('status', 'pending')[cite: 1];
+                if(!data || data.length===0) html = "<p class='text-center text-gray-400'>စိစစ်ရန် မရှိသေးပါ</p>"[cite: 1];
+                data?.forEach(t => {
+                    let dTxt = t.name ? `${t.name} (${t.phone})<br>${t.state}, ${t.grade1}` : `[Profile လွတ်]<br>U: ${t.username} | P: ${t.password}`[cite: 1];
+                    html += `
+                        <div class="bg-white p-4 rounded-xl border shadow-sm mb-3">
+                            <p class="text-xs text-gray-700 leading-relaxed mb-3">${dTxt}</p>
+                            <div class="flex justify-between space-x-2">
+                                <button onclick="aViewTutor(${t.id}, false)" class="flex-1 bg-blue-100 text-blue-700 font-bold py-2 rounded-lg"><i class="fa-solid fa-eye"></i> Detail</button>
+                                <button onclick="aApproveTutor(${t.id})" class="flex-1 bg-green-600 text-white font-bold py-2 rounded-lg"><i class="fa-solid fa-check"></i> Approve</button>
+                            </div>
                         </div>
                     `;
                 });
-            } else if(key === 'approved_list') {
-                const { data } = await dbClient.from('tutors').select('*').eq('status', 'approved');
-                sub.innerHTML = data?.length ? "" : "<p class='text-gray-400'>ဆရာမရှိသေးပါ</p>";
+            } 
+            else if(type === 'tutors') { // ဆရာစာရင်း[cite: 1]
+                const { data } = await db.from('tutors').select('*').eq('status', 'approved')[cite: 1];
+                if(!data || data.length===0) html = "<p class='text-center text-gray-400'>စာရင်း မရှိသေးပါ</p>"[cite: 1];
                 data?.forEach(t => {
-                    sub.innerHTML += `
-                        <div class="bg-white p-3 rounded-2xl border space-y-1">
-                            <p class="font-bold text-gray-800">${t.name || t.username}</p>
-                            <p class="text-gray-500">ဖုန်း: ${t.phone || '-'}</p>
-                            <button onclick="blacklistTutor(${t.id})" class="bg-black text-white px-3 py-1 rounded-xl font-bold text-[10px]">Blacklist</button>
+                    let n = t.name ? `${t.name} (${t.gender})` : `User: ${t.username}`[cite: 1];
+                    html += `
+                        <div class="bg-white p-4 rounded-xl border shadow-sm mb-3">
+                            <p class="font-bold text-gray-800 text-sm">${n}</p>
+                            <p class="text-[10px] text-gray-500 mb-2">U: ${t.username} | P: ${t.password} | Ph: ${t.phone||'-'}</p>
+                            <div class="flex space-x-2">
+                                <button onclick="aResetPass(${t.id})" class="flex-1 bg-orange-100 text-orange-700 font-bold py-1.5 rounded text-[10px]"><i class="fa-solid fa-key"></i> Reset</button>
+                                <button onclick="aViewTutor(${t.id}, true)" class="flex-1 bg-blue-100 text-blue-700 font-bold py-1.5 rounded text-[10px]"><i class="fa-solid fa-eye"></i> Detail</button>
+                                <button onclick="aBlacklist(${t.id})" class="flex-1 bg-gray-800 text-white font-bold py-1.5 rounded text-[10px]"><i class="fa-solid fa-ban"></i> Block</button>
+                            </div>
                         </div>
                     `;
                 });
             }
+            else if(type === 'p_posts' || type === 'a_posts' || type === 'c_posts') { // Posts[cite: 1]
+                let stat = type==='p_posts'?'pending':(type==='a_posts'?'approved':'completed')[cite: 1];
+                const { data } = await db.from('job_posts').select('*').eq('status', stat).order('id', {ascending: false})[cite: 1];
+                if(!data || data.length===0) html = "<p class='text-center text-gray-400'>စာရင်း မရှိသေးပါ</p>"[cite: 1];
+                for(let p of (data||[])) {
+                    html += `<div class="bg-white p-4 rounded-xl border shadow-sm mb-3 text-xs leading-relaxed">
+                        <p class="font-bold text-blue-800">ဘာသာရပ်: ${p.subject}</p>
+                        <p>ကျောင်းသား: ${p.stu_name} (${p.stu_phone})</p>
+                        <p>ဒေသ: ${p.state}, ${p.township}</p>
+                        <p>ကြေး: ${p.fee_offer} Ks | Detail: ${p.details}</p>
+                        <hr class="my-2">
+                    `;
+                    if(stat === 'pending') {
+                        html += `<div class="flex space-x-2"><button onclick="aApprovePost(${p.id})" class="flex-1 bg-green-600 text-white font-bold py-2 rounded-lg">Approve</button><button onclick="aRejectPost(${p.id})" class="flex-1 bg-red-100 text-red-700 font-bold py-2 rounded-lg">Reject</button></div></div>`[cite: 1];
+                    } else if(stat === 'approved') {
+                        const apps = await db.from('job_applications').select('id', {count:'exact'}).eq('job_id', p.id)[cite: 1];
+                        html += `<div class="flex justify-between items-center"><button onclick="aViewApplicants(${p.id}, '${p.subject}', '${p.stu_name}', '${p.stu_phone}')" class="text-blue-600 font-bold underline"><i class="fa-solid fa-users"></i> လျှောက်ထားသူ (${apps.count||0})</button> <button onclick="aCompletePost(${p.id})" class="bg-green-600 text-white px-3 py-1.5 rounded-lg font-bold">Done</button></div></div>`[cite: 1];
+                    } else {
+                        html += `<p class="font-bold text-green-600"><i class="fa-solid fa-check"></i> ပြီးမြောက်ပြီး</p></div>`[cite: 1];
+                    }
+                }
+            }
+            else if(type === 'direct') { // Direct Booking[cite: 1]
+                const pReq = await db.from('requests').select('*, tutors(name)').eq('status', 'pending')[cite: 1];
+                html += `<h4 class="font-bold text-orange-600 mb-2">စိစစ်ဆဲ တောင်းဆိုမှုများ</h4>`;
+                pReq.data?.forEach(r => {
+                    html += `<div class="bg-orange-50 p-3 rounded-xl border border-orange-200 mb-2 text-xs flex justify-between items-center">
+                        <div><p class="font-bold">ကျောင်းသား: ${r.student_name}</p><p>ဆရာ: ${r.tutors?.name || 'Unknown'}</p></div>
+                        <button onclick="aViewRequest(${r.id})" class="bg-orange-500 text-white px-3 py-1.5 rounded-lg font-bold">Detail</button>
+                    </div>`[cite: 1];
+                });
+                const cReq = await db.from('requests').select('*, tutors(name)').neq('status', 'pending').limit(10)[cite: 1];
+                html += `<h4 class="font-bold text-gray-600 mt-4 mb-2">မှတ်တမ်းများ (History)</h4>`;
+                cReq.data?.forEach(r => {
+                    let col = r.status==='completed'?'green':'red'[cite: 1];
+                    html += `<div class="bg-gray-50 p-2 rounded border mb-2 text-[10px] text-${col}-700">
+                        <span class="font-bold uppercase">[${r.status}]</span> S: ${r.student_name} -> T: ${r.tutors?.name} ${r.reject_reason ? `(${r.reject_reason})`:''}
+                    </div>`[cite: 1];
+                });
+            }
+            else if(type === 'noti') { // Notifications[cite: 1]
+                const { data } = await db.from('notifications').select('*').order('timestamp', {ascending: false}).limit(20)[cite: 1];
+                data?.forEach(n => {
+                    html += `<div class="bg-white p-3 rounded-xl border shadow-sm mb-2 text-xs border-l-4 border-l-orange-400">
+                        <p class="font-bold text-blue-800">${n.title}</p>
+                        <p class="text-gray-600">${n.message}</p>
+                        <p class="text-[9px] text-gray-400 mt-1">${new Date(n.timestamp).toLocaleString()}</p>
+                    </div>`[cite: 1];
+                });
+            }
+            else if(type === 'chat') { // Chat list[cite: 1]
+                const { data } = await db.from('chat_messages').select('tutor_id, tutors(name, username)').order('timestamp', {ascending: false})[cite: 1];
+                let tSet = new Set();
+                data?.forEach(r => {
+                    if(!tSet.has(r.tutor_id)) {
+                        tSet.add(r.tutor_id);
+                        let n = r.tutors?.name || r.tutors?.username[cite: 1];
+                        html += `<button onclick="aOpenChat(${r.tutor_id}, '${n}')" class="w-full text-left bg-white p-3 rounded-xl border shadow-sm mb-2 font-bold text-gray-700 text-sm hover:bg-blue-50 transition"><i class="fa-solid fa-user-circle text-blue-400 text-lg mr-2 align-middle"></i> ${n}</button>`[cite: 1];
+                    }
+                });
+            }
+            sub.innerHTML = html || "<p class='text-center text-gray-400'>Data မရှိပါ</p>";
         }
 
-        async function approveTutor(id) {
-            await dbClient.from('tutors').update({ status: 'approved' }).eq('id', id);
-            showAdminPanel('new', 'ဆရာသစ် အတည်ပြုရန်');
+        // Admin Helpers
+        async function aApproveTutor(id) { await db.from('tutors').update({status:'approved'}).eq('id',id); openAPanel('new', 'ဆရာသစ် အတည်ပြုရန်'); }[cite: 1]
+        async function aApprovePost(id) { await db.from('job_posts').update({status:'approved'}).eq('id',id); openAPanel('p_posts', 'စိစစ်ရန် Post များ'); }[cite: 1]
+        async function aCompletePost(id) { await db.from('job_posts').update({status:'completed'}).eq('id',id); openAPanel('a_posts', 'စိစစ်ပြီး Post များ'); }[cite: 1]
+
+        function aResetPass(id) {
+            openModal(
+                `<h3 class="font-bold text-center mb-2">Password ပြန်သတ်မှတ်ရန်</h3><input type="text" id="a-new-pass" placeholder="Password အသစ်" class="w-full border p-2 rounded">`,
+                `<button onclick="aExecuteReset(${id})" class="flex-1 bg-green-600 text-white py-2 rounded font-bold">သိမ်းမည်</button><button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold">ပိတ်မည်</button>`
+            );
+        }
+        async function aExecuteReset(id) {
+            const p = document.getElementById('a-new-pass').value[cite: 1];
+            if(p) { await db.from('tutors').update({password:p}).eq('id',id); closeModal(); showAlert("အောင်မြင်သည်","Reset ချပြီးပါပြီ","green"); }[cite: 1]
         }
 
-        async function blacklistTutor(id) {
-            await dbClient.from('tutors').update({ status: 'blacklisted' }).eq('id', id);
-            showAdminPanel('approved_list', 'ဆရာများ စာရင်း');
+        function aBlacklist(id) {
+            openModal(
+                `<h3 class="font-bold text-center text-red-600 mb-2">Blacklist သွင်းရန်</h3><input type="text" id="a-bl-reason" placeholder="အကြောင်းရင်း" class="w-full border p-2 rounded">`,
+                `<button onclick="aExecuteBL(${id})" class="flex-1 bg-black text-white py-2 rounded font-bold">Block</button><button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold">ပိတ်မည်</button>`
+            );
+        }
+        async function aExecuteBL(id) {
+            const r = document.getElementById('a-bl-reason').value[cite: 1];
+            if(r) { await db.from('tutors').update({status:'blacklisted', reject_reason:r}).eq('id',id); pushNoti("Blacklist","ဆရာအကောင့်တစ်ခုအား Black List သို့ ပြောင်းရွှေ့လိုက်ပါသည်။"); closeModal(); openAPanel('tutors', 'ဆရာများ စာရင်း'); }[cite: 1]
         }
 
-        function logoutAdmin() {
-            isAdminLoggedIn = false;
-            navigate('home-screen', 'Teacher Match');
+        function aRejectPost(id) {
+            openModal(
+                `<h3 class="font-bold text-center text-red-600 mb-2">Post Reject လုပ်ရန်</h3><input type="text" id="a-rej-reason" placeholder="အကြောင်းရင်း" class="w-full border p-2 rounded">`,
+                `<button onclick="aExecuteRejPost(${id})" class="flex-1 bg-red-600 text-white py-2 rounded font-bold">Reject</button><button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold">ပိတ်မည်</button>`
+            );
+        }
+        async function aExecuteRejPost(id) {
+            const r = document.getElementById('a-rej-reason').value[cite: 1];
+            if(r) { await db.from('job_posts').update({status:'rejected', reject_reason:r}).eq('id',id); closeModal(); openAPanel('p_posts', 'စိစစ်ရန် Post များ'); }[cite: 1]
         }
 
-        // --- BLACKLIST VIEW ---
-        async function loadBlacklist() {
-            const container = document.getElementById('blacklist-list');
-            const { data } = await dbClient.from('tutors').select('*').eq('status', 'blacklisted');
-            container.innerHTML = data?.length ? "" : "<p class='text-gray-400 text-center'>Black List စာရင်း မရှိသေးပါ။</p>";
-            data?.forEach(t => {
-                container.innerHTML += `
-                    <div class="bg-white p-3 rounded-2xl border text-red-600 space-y-1">
-                        <p class="font-bold">${t.name || t.username}</p>
-                        <p class="text-gray-500 text-[10px]">အကြောင်းရင်း: ${t.reject_reason || '-'}</p>
+        async function aViewTutor(id, isApproved) {
+            const { data } = await db.from('tutors').select('*').eq('id', id)[cite: 1];
+            const r = data[0][cite: 1];
+            let html = `
+                <div class="space-y-2 text-xs leading-relaxed">
+                    <img src="${r.photo||'https://via.placeholder.com/80'}" class="w-16 h-16 rounded-full mx-auto object-cover border">
+                    <p class="text-center font-bold text-blue-800">${r.username} (Pass: ${r.password})</p><hr>
+                    <p>အမည်: ${r.name||'-'} (${r.gender||'-'})</p><p>ဖုန်း: ${r.phone||'-'}</p>
+                    <p>ဒေသ: ${r.state||'-'}, ${r.township||'-'}</p><p>သင်ရိုး: ${r.curriculum||'-'} | စနစ်: ${r.teaching_mode||'-'}</p>
+                    <p>အတန်း: ${r.grade1} ${r.subject1}</p><p>ရက်/အချိန်: ${r.days} (${r.time})</p><p>ကြေး: ${r.fee||'-'}</p>
+                </div>
+            `;
+            let btns = `<button onclick="closeModal()" class="w-full bg-gray-200 py-2 rounded font-bold">ပိတ်မည်</button>`;
+            if(!isApproved) {
+                btns = `
+                    <button onclick="aApproveTutor(${id}); closeModal()" class="flex-1 bg-green-600 text-white py-2 rounded font-bold">Approve</button>
+                    <button onclick="aRejectTutorPrompt(${id})" class="flex-1 bg-red-600 text-white py-2 rounded font-bold">Reject</button>
+                    <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold">ပိတ်မည်</button>
+                `[cite: 1];
+            }
+            openModal(html, btns);
+        }
+
+        function aRejectTutorPrompt(id) {
+            openModal(
+                `<h3 class="font-bold text-center text-red-600 mb-2">Tutor Reject လုပ်ရန်</h3><input type="text" id="a-rej-t-reason" placeholder="အကြောင်းရင်း" class="w-full border p-2 rounded">`,
+                `<button onclick="aExecuteRejTutor(${id})" class="flex-1 bg-red-600 text-white py-2 rounded font-bold">Reject</button><button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold">ပိတ်မည်</button>`
+            );
+        }
+        async function aExecuteRejTutor(id) {
+            const r = document.getElementById('a-rej-t-reason').value[cite: 1];
+            if(r) { await db.from('tutors').update({status:'rejected', reject_reason:r}).eq('id',id); closeModal(); openAPanel('new', 'ဆရာသစ် အတည်ပြုရန်'); }[cite: 1]
+        }
+
+        async function aViewApplicants(jid, subj, sname, sphone) {
+            const { data } = await db.from('job_applications').select('*, tutors(*)').eq('job_id', jid)[cite: 1];
+            let html = `<h4 class="font-bold text-blue-800 text-sm sticky top-0 bg-white pb-2 border-b">Applicants for: ${subj}</h4><div class="mt-2 space-y-2">`;
+            if(!data || data.length===0) html += "<p>No applicants.</p>"[cite: 1];
+            data?.forEach(a => {
+                const t = a.tutors || {}[cite: 1];
+                html += `
+                    <div class="bg-gray-50 p-2 rounded border text-xs">
+                        <p class="font-bold">${t.name || t.username}</p><p>Ph: ${t.phone}</p>
+                        <div class="flex space-x-2 mt-2">
+                            <button onclick="aViewTutor(${t.id}, true)" class="flex-1 bg-blue-100 text-blue-700 py-1 rounded">Detail</button>
+                            <button onclick="aHire(${t.id}, ${jid}, '${sname}', '${sphone}')" class="flex-1 bg-green-600 text-white py-1 rounded">Hire (Done)</button>
+                        </div>
                     </div>
                 `;
             });
+            html += "</div>";
+            openModal(html);
         }
+
+        async function aHire(tid, jid, sname, sphone) {
+            await db.from('job_posts').update({status:'completed'}).eq('id',jid)[cite: 1];
+            await db.from('requests').insert([{tutor_id:tid, student_name:sname, student_phone:sphone, status:'completed', reject_reason:'Post မှ ချိတ်ဆက်ပေးခြင်း'}])[cite: 1];
+            closeModal(); showAlert("အောင်မြင်သည်","ချိတ်ဆက်ပေးပြီးပါပြီ","green")[cite: 1];
+            openAPanel('a_posts', 'စိစစ်ပြီး Post များ');
+        }
+
+        async function aViewRequest(rid) {
+            const { data } = await db.from('requests').select('*, tutors(*)').eq('id', rid)[cite: 1];
+            const r = data[0]; const t = r.tutors || {}[cite: 1];
+            let html = `
+                <div class="text-xs leading-relaxed space-y-2">
+                    <p class="font-bold text-blue-700 border-b pb-1">ကျောင်းသား: ${r.student_name} (${r.student_phone})</p>
+                    <p class="font-bold text-orange-700 border-b pb-1 mt-2">ဆရာ: ${t.name||t.username} (${t.phone||'-'})</p>
+                    <p>ဒေသ: ${t.state}, ${t.township} | လစဉ်ကြေး: ${t.fee}</p>
+                </div>
+            `;
+            openModal(html, `
+                <button onclick="aApproveReq(${rid})" class="flex-1 bg-green-600 text-white py-2 rounded font-bold">ချိတ်ဆက်မည်</button>
+                <button onclick="aRejectReqPrompt(${rid})" class="flex-1 bg-red-600 text-white py-2 rounded font-bold">ငြင်းပယ်မည်</button>
+                <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold">ပိတ်မည်</button>
+            `);
+        }
+
+        async function aApproveReq(rid) {
+            await db.from('requests').update({status:'completed'}).eq('id',rid)[cite: 1]; closeModal(); openAPanel('direct', 'Direct Booking စိစစ်ရန်');
+        }
+        function aRejectReqPrompt(rid) {
+            openModal(
+                `<h3 class="font-bold text-center text-red-600 mb-2">Request ငြင်းပယ်ရန်</h3><input type="text" id="a-rej-r-reason" placeholder="အကြောင်းရင်း" class="w-full border p-2 rounded">`,
+                `<button onclick="aExecuteRejReq(${rid})" class="flex-1 bg-red-600 text-white py-2 rounded font-bold">Reject</button><button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold">ပိတ်မည်</button>`
+            );
+        }
+        async function aExecuteRejReq(rid) {
+            const r = document.getElementById('a-rej-r-reason').value[cite: 1];
+            if(r) { 
+                await db.from('requests').update({status:'rejected', reject_reason:r}).eq('id',rid)[cite: 1]; 
+                pushNoti("ချိတ်ဆက်မှု ငြင်းပယ်ခြင်း", "တောင်းဆိုချက်အား ငြင်းပယ်လိုက်ပါသည်။")[cite: 1];
+                closeModal(); openAPanel('direct', 'Direct Booking စိစစ်ရန်'); 
+            }
+        }
+
+        // Admin Chat
+        function aOpenChat(tid, tname) {
+            a_chat_id = tid[cite: 1];
+            document.getElementById('a-sub').innerHTML = `
+                <div class="bg-white p-3 rounded-xl border shadow flex flex-col h-[65vh]">
+                    <h4 class="font-bold text-blue-800 border-b pb-2"><i class="fa-solid fa-comments"></i> Chat: ${tname}</h4>
+                    <div id="a-chat-box" class="flex-1 overflow-y-auto space-y-2 p-2 bg-gray-50 mt-2 rounded border text-xs"></div>
+                    <div class="flex space-x-2 mt-2">
+                        <input type="text" id="a-chat-input" placeholder="စာပြန်ရန်..." class="flex-1 border p-2 rounded outline-none">
+                        <button onclick="aSendChat()" class="bg-blue-600 text-white px-4 rounded font-bold"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            `[cite: 1];
+            aLoadChatBox();
+        }
+
+        async function aLoadChatBox() {
+            if(!a_chat_id) return[cite: 1];
+            const box = document.getElementById('a-chat-box');
+            const { data } = await db.from('chat_messages').select('*').eq('tutor_id', a_chat_id).order('timestamp')[cite: 1];
+            box.innerHTML = "";
+            data?.forEach(msg => {
+                const me = msg.sender === 'admin'[cite: 1];
+                box.innerHTML += `
+                    <div class="flex ${me ? 'justify-end' : 'justify-start'}">
+                        <div class="${me ? 'bg-green-100' : 'bg-white border'} p-2 rounded-lg max-w-[80%]">
+                            <p class="font-bold text-[9px] text-gray-500">${me ? 'Admin (Me)' : 'Teacher'}</p>
+                            <p>${msg.message}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        async function aSendChat() {
+            const inp = document.getElementById('a-chat-input');
+            if(!inp.value.trim() || !a_chat_id) return[cite: 1];
+            await db.from('chat_messages').insert([{ tutor_id: a_chat_id, sender: 'admin', message: inp.value }])[cite: 1];
+            inp.value = ""; aLoadChatBox();
+        }
+
     </script>
 </body>
 </html>
