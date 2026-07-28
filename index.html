@@ -971,14 +971,28 @@
                 for(let p of pData.data) {
                     const apps = await db.from('job_applications').select('id', {count: 'exact'}).eq('job_id', p.id);
                     const count = apps.count || 0;
-                    let sCol = p.status === 'pending' ? 'orange' : 'green';
-                    let sTxt = p.status === 'pending' ? 'အတည်ပြုချက်စောင့်ဆိုင်းဆဲ' : 'ဆရာများ လျှောက်ထားနိုင်ပါပြီ';
+                    // Pending, Rejected, Approved အခြေအနေ ၃ မျိုးအတွက် အရောင်များ သတ်မှတ်မည်
+                    let boxClass = "";
+                    let badgeHtml = "";
+                    
+                    if (p.status === 'pending') {
+                        boxClass = "bg-orange-50 border-orange-200";
+                        badgeHtml = `<span class="text-[10px] font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded">အတည်ပြုချက်စောင့်ဆိုင်းဆဲ</span>`;
+                    } else if (p.status === 'rejected') {
+                        boxClass = "bg-red-50 border-red-300";
+                        badgeHtml = `<span class="text-[10px] font-bold text-red-600 bg-red-100 px-2 py-1 rounded">Admin မှ ပယ်ချလိုက်ပါသည်</span>`;
+                    } else { // approved ဖြစ်လျှင်
+                        boxClass = "bg-green-50 border-green-200";
+                        badgeHtml = `<span class="text-[10px] font-bold text-green-600 bg-green-100 px-2 py-1 rounded">ဆရာများ လျှောက်ထားနိုင်ပါပြီ</span>`;
+                    }
+
                     aList.innerHTML += `
-                        <div class="bg-gray-50 p-3 rounded-xl border border-${sCol}-200 space-y-1">
+                        <div class="p-3 rounded-xl border ${boxClass} space-y-1">
                             <p class="font-bold text-blue-800">${p.subject}</p>
                             <p class="text-[10px] text-gray-600">${p.state}, ${p.township} | ${p.fee_offer} Ks</p>
+                            ${p.status === 'rejected' && p.reject_reason ? `<p class="text-[10.5px] font-bold text-red-600 bg-red-100 p-1.5 rounded border border-red-200 mt-1">ပယ်ချရသည့်အကြောင်းရင်း - ${p.reject_reason}</p>` : ''}
                             <div class="flex justify-between items-center mt-2 pt-2 border-t">
-                                <span class="text-[10px] font-bold text-${sCol}-600 bg-${sCol}-100 px-2 py-1 rounded">${sTxt}</span>
+                                ${badgeHtml}
                                 <span class="text-[10px] font-bold text-teal-700 bg-teal-100 px-2 py-1 rounded"><i class="fa-solid fa-users"></i> ${count} ယောက် လျှောက်ထားသည်</span>
                             </div>
                         </div>
