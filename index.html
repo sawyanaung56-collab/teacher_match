@@ -1368,7 +1368,34 @@
                 });
             }
         }
-        
+      /* ========================================================================= */
+        /* BLACKLIST FUNCTION */
+        /* ========================================================================= */
+        async function loadBlacklist() {
+            const blList = document.getElementById('bl-list');
+            blList.innerHTML = "<p class='text-center py-4 text-gray-500'>ဆွဲယူနေပါသည်...</p>";
+            
+            // Database ထဲမှ status 'blacklisted' ဖြစ်နေသော ဆရာများကို ရှာမည်
+            const { data } = await db.from('tutors').select('*').eq('status', 'blacklisted');
+            
+            blList.innerHTML = "";
+            if (!data || data.length === 0) {
+                blList.innerHTML = "<p class='text-center text-gray-400'>Blacklist သွင်းထားသူ မရှိသေးပါ။</p>";
+                return;
+            }
+            
+            data.forEach(t => {
+                blList.innerHTML += `
+                    <div class="bg-red-50 p-3 rounded-xl border border-red-200 space-y-1 text-xs">
+                        <p class="font-bold text-red-800"><i class="fa-solid fa-ban"></i> ${t.name || t.username}</p>
+                        <p class="text-gray-600">ဖုန်း: ${t.phone || '-'}</p>
+                        <p class="text-[10px] text-red-600 font-bold mt-1 bg-white p-1.5 rounded inline-block">
+                            အကြောင်းရင်း: ${t.reject_reason || 'အကြောင်းရင်းမဖော်ပြထားပါ'}
+                        </p>
+                    </div>
+                `;
+            });
+        }  
     </script>
 </body>
 </html>
