@@ -388,9 +388,9 @@
 
             <!-- Admin Grid -->
             <div id="a-grid" class="grid grid-cols-2 gap-3">
-                <button onclick="openAPanel('new', 'ဆရာသစ် အတည်ပြုရန်')" class="bg-teal-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-teal-900 h-28 shadow-sm hover:opacity-80">
-                    <i class="fa-solid fa-user-plus text-3xl mb-2"></i>
-                    <span class="text-xs text-center">ဆရာသစ်<br>အတည်ပြုရန်</span>
+                <button onclick="openAPanel('blacklist', 'Blacklist စာရင်း')" class="bg-red-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-red-900 h-28 shadow-sm hover:opacity-80">
+                    <i class="fa-solid fa-user-slash text-3xl mb-2"></i>
+                    <span class="text-xs text-center">Blacklist<br>စာရင်း</span>
                 </button>
                 <button onclick="openAPanel('tutors', 'ဆရာများ စာရင်း')" class="bg-teal-100 p-4 rounded-2xl flex flex-col items-center justify-center font-bold text-teal-900 h-28 shadow-sm hover:opacity-80">
                     <i class="fa-solid fa-users text-3xl mb-2"></i>
@@ -1169,6 +1169,20 @@
                     html += `<button onclick="aOpenChat(${tid}, '${info.name}')" class="w-full flex items-center text-left bg-white p-3 rounded-xl border shadow-sm mb-2 font-bold text-gray-700 text-sm hover:bg-blue-50 transition"><i class="fa-solid fa-user-circle text-blue-400 text-lg mr-2 align-middle"></i> <span class="flex-1">${info.name}</span> ${badge}</button>`;
                 });
             }
+            else if(type === 'blacklist') {
+                const { data } = await db.from('tutors').select('*').eq('status', 'blacklisted');
+                if(!data || data.length===0) html = "<p class='text-center text-gray-400'>Blacklist စာရင်း မရှိသေးပါ</p>";
+                data?.forEach(t => {
+                    let n = t.name ? `${t.name} (${t.gender})` : `User: ${t.username}`;
+                    html += `
+                        <div class="bg-red-50 p-4 rounded-xl border border-red-200 shadow-sm mb-3">
+                            <p class="font-bold text-red-800 text-sm"><i class="fa-solid fa-ban"></i> ${n}</p>
+                            <p class="text-[10px] text-gray-600 mb-2">Ph: ${t.phone||'-'} | အကြောင်းရင်း: ${t.reject_reason || '-'}</p>
+                            <button onclick="aUnblockPrompt(${t.id})" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded-lg text-xs transition"><i class="fa-solid fa-rotate-left mr-1"></i> Blacklist မှ ပယ်ဖျက်မည် (Unblock)</button>
+                        </div>
+                    `;
+                });
+            }
             sub.innerHTML = html || "<p class='text-center text-gray-400'>Data မရှိပါ</p>";
         }
 
@@ -1196,6 +1210,21 @@
         async function aExecuteBL(id) {
             const r = document.getElementById('a-bl-reason').value;
             if(r) { await db.from('tutors').update({status:'blacklisted', reject_reason:r}).eq('id',id); pushNoti("Blacklist","ဆရာအကောင့်တစ်ခုအား Black List သို့ ပြောင်းရွှေ့လိုက်ပါသည်။"); closeModal(); openAPanel('tutors', 'ဆရာများ စာရင်း'); }
+        }
+        function aUnblockPrompt(id) {
+            openModal(
+                `<h3 class="font-bold text-center text-green-600 mb-2">Blacklist မှ ပြန်လည်ပယ်ဖျက်ရန်</h3><p class="text-center text-xs text-gray-600 mb-4">ဤဆရာကို ဆရာများစာရင်း (Approved) သို့ ပြန်လည် ထည့်သွင်းမည်မှာ သေချာပါသလား?</p>`,
+                `<button onclick="aExecuteUnblock(${id})" class="flex-1 bg-green-600 text-white py-2 rounded font-bold">သေချာပါသည်</button><button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold">ပိတ်မည်</button>`
+            );
+        }
+        
+        async function aExecuteUnblock(id) {
+            // Status ကို approved အဖြစ်ပြောင်းပြီး၊ Reject Reason ကို အလွတ် ပြန်ဖျက်လိုက်ပါမည်
+            await db.from('tutors').update({status: 'approved', reject_reason: ''}).eq('id', id);
+            pushNoti("Unblock", "ဆရာအကောင့်တစ်ခုအား Blacklist မှ ပယ်ဖျက်ပေးလိုက်ပါသည်။");
+            closeModal(); 
+            showAlert("အောင်မြင်သည်", "Blacklist မှ ပယ်ဖျက်ပြီး ဆရာစာရင်းသို့ ပြန်လည်ထည့်သွင်းလိုက်ပါပြီ။", "green");
+            openAPanel('blacklist', 'Blacklist စာရင်း');
         }
 
         function aRejectPost(id) {
