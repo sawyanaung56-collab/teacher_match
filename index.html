@@ -1492,40 +1492,100 @@
             );
         }
 
+        // --- Post ဖျက်ရန် ---
+        function sDeletePostPrompt(id) {
+            openModal(
+                `<h3 class="font-bold text-center text-red-600 mb-2">Post ဖျက်ရန်</h3>
+                 <p class="text-center text-xs text-gray-600 mb-4">ဤ Post ကို ဖျက်ရန် သေချာပါသလား? (ပြန်လည်ရယူ၍ မရပါ)</p>`,
+                `<button onclick="sExecuteDeletePost('${id}')" class="flex-1 bg-red-600 text-white py-2 rounded font-bold">ဖျက်မည်</button>
+                 <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold text-gray-700">ပိတ်မည်</button>`
+            );
+        }
+
         async function sExecuteDeletePost(id) {
-            // Loading ပြမည့် Error တက်နေသောစာကြောင်းကို ဖြုတ်လိုက်ပါသည်
-            await db.from('job_posts').delete().eq('id', id);
-            closeModal();
-            showAlert("အောင်မြင်သည်", "Post ကို အောင်မြင်စွာ ဖျက်လိုက်ပါပြီ။", "green");
-            sLoadMyPosts();
+            try {
+                const { error } = await db.from('job_posts').delete().eq('id', id);
+                if (error) throw error; // Database Error ရှိလျှင် ဖမ်းမည်
+                
+                closeModal();
+                showAlert("အောင်မြင်သည်", "Post ကို အောင်မြင်စွာ ဖျက်လိုက်ပါပြီ။", "green");
+                sLoadMyPosts();
+            } catch (err) {
+                alert("ဖျက်ရာတွင် အခက်အခဲရှိနေပါသည်: " + err.message);
+            }
         }
 
         // --- Post ပြင်ရန် ---
         async function sEditPostPrompt(id) {
-            const { data } = await db.from('job_posts').select('*').eq('id', id).single();
-            if(!data) return;
+            try {
+                const { data, error } = await db.from('job_posts').select('*').eq('id', id).single();
+                if (error || !data) return;
 
-            let formHtml = `
-                <h3 class="font-bold text-center text-blue-600 mb-3">Post ပြင်ဆင်ရန်</h3>
-                <div class="space-y-2 text-left">
-                    <label class="text-[10px] font-bold text-gray-600">ဘာသာရပ်/အတန်း</label>
-                    <input type="text" id="e-post-subj" value="${data.subject}" class="w-full border p-2 rounded-lg text-xs outline-none focus:border-blue-400">
-                    
-                    <label class="text-[10px] font-bold text-gray-600 mt-2 block">မြို့နယ်</label>
-                    <input type="text" id="e-post-town" value="${data.township}" class="w-full border p-2 rounded-lg text-xs outline-none focus:border-blue-400">
-                    
-                    <label class="text-[10px] font-bold text-gray-600 mt-2 block">လစာ/ကြေး</label>
-                    <input type="text" id="e-post-fee" value="${data.fee_offer}" class="w-full border p-2 rounded-lg text-xs outline-none focus:border-blue-400">
-                    
-                    <label class="text-[10px] font-bold text-gray-600 mt-2 block">အသေးစိတ်</label>
-                    <textarea id="e-post-det" class="w-full border p-2 rounded-lg text-xs h-20 outline-none focus:border-blue-400">${data.details}</textarea>
-                </div>
-            `;
-            openModal(
-                formHtml,
-                `<button onclick="sExecuteEditPost(${id})" class="flex-1 bg-blue-600 text-white py-2 rounded font-bold">သိမ်းမည်</button>
-                 <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold text-gray-700">ပိတ်မည်</button>`
-            );
+                let formHtml = `
+                    <h3 class="font-bold text-center text-blue-600 mb-3">Post ပြင်ဆင်ရန်</h3>
+                    <div class="space-y-2 text-left">
+                        <label class="text-[10px] font-bold text-gray-600">ဘာသာရပ်/အတန်း</label>
+                        <input type="text" id="e-post-subj" value="${data.subject || ''}" class="w-full border p-2 rounded-lg text-xs outline-none focus:border-blue-400">
+                        
+                        <label class="text-[10px] font-bold text-gray-600 mt-2 block">မြို့နယ်</label>
+                        <input type="text" id="e-post-town" value="${data.township || ''}" class="w-full border p-2 rounded-lg text-xs outline-none focus:border-blue-400">
+                        
+                        <label class="text-[10px] font-bold text-gray-600 mt-2 block">လစာ/ကြေး</label>
+                        <input type="text" id="e-post-fee" value="${data.fee_offer || ''}" class="w-full border p-2 rounded-lg text-xs outline-none focus:border-blue-400">
+                        
+                        <label class="text-[10px] font-bold text-gray-600 mt-2 block">အသေးစိတ်</label>
+                        <textarea id="e-post-det" class="w-full border p-2 rounded-lg text-xs h-20 outline-none focus:border-blue-400">${data.details || ''}</textarea>
+                    </div>
+                `;
+                openModal(
+                    formHtml,
+                    `<button id="s-edit-save-btn" onclick="sExecuteEditPost('${id}')" class="flex-1 bg-blue-600 text-white py-2 rounded font-bold transition">သိမ်းမည်</button>
+                     <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold text-gray-700">ပိတ်မည်</button>`
+                );
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        async function sExecuteEditPost(id) {
+            let subj = document.getElementById('e-post-subj').value;
+            let town = document.getElementById('e-post-town').value;
+            let fee = document.getElementById('e-post-fee').value;
+            let det = document.getElementById('e-post-det').value;
+            
+            if(!subj || !town || !fee) {
+                alert("အချက်အလက်များ ပြည့်စုံစွာ ဖြည့်ပါ။");
+                return;
+            }
+            
+            let btn = document.getElementById('s-edit-save-btn');
+            if(btn) {
+                btn.innerText = "သိမ်းဆည်းနေသည်...";
+                btn.classList.add("opacity-50", "cursor-not-allowed");
+            }
+
+            try {
+                const { error } = await db.from('job_posts').update({
+                    subject: subj, 
+                    township: town, 
+                    fee_offer: fee, 
+                    details: det,
+                    status: 'pending',
+                    reject_reason: ''
+                }).eq('id', id);
+                
+                if (error) throw error; // Database Error ရှိလျှင် ဖမ်းမည်
+
+                closeModal();
+                showAlert("အောင်မြင်သည်", "Post ကို ပြင်ဆင်ပြီးပါပြီ။ Admin မှ ပြန်လည်စစ်ဆေးပေးပါမည်။", "green");
+                sLoadMyPosts();
+            } catch (err) {
+                alert("Database Error (သိမ်း၍မရပါ): " + err.message);
+                if(btn) {
+                    btn.innerText = "သိမ်းမည်";
+                    btn.classList.remove("opacity-50", "cursor-not-allowed");
+                }
+            }
         }
 
         async function sExecuteEditPost(id) {
