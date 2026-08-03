@@ -1493,7 +1493,7 @@
         }
 
         async function sExecuteDeletePost(id) {
-            document.getElementById('modal-btn-container').innerHTML = "<p class='text-xs text-gray-500'>ဖျက်နေပါသည်...</p>";
+            // Loading ပြမည့် Error တက်နေသောစာကြောင်းကို ဖြုတ်လိုက်ပါသည်
             await db.from('job_posts').delete().eq('id', id);
             closeModal();
             showAlert("အောင်မြင်သည်", "Post ကို အောင်မြင်စွာ ဖျက်လိုက်ပါပြီ။", "green");
@@ -1526,6 +1526,32 @@
                 `<button onclick="sExecuteEditPost(${id})" class="flex-1 bg-blue-600 text-white py-2 rounded font-bold">သိမ်းမည်</button>
                  <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold text-gray-700">ပိတ်မည်</button>`
             );
+        }
+
+        async function sExecuteEditPost(id) {
+            let subj = document.getElementById('e-post-subj').value;
+            let town = document.getElementById('e-post-town').value;
+            let fee = document.getElementById('e-post-fee').value;
+            let det = document.getElementById('e-post-det').value;
+            
+            if(!subj || !town || !fee) {
+                alert("အချက်အလက်များ ပြည့်စုံစွာ ဖြည့်ပါ။");
+                return;
+            }
+            
+            // Loading ပြမည့် Error တက်နေသောစာကြောင်းကို ဖြုတ်လိုက်ပါသည်
+            await db.from('job_posts').update({
+                subject: subj, 
+                township: town, 
+                fee_offer: fee, 
+                details: det,
+                status: 'pending',
+                reject_reason: ''
+            }).eq('id', id);
+            
+            closeModal();
+            showAlert("အောင်မြင်သည်", "Post ကို ပြင်ဆင်ပြီးပါပြီ။ Admin မှ ပြန်လည်စစ်ဆေးပေးပါမည်။", "green");
+            sLoadMyPosts();
         }
 
         async function sExecuteEditPost(id) {
