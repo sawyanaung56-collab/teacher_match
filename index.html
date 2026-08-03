@@ -1459,7 +1459,21 @@
                     </div>
                 `;
             });
-        }  
+        }
+        /* Admin Tutors Search Function */
+        function filterAdminTutors() {
+            let input = document.getElementById('a-tutor-search').value.toLowerCase();
+            let items = document.querySelectorAll('.a-tutor-item');
+            
+            items.forEach(item => {
+                let text = item.getAttribute('data-search');
+                if (text.includes(input)) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
     </script>
 </body>
 </html>
