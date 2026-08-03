@@ -1318,10 +1318,23 @@
         }
 
         async function aHire(tid, jid, sname, sphone) {
-            await db.from('job_posts').update({status:'completed'}).eq('id',jid);
-            await db.from('requests').insert([{tutor_id:tid, student_name:sname, student_phone:sphone, status:'completed', reject_reason:'Post မှ ချိတ်ဆက်ပေးခြင်း'}]);
-            closeModal(); showAlert("အောင်မြင်သည်","ချိတ်ဆက်ပေးပြီးပါပြီ","green");
-            openAPanel('a_posts', 'စိစစ်ပြီး Post များ');
+            try {
+                // ၁။ Post ရဲ့ status ကို 'completed' သို့ ပြောင်းမည် (ကျောင်းသားနှင့် Admin ဘက်တွင် မှတ်တမ်းထဲ ရောက်သွားစေရန်)
+                const { error: pErr } = await db.from('job_posts').update({ status: 'completed' }).eq('id', jid);
+                if (pErr) throw pErr;
+
+                // ၂။ ရွေးချယ်ခံရသော ဆရာ၏ လျှောက်လွှာကို 'approved' သို့ ပြောင်းမည်
+                const { error: aErr } = await db.from('job_applications').update({ status: 'approved' }).eq('job_id', jid).eq('tutor_id', tid);
+                if (aErr) throw aErr;
+
+                closeModal();
+                showAlert("အောင်မြင်သည်", "ဆရာနှင့် ကျောင်းသားအား အောင်မြင်စွာ ချိတ်ဆက်ပေးလိုက်ပါပြီ။", "green");
+                
+                // Admin မျက်နှာပြင်ကို 'စိစစ်ပြီး Post များ' ဖြင့် Refresh လုပ်ပေးမည်
+                openAPanel('a_posts', 'စိစစ်ပြီး Post များ');
+            } catch (err) {
+                alert("Database Error (ချိတ်ဆက်ရာတွင် အခက်အခဲရှိပါသည်): " + err.message);
+            }
         }
 
         async function aViewRequest(rid) {
