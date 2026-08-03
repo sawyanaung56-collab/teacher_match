@@ -956,12 +956,25 @@
                 township: document.getElementById('s-post-town').value, fee_offer: document.getElementById('s-post-fee').value,
                 details: document.getElementById('s-post-det').value, status: 'pending', reject_reason: ''
             };
-            if(!data.subject || !data.township) { document.getElementById('s-post-msg').innerHTML = "<span class='text-red-500'>လိုအပ်ချက်များ ဖြည့်ပါ</span>"; return; }
-            
-            await db.from('job_posts').insert([data]);
-            pushNoti("ဆရာခေါ်စာအသစ်", `မိဘ ${s_user.name} မှ ဆရာခေါ်ယူရန် ပို့စ်အသစ်တစ်ခု တင်ထားပါသည်။`);
-            document.getElementById('s-post-msg').innerHTML = "<span class='text-green-600'>ဆရာခေါ်စာ တင်ပြီးပါပြီ။ Admin အတည်ပြုချက်စောင့်ပါ။</span>";
-            ['s-post-subj','s-post-town','s-post-fee','s-post-det'].forEach(id => document.getElementById(id).value='');
+
+            if(!data.subject || !data.township) {
+                document.getElementById('s-post-msg').innerHTML = "<span class='text-red-500'>လိုအပ်သော အချက်အလက်များ ဖြည့်ပါ</span>";
+                return;
+            }
+
+            try {
+                // Database ထဲ ထည့်သည့်အခါ Error ရှိမရှိ သေချာစစ်ဆေးမည့် အပိုင်း
+                const { error } = await db.from('job_posts').insert([data]);
+                if (error) throw error;
+
+                pushNoti("ဆရာခေါ်စာအသစ်", `မိဘ ${s_user.name} မှ ဆရာခေါ်ယူရန် ပို့စ်အသစ်တစ်ခု တင်ထားပါသည်။`);
+                document.getElementById('s-post-msg').innerHTML = "<span class='text-green-600'>ဆရာခေါ်စာ တင်ပြီးပါပြီ။ Admin အတည်ပြုချက်စောင့်ပါ။</span>";
+                ['s-post-subj','s-post-town','s-post-fee','s-post-det'].forEach(id => document.getElementById(id).value='');
+                
+                sLoadMyPosts();
+            } catch (err) {
+                alert("Database သို့ သိမ်းဆည်းရာတွင် အခက်အခဲရှိပါသည်: " + err.message);
+            }
         }
 
         async function sLoadMyPosts() {
