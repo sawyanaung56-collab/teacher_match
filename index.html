@@ -999,6 +999,10 @@
                                 ${badgeHtml}
                                 <span class="text-[10px] font-bold text-teal-700 bg-teal-100 px-2 py-1 rounded"><i class="fa-solid fa-users"></i> ${count} ယောက် လျှောက်ထားသည်</span>
                             </div>
+                            <div class="flex space-x-2 mt-2 pt-2 border-t border-gray-100">
+                                <button onclick="sEditPostPrompt(${p.id})" class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold py-1.5 rounded text-[10px] border border-blue-200 transition"><i class="fa-solid fa-pen"></i> ပြင်မည်</button>
+                                <button onclick="sDeletePostPrompt(${p.id})" class="flex-1 bg-red-50 hover:bg-red-100 text-red-600 font-bold py-1.5 rounded text-[10px] border border-red-200 transition"><i class="fa-solid fa-trash"></i> ဖျက်မည်</button>
+                            </div>
                         </div>
                     `;
                 }
@@ -1473,6 +1477,83 @@
                     item.style.display = "none";
                 }
             });
+        }
+        /* ========================================================================= */
+        /* STUDENT POST EDIT & DELETE FUNCTIONS */
+        /* ========================================================================= */
+        
+        // --- Post ဖျက်ရန် ---
+        function sDeletePostPrompt(id) {
+            openModal(
+                `<h3 class="font-bold text-center text-red-600 mb-2">Post ဖျက်ရန်</h3>
+                 <p class="text-center text-xs text-gray-600 mb-4">ဤ Post ကို ဖျက်ရန် သေချာပါသလား? (ပြန်လည်ရယူ၍ မရပါ)</p>`,
+                `<button onclick="sExecuteDeletePost(${id})" class="flex-1 bg-red-600 text-white py-2 rounded font-bold">ဖျက်မည်</button>
+                 <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold text-gray-700">ပိတ်မည်</button>`
+            );
+        }
+
+        async function sExecuteDeletePost(id) {
+            document.getElementById('modal-btn-container').innerHTML = "<p class='text-xs text-gray-500'>ဖျက်နေပါသည်...</p>";
+            await db.from('job_posts').delete().eq('id', id);
+            closeModal();
+            showAlert("အောင်မြင်သည်", "Post ကို အောင်မြင်စွာ ဖျက်လိုက်ပါပြီ။", "green");
+            sLoadMyPosts();
+        }
+
+        // --- Post ပြင်ရန် ---
+        async function sEditPostPrompt(id) {
+            const { data } = await db.from('job_posts').select('*').eq('id', id).single();
+            if(!data) return;
+
+            let formHtml = `
+                <h3 class="font-bold text-center text-blue-600 mb-3">Post ပြင်ဆင်ရန်</h3>
+                <div class="space-y-2 text-left">
+                    <label class="text-[10px] font-bold text-gray-600">ဘာသာရပ်/အတန်း</label>
+                    <input type="text" id="e-post-subj" value="${data.subject}" class="w-full border p-2 rounded-lg text-xs outline-none focus:border-blue-400">
+                    
+                    <label class="text-[10px] font-bold text-gray-600 mt-2 block">မြို့နယ်</label>
+                    <input type="text" id="e-post-town" value="${data.township}" class="w-full border p-2 rounded-lg text-xs outline-none focus:border-blue-400">
+                    
+                    <label class="text-[10px] font-bold text-gray-600 mt-2 block">လစာ/ကြေး</label>
+                    <input type="text" id="e-post-fee" value="${data.fee_offer}" class="w-full border p-2 rounded-lg text-xs outline-none focus:border-blue-400">
+                    
+                    <label class="text-[10px] font-bold text-gray-600 mt-2 block">အသေးစိတ်</label>
+                    <textarea id="e-post-det" class="w-full border p-2 rounded-lg text-xs h-20 outline-none focus:border-blue-400">${data.details}</textarea>
+                </div>
+            `;
+            openModal(
+                formHtml,
+                `<button onclick="sExecuteEditPost(${id})" class="flex-1 bg-blue-600 text-white py-2 rounded font-bold">သိမ်းမည်</button>
+                 <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold text-gray-700">ပိတ်မည်</button>`
+            );
+        }
+
+        async function sExecuteEditPost(id) {
+            let subj = document.getElementById('e-post-subj').value;
+            let town = document.getElementById('e-post-town').value;
+            let fee = document.getElementById('e-post-fee').value;
+            let det = document.getElementById('e-post-det').value;
+            
+            if(!subj || !town || !fee) {
+                alert("အချက်အလက်များ ပြည့်စုံစွာ ဖြည့်ပါ။");
+                return;
+            }
+            
+            document.getElementById('modal-btn-container').innerHTML = "<p class='text-xs text-gray-500'>သိမ်းဆည်းနေပါသည်...</p>";
+            
+            // ပြင်ဆင်ပြီးပါက Admin မှ ပြန်လည်စစ်ဆေးနိုင်ရန် pending သို့ ပြောင်းပေးမည်
+            await db.from('job_posts').update({
+                subject: subj, 
+                township: town, 
+                fee_offer: fee, 
+                details: det,
+                status: 'pending',
+                reject_reason: ''
+            }).eq('id', id);
+            
+            closeModal();
+            showAlert("အောင်မြင်သည်", "Post ကို ပြင်ဆင်ပြီးပါပြီ။ Admin မှ ပြန်လည်စစ်ဆေးပေးပါမည်။", "green");
+            sLoadMyPosts();
         }
     </script>
 </body>
