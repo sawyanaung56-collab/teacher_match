@@ -1342,8 +1342,17 @@
         }
 
         async function aApproveReq(rid) {
-            await db.from('requests').update({status:'completed'}).eq('id',rid); closeModal(); openAPanel('direct', 'Direct Booking စိစစ်ရန်');
-        }
+    try {
+        const { error } = await db.from('requests').update({status:'completed'}).eq('id', rid);
+        if (error) throw error;
+        
+        closeModal();
+        openAPanel('direct', 'ဆရာများအား ချိတ်ဆက်ခြင်း အတည်ပြုရန်');
+        showAlert("အောင်မြင်သည်", "Direct Booking ချိတ်ဆက်မှုကို အတည်ပြုလိုက်ပါပြီ။", "green");
+    } catch (err) {
+        alert("Database Error (အတည်ပြုရာတွင် အခက်အခဲရှိပါသည်): " + err.message);
+    }
+}
         function aRejectReqPrompt(rid) {
             openModal(
                 `<h3 class="font-bold text-center text-red-600 mb-2">Request ငြင်းပယ်ရန်</h3><input type="text" id="a-rej-r-reason" placeholder="အကြောင်းရင်း" class="w-full border p-2 rounded">`,
