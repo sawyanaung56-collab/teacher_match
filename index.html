@@ -80,9 +80,9 @@
                 </button>
             </div>
 
-            <button onclick="checkUpdateManual()" class="w-full bg-[#00796B] text-white p-3 rounded-2xl flex items-center justify-center space-x-2 shadow hover:opacity-90 transition h-14">
-                <i class="fa-solid fa-download"></i>
-                <span class="text-sm font-bold">Update APP</span>
+            <button onclick="downloadAndroidApp()" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-3.5 px-4 rounded-2xl shadow-md flex items-center justify-center space-x-2 transition transform active:scale-95">
+                <i class="fa-brands fa-android text-2xl text-green-400"></i>
+                <span class="text-sm">Download App for Android</span>
             </button>
 
             <div class="text-center pt-2">
@@ -1697,6 +1697,29 @@
                 openAPanel('tutors', 'ဆရာများ စာရင်း');
             } catch (err) {
                 alert("Database Error (Password ပြောင်း၍ မရပါ): " + err.message);
+            }
+        }
+        /* ========================================================================= */
+        /* DOWNLOAD ANDROID APP FROM SUPABASE */
+        /* ========================================================================= */
+        async function downloadAndroidApp() {
+            try {
+                // app_versions Table ထဲမှ နောက်ဆုံးထွက် download_url ကို ဆွဲယူမည်
+                const { data, error } = await db.from('app_versions')
+                    .select('download_url')
+                    .order('id', { ascending: false })
+                    .limit(1);
+
+                if (error) throw error;
+
+                if (data && data.length > 0 && data[0].download_url) {
+                    // Supabase ထဲမှ ရရှိသော URL အတိုင်း Tab အသစ်ဖြင့် Download ဆွဲမည်
+                    window.open(data[0].download_url, '_blank');
+                } else {
+                    alert("Download Link ကို ရှာမတွေ့ပါခင်ဗျာ။");
+                }
+            } catch (err) {
+                alert("App ဒေါင်းလုဒ်ဆွဲရာတွင် အခက်အခဲရှိပါသည်: " + err.message);
             }
         }
     </script>
