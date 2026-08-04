@@ -1042,14 +1042,27 @@
             else navTo('admin-login-screen', 'Admin Login');
         }
 
-        function aLogin() {
-            if(document.getElementById('a-pass').value === "G&b862013") {
+        async function aLogin() {
+            const passInput = document.getElementById('a-pass').value.trim();
+            const msg = document.getElementById('a-msg');
+
+            if(!passInput) {
+                msg.innerText = "Password ထည့်ပါ";
+                msg.classList.remove('hidden');
+                return;
+            }
+
+            // Code ထဲတွင် အသေမထားတော့ဘဲ Supabase ထဲရှိ admin_users ဇယားနှင့် တိုက်စစ်ပါမည်
+            const { data, error } = await db.from('admin_users').select('*').eq('password', passInput);
+
+            if(data && data.length > 0) {
                 a_logged = true;
                 document.getElementById('a-pass').value = '';
-                document.getElementById('a-msg').classList.add('hidden');
+                msg.classList.add('hidden');
                 openAdmin();
             } else {
-                document.getElementById('a-msg').classList.remove('hidden');
+                msg.innerText = "Password မှားယွင်းနေပါသည်";
+                msg.classList.remove('hidden');
             }
         }
 
