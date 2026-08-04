@@ -1280,7 +1280,7 @@
     const { data } = await db.from('tutors').select('*').eq('id', id);
     const r = data[0] || {};
     
-    // အချက်အလက်များများပြပါက Scroll ဆွဲကြည့်နိုင်ရန် max-h-[65vh] overflow-y-auto ထည့်ထားပါသည်
+    // မပါဝင်သော အပိုအချက်အလက်များ ဖယ်ရှားထားပြီး ရှိရင်းစွဲ အချက်အလက်များကိုသာ ပြသထားပါသည်
     let html = `
         <div class="space-y-3 text-xs leading-relaxed max-h-[65vh] overflow-y-auto pr-2">
             <img src="${r.photo || 'https://via.placeholder.com/80'}" class="w-16 h-16 rounded-full mx-auto object-cover border shadow">
@@ -1289,22 +1289,14 @@
             
             <div class="grid grid-cols-1 gap-2">
                 <p><b>အမည်:</b> ${r.name || '-'} (${r.gender || '-'})</p>
-                <p><b>မှတ်ပုံတင်:</b> ${r.nrc || '-'}</p>
                 <p><b>ဖုန်း:</b> ${r.phone || '-'}</p>
-                <p><b>မွေးသက္ကရာဇ်/အသက်:</b> ${r.dob || r.age || '-'}</p>
-                
-                <hr class="border-gray-100">
-                <p><b>ပညာအရည်အချင်း:</b> ${r.education || r.degree || '-'}</p>
-                <p><b>အတွေ့အကြုံ:</b> ${r.experience || '-'}</p>
-                <p><b>လက်ရှိအလုပ်:</b> ${r.current_job || r.occupation || '-'}</p>
                 
                 <hr class="border-gray-100">
                 <p><b>ဒေသ:</b> ${r.state || '-'}, ${r.township || '-'}</p>
-                <p><b>လိပ်စာ:</b> ${r.address || '-'}</p>
                 
                 <hr class="border-gray-100">
                 <p><b>သင်ရိုး:</b> ${r.curriculum || '-'} | <b>စနစ်:</b> ${r.teaching_mode || '-'}</p>
-                <p><b>အတန်း/ဘာသာရပ်:</b> ${r.grade1 || r.grade || '-'} - ${r.subject1 || r.subject || '-'}</p>
+                <p><b>အတန်း/ဘာသာရပ်:</b> ${r.grade1 || '-'} - ${r.subject1 || '-'}</p>
                 <p><b>ရက်/အချိန်:</b> ${r.days || '-'} (${r.time || '-'})</p>
                 <p><b>လခ/ကြေး:</b> <span class="font-bold text-green-600">${r.fee || '-'}</span></p>
             </div>
