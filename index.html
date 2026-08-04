@@ -1277,27 +1277,52 @@
         }
 
         async function aViewTutor(id, isApproved) {
-            const { data } = await db.from('tutors').select('*').eq('id', id);
-            const r = data[0];
-            let html = `
-                <div class="space-y-2 text-xs leading-relaxed">
-                    <img src="${r.photo||'https://via.placeholder.com/80'}" class="w-16 h-16 rounded-full mx-auto object-cover border shadow">
-                    <p class="text-center font-bold text-blue-800">${r.username} (Pass: ${r.password})</p><hr>
-                    <p>အမည်: ${r.name||'-'} (${r.gender||'-'})</p><p>ဖုန်း: ${r.phone||'-'}</p>
-                    <p>ဒေသ: ${r.state||'-'}, ${r.township||'-'}</p><p>သင်ရိုး: ${r.curriculum||'-'} | စနစ်: ${r.teaching_mode||'-'}</p>
-                    <p>အတန်း: ${r.grade1} ${r.subject1}</p><p>ရက်/အချိန်: ${r.days} (${r.time})</p><p>ကြေး: <span class="font-bold text-green-600">${r.fee||'-'}</span></p>
-                </div>
-            `;
-            let btns = `<button onclick="closeModal()" class="w-full bg-gray-200 py-2 rounded font-bold">ပိတ်မည်</button>`;
-            if(!isApproved) {
-                btns = `
-                    <button onclick="aApproveTutor(${id}); closeModal()" class="flex-1 bg-green-600 text-white py-2 rounded font-bold">Approve</button>
-                    <button onclick="aRejectTutorPrompt(${id})" class="flex-1 bg-red-600 text-white py-2 rounded font-bold">Reject</button>
-                    <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold">ပိတ်မည်</button>
-                `;
-            }
-            openModal(html, btns);
-        }
+    const { data } = await db.from('tutors').select('*').eq('id', id);
+    const r = data[0] || {};
+    
+    // အချက်အလက်များများပြပါက Scroll ဆွဲကြည့်နိုင်ရန် max-h-[65vh] overflow-y-auto ထည့်ထားပါသည်
+    let html = `
+        <div class="space-y-3 text-xs leading-relaxed max-h-[65vh] overflow-y-auto pr-2">
+            <img src="${r.photo || 'https://via.placeholder.com/80'}" class="w-16 h-16 rounded-full mx-auto object-cover border shadow">
+            <p class="text-center font-bold text-blue-800">${r.username} (Pass: ${r.password})</p>
+            <hr>
+            
+            <div class="grid grid-cols-1 gap-2">
+                <p><b>အမည်:</b> ${r.name || '-'} (${r.gender || '-'})</p>
+                <p><b>မှတ်ပုံတင်:</b> ${r.nrc || '-'}</p>
+                <p><b>ဖုန်း:</b> ${r.phone || '-'}</p>
+                <p><b>မွေးသက္ကရာဇ်/အသက်:</b> ${r.dob || r.age || '-'}</p>
+                
+                <hr class="border-gray-100">
+                <p><b>ပညာအရည်အချင်း:</b> ${r.education || r.degree || '-'}</p>
+                <p><b>အတွေ့အကြုံ:</b> ${r.experience || '-'}</p>
+                <p><b>လက်ရှိအလုပ်:</b> ${r.current_job || r.occupation || '-'}</p>
+                
+                <hr class="border-gray-100">
+                <p><b>ဒေသ:</b> ${r.state || '-'}, ${r.township || '-'}</p>
+                <p><b>လိပ်စာ:</b> ${r.address || '-'}</p>
+                
+                <hr class="border-gray-100">
+                <p><b>သင်ရိုး:</b> ${r.curriculum || '-'} | <b>စနစ်:</b> ${r.teaching_mode || '-'}</p>
+                <p><b>အတန်း/ဘာသာရပ်:</b> ${r.grade1 || r.grade || '-'} - ${r.subject1 || r.subject || '-'}</p>
+                <p><b>ရက်/အချိန်:</b> ${r.days || '-'} (${r.time || '-'})</p>
+                <p><b>လခ/ကြေး:</b> <span class="font-bold text-green-600">${r.fee || '-'}</span></p>
+            </div>
+        </div>
+    `;
+    
+    let btns = `<button onclick="closeModal()" class="w-full bg-gray-200 py-2 rounded font-bold text-gray-700">ပိတ်မည်</button>`;
+    
+    if(!isApproved) {
+        btns = `
+            <button onclick="aApproveTutor(${id}); closeModal()" class="flex-1 bg-green-600 text-white py-2 rounded font-bold">Approve</button>
+            <button onclick="aRejectTutorPrompt(${id})" class="flex-1 bg-red-600 text-white py-2 rounded font-bold">Reject</button>
+            <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold text-gray-700">ပိတ်မည်</button>
+        `;
+    }
+    
+    openModal(html, btns);
+}
 
         function aRejectTutorPrompt(id) {
             openModal(
