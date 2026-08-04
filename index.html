@@ -1280,36 +1280,58 @@
     const { data } = await db.from('tutors').select('*').eq('id', id);
     const r = data[0] || {};
     
-    // မပါဝင်သော အပိုအချက်အလက်များ ဖယ်ရှားထားပြီး ရှိရင်းစွဲ အချက်အလက်များကိုသာ ပြသထားပါသည်
+    // အတန်း/ဘာသာရပ် အများကြီးရှိပါက အစဉ်လိုက်ပေါ်အောင် စီစဉ်ခြင်း
+    let subjectsHtml = '';
+    if (r.grade1 || r.subject1) subjectsHtml += `<p>၁။ ${r.grade1 || ''} (${r.subject1 || ''})</p>`;
+    if (r.grade2 || r.subject2) subjectsHtml += `<p>၂။ ${r.grade2 || ''} (${r.subject2 || ''})</p>`;
+    if (r.grade3 || r.subject3) subjectsHtml += `<p>၃။ ${r.grade3 || ''} (${r.subject3 || ''})</p>`;
+    if (r.grade4 || r.subject4) subjectsHtml += `<p>၄။ ${r.grade4 || ''} (${r.subject4 || ''})</p>`;
+    // အကယ်၍ အထက်ပါအတိုင်း မရှိဘဲ ပုံမှန် grade/subject သာရှိပါက
+    if (!subjectsHtml) {
+         subjectsHtml = `<p>၁။ ${r.grade || '-'} (${r.subject || '-'})</p>`;
+    }
+    
     let html = `
-        <div class="space-y-3 text-xs leading-relaxed max-h-[65vh] overflow-y-auto pr-2">
-            <img src="${r.photo || 'https://via.placeholder.com/80'}" class="w-16 h-16 rounded-full mx-auto object-cover border shadow">
-            <p class="text-center font-bold text-blue-800">${r.username} (Pass: ${r.password})</p>
-            <hr>
+        <div class="max-h-[75vh] overflow-y-auto px-2 pb-2">
+            <h2 class="text-blue-500 text-2xl font-bold text-center mb-4">Tutor Details</h2>
             
-            <div class="grid grid-cols-1 gap-2">
-                <p><b>အမည်:</b> ${r.name || '-'} (${r.gender || '-'})</p>
-                <p><b>ဖုန်း:</b> ${r.phone || '-'}</p>
-                
-                <hr class="border-gray-100">
-                <p><b>ဒေသ:</b> ${r.state || '-'}, ${r.township || '-'}</p>
-                
-                <hr class="border-gray-100">
-                <p><b>သင်ရိုး:</b> ${r.curriculum || '-'} | <b>စနစ်:</b> ${r.teaching_mode || '-'}</p>
-                <p><b>အတန်း/ဘာသာရပ်:</b> ${r.grade1 || '-'} - ${r.subject1 || '-'}</p>
-                <p><b>ရက်/အချိန်:</b> ${r.days || '-'} (${r.time || '-'})</p>
-                <p><b>လခ/ကြေး:</b> <span class="font-bold text-green-600">${r.fee || '-'}</span></p>
+            <img src="${r.photo || 'https://via.placeholder.com/150'}" class="w-28 h-36 mx-auto object-cover mb-4 rounded-md shadow-sm">
+            
+            <div class="text-gray-800 space-y-1.5 text-[15px] leading-relaxed">
+                <p>အမည်: ${r.name || '-'}</p>
+                <p>ဖုန်း: ${r.phone || '-'}</p>
+                <p>ကျား/မ: ${r.gender || '-'}</p>
+                <p>ဒေသ: ${r.state || '-'}, ${r.township || '-'}</p>
+                <p>သင်ရိုး: ${r.curriculum || '-'} | ${r.teaching_mode || '-'}</p>
+            </div>
+            
+            <hr class="my-4 border-gray-300">
+            
+            <div class="text-gray-800 space-y-1.5 text-[15px] leading-relaxed">
+                ${subjectsHtml}
+            </div>
+            
+            <hr class="my-4 border-gray-300">
+            
+            <div class="text-gray-800 space-y-1.5 text-[15px] leading-relaxed">
+                <p>ရက်: ${r.days || '-'} | အချိန်: ${r.time || '-'}</p>
+                <p>လစဉ်ကြေး: ${r.fee || '-'}</p>
+                <p class="mt-3 text-justify leading-relaxed">မှတ်ချက်: ${r.bio || r.remark || r.note || '-'}</p>
             </div>
         </div>
     `;
     
-    let btns = `<button onclick="closeModal()" class="w-full bg-gray-200 py-2 rounded font-bold text-gray-700">ပိတ်မည်</button>`;
+    // အတည်ပြုပြီးသားဖြစ်ပါက ပုံထဲကအတိုင်း ညာဘက်ထောင့်တွင် 'ပိတ်မည်' စာသားလေးသာ ပြမည်
+    let btns = `<div class="flex justify-end mt-2"><button onclick="closeModal()" class="text-blue-600 px-4 py-2 text-[15px]">ပိတ်မည်</button></div>`;
     
+    // အတည်မပြုရသေးပါက Approve / Reject ခလုတ်များပါ ပြမည်
     if(!isApproved) {
         btns = `
-            <button onclick="aApproveTutor(${id}); closeModal()" class="flex-1 bg-green-600 text-white py-2 rounded font-bold">Approve</button>
-            <button onclick="aRejectTutorPrompt(${id})" class="flex-1 bg-red-600 text-white py-2 rounded font-bold">Reject</button>
-            <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold text-gray-700">ပိတ်မည်</button>
+            <div class="flex space-x-2 mt-4">
+                <button onclick="aApproveTutor(${id}); closeModal()" class="flex-1 bg-green-600 text-white py-2.5 rounded-lg font-bold">Approve</button>
+                <button onclick="aRejectTutorPrompt(${id})" class="flex-1 bg-red-600 text-white py-2.5 rounded-lg font-bold">Reject</button>
+                <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2.5 rounded-lg font-bold text-gray-700">ပိတ်မည်</button>
+            </div>
         `;
     }
     
