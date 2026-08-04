@@ -1656,6 +1656,49 @@
                 alert("Database Error (Block လုပ်၍ မရပါ): " + err.message);
             }
         }
+        /* ========================================================================= */
+        /* ADMIN RESET TUTOR PASSWORD FUNCTIONS */
+        /* ========================================================================= */
+        
+        // Password အသစ် ရိုက်ထည့်ရန် မေးမည့် Popup Box
+        function aResetPassPrompt(tutorId) {
+            let formHtml = `
+                <h3 class="font-bold text-center text-orange-600 mb-2">Password အသစ် ပြောင်းရန်</h3>
+                <p class="text-xs text-gray-500 mb-3 text-center">ဤဆရာအတွက် Password အသစ် ရိုက်ထည့်ပေးပါ</p>
+                <input type="text" id="a-new-pass" placeholder="Password အသစ် ရိုက်ပါ (ဥပမာ- 123456)" class="w-full border p-2 rounded-lg text-xs outline-none focus:border-orange-400 mb-3 text-center font-bold">
+            `;
+            openModal(
+                formHtml,
+                `<button onclick="aExecuteResetPass('${tutorId}')" class="flex-1 bg-orange-500 text-white py-2 rounded font-bold text-xs">Password ပြောင်းမည်</button>
+                 <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold text-gray-700 text-xs">မလုပ်တော့ပါ</button>`
+            );
+        }
+
+        // Database ထဲတွင် Password အသစ် သွားပြင်ပေးမည့် Function
+        async function aExecuteResetPass(tutorId) {
+            let newPass = document.getElementById('a-new-pass').value;
+            if(!newPass) {
+                alert("ကျေးဇူးပြု၍ Password အသစ် ရိုက်ထည့်ပေးပါခင်ဗျာ။");
+                return;
+            }
+
+            try {
+                // Tutors Table ထဲတွင် password အသစ် ပြောင်းမည်
+                const { error } = await db.from('tutors').update({
+                    password: newPass
+                }).eq('id', tutorId);
+
+                if (error) throw error;
+
+                closeModal();
+                showAlert("အောင်မြင်သည်", "Password ကို အောင်မြင်စွာ ပြောင်းလဲပေးလိုက်ပါပြီ။", "green");
+                
+                // ဆရာများ စာရင်း Panel ကို ပြန်လည် Refresh လုပ်ပေးမည်
+                openAPanel('tutors', 'ဆရာများ စာရင်း');
+            } catch (err) {
+                alert("Database Error (Password ပြောင်း၍ မရပါ): " + err.message);
+            }
+        }
     </script>
 </body>
 </html>
