@@ -1612,6 +1612,50 @@
                 }
             }
         }
+        /* ========================================================================= */
+        /* ADMIN TUTOR BLOCK / BLACKLIST FUNCTIONS */
+        /* ========================================================================= */
+        
+        // Block နှိပ်လျှင် Reason မေးမည့် Popup Box
+        function aBlockPrompt(tutorId) {
+            let formHtml = `
+                <h3 class="font-bold text-center text-red-600 mb-2">Blacklist သို့ ထည့်သွင်းရန်</h3>
+                <p class="text-xs text-gray-500 mb-3 text-center">ဤဆရာအား Blacklist စာရင်းထဲ ထည့်သွင်းလိုသည့် အကြောင်းအရင်းကို ရေးသားပါ</p>
+                <textarea id="a-block-reason" placeholder="အကြောင်းအရင်း ရေးပါ..." class="w-full border p-2 rounded-lg text-xs h-20 outline-none focus:border-red-400 mb-2"></textarea>
+            `;
+            openModal(
+                formHtml,
+                `<button onclick="aExecuteBlock('${tutorId}')" class="flex-1 bg-red-600 text-white py-2 rounded font-bold text-xs">Blacklist သို့ထည့်မည်</button>
+                 <button onclick="closeModal()" class="flex-1 bg-gray-200 py-2 rounded font-bold text-gray-700 text-xs">မလုပ်တော့ပါ</button>`
+            );
+        }
+
+        // Database ထဲသို့ Blacklist အဖြစ် ပြောင်းလဲပေးမည့် Function
+        async function aExecuteBlock(tutorId) {
+            let reason = document.getElementById('a-block-reason').value;
+            if(!reason) {
+                alert("ကျေးဇူးပြု၍ Blacklist ထည့်ရသည့် အကြောင်းအရင်းကို ရေးပေးပါခင်ဗျာ။");
+                return;
+            }
+
+            try {
+                // Tutors Table ထဲတွင် status ကို blacklisted သို့ပြောင်း၍ reject_reason ထည့်မည်
+                const { error } = await db.from('tutors').update({
+                    status: 'blacklisted',
+                    reject_reason: reason
+                }).eq('id', tutorId);
+
+                if (error) throw error;
+
+                closeModal();
+                showAlert("အောင်မြင်သည်", "ဆရာအား Blacklist စာရင်းသို့ ထည့်သွင်းလိုက်ပါပြီ။", "red");
+                
+                // ဆရာများ စာရင်း Panel ကို ပြန်လည် Refresh လုပ်ပေးမည်
+                openAPanel('tutors', 'ဆရာများ စာရင်း');
+            } catch (err) {
+                alert("Database Error (Block လုပ်၍ မရပါ): " + err.message);
+            }
+        }
     </script>
 </body>
 </html>
